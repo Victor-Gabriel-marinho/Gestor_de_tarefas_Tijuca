@@ -1,8 +1,62 @@
-function Modal () {
+import { FaUserCircle } from "react-icons/fa";
+import { IoCloseOutline } from "react-icons/io5";
+import { BiSolidDownArrow } from "react-icons/bi";
+import PopUp from "./PopUp";
+import { useState } from "react";
+
+type ModalProps = {
+    openModal: boolean,
+    setopenmodal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Modal ({openModal, setopenmodal} : ModalProps) {
+
+    const [popUp, setpopUp] = useState<boolean>(false)
+
+    function HandlePopUp () {
+        setpopUp(!popUp)
+    }
+
+    function handleModal () {
+        setopenmodal(!openModal)
+    }
+
+
     return (
-        <div className="w-screen h-screen flex items-center justify-center bg-[#000] opacity-40 fixed top-0 right-0 left-0">
+        <div className="w-screen h-screen flex items-center justify-center bg-balck/50 backdrop-blur-sm fixed inset-0">
             <div className="bg-[#524D50] w-[652px] h-[674px] rounded-[50px] shadow-2xl shadow-[#524D50]">
-                <div></div>
+                <div className="flex flex-col text-white m-9 gap-7 items-center">
+
+                    <div className="flex flex-row items-center w-full justify-between">
+                        <h2 className="text-2xl">Adicionar membros</h2>
+                        <IoCloseOutline className="text-4xl cursor-pointer" onClick={handleModal} />
+                    </div>
+
+                    <div className="w-full flex flex-row justify-between gap-4 items-center">
+                        <input type="email" placeholder="Email" className="border w-10/12 outline-0 border-[#746E72] p-2 font-semibold text-xl rounded-[10px]" />
+                        <input type="button" value="Convidar" className="bg-[#251F1F] cursor-pointer p-3.5 w-2/12 font-semibold rounded-2xl"/>                    
+                     </div>
+
+                     <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
+                    
+                    <div className="flex items-center justify-between w-full">
+
+                            <div className="items-center flex flex-row gap-2">
+                                <FaUserCircle className="text-white text-5xl" />
+                                <p className="text-xl">Nome</p>
+                            </div>
+                            
+                            <div className="flex flex-row gap-2 items-center">
+                                <p className="text-xl">Colaborador</p>
+                                <div className="relative">
+                                    <BiSolidDownArrow className={`text-xl ${popUp ? 'rotate-180' : ''} cursor-pointer`} onClick={HandlePopUp} />
+                                    {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp}/>}
+                                </div>
+                            </div>
+                    </div>  
+                              
+                </div>
+               
             </div>
         </div>
     )
