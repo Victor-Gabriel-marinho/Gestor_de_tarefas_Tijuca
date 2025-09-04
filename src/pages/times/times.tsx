@@ -3,20 +3,26 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/Modal.jsx";
+import Options from "../../components/Options.js";
 import { useFont } from "../font";
 import { useState } from "react";
 
 function Times() {
-  const [openModal, SetopenModal] = useState(false);
+  const [openModal, SetopenModal] = useState<boolean>(false);
+  const [options, Setoptions] = useState<boolean>(false)
 
-  function Openmodal() {
-    SetopenModal(true);
+  function Handlemodal() {
+    SetopenModal(!openModal);
+  }
+
+  function handleOptions () {
+    Setoptions(!options)
   }
 
   useFont(" 'Poppins', 'SansSerif' ");
 
   return (
-    <div className="relative">
+    <div className="relative z-0">
       <div className="w-screen h-screen flex flex-col">
         <nav className="w-full h-17 bg-[#524D50]"></nav>
         <div className="flex-1 flex flex-row">
@@ -53,7 +59,7 @@ function Times() {
             <div className="flex flex-row items-center justify-between">
               <h1 className="text-white text-6xl font-semibold"> Membros </h1>
               <div
-                onClick={Openmodal}
+                onClick={Handlemodal}
                 className="h-10 w-10 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer"
               >
                 <span className="text-white text-3xl font-semibold"> + </span>
@@ -61,6 +67,31 @@ function Times() {
             </div>
             <div className="flex-1">
               <div className="flex flex-col gap-8">
+              {options ? 
+              <Options>
+                <div className="flex-row flex gap-2 m-5 justify-between items-center">
+                  <div className="flex gap-4">
+                    <FaUserCircle className="text-white text-5xl" />
+                    <div className="flex flex-col">
+                      <p className="text-white text-2xl">Nome</p>
+                      <p className="text-[#AC8E8E] text-xl">Cargo</p>
+                    </div>
+                  </div>
+                  <BsThreeDotsVertical className="text-white text-3xl cursor-pointer rotate-90" onClick={handleOptions} />
+
+                </div>
+                  </Options> :  (
+                  <div className="flex-row flex gap-2 justify-between items-center ">
+                  <div className="flex gap-4">
+                    <FaUserCircle className="text-white text-5xl" />
+                    <div className="flex flex-col">
+                      <p className="text-white text-2xl">Nome</p>
+                      <p className="text-[#AC8E8E] text-xl">Cargo</p>
+                    </div>
+                  </div>
+                  <BsThreeDotsVertical className="text-white text-3xl cursor-pointer" onClick={handleOptions} />
+                </div>
+                  )}
                 <div className="flex-row flex gap-2 justify-between items-center">
                   <div className="flex gap-4">
                     <FaUserCircle className="text-white text-5xl" />
@@ -69,7 +100,7 @@ function Times() {
                       <p className="text-[#AC8E8E] text-xl">Cargo</p>
                     </div>
                   </div>
-                  <BsThreeDotsVertical className="text-white text-3xl" />
+                  <BsThreeDotsVertical className="text-white text-3xl cursor-pointer" />
                 </div>
                 <div className="flex-row flex gap-2 justify-between items-center">
                   <div className="flex gap-4">
@@ -79,17 +110,7 @@ function Times() {
                       <p className="text-[#AC8E8E] text-xl">Cargo</p>
                     </div>
                   </div>
-                  <BsThreeDotsVertical className="text-white text-3xl" />
-                </div>
-                <div className="flex-row flex gap-2 justify-between items-center">
-                  <div className="flex gap-4">
-                    <FaUserCircle className="text-white text-5xl" />
-                    <div className="flex flex-col">
-                      <p className="text-white text-2xl">Nome</p>
-                      <p className="text-[#AC8E8E] text-xl">Cargo</p>
-                    </div>
-                  </div>
-                  <BsThreeDotsVertical className="text-white text-3xl" />
+                  <BsThreeDotsVertical className="text-white text-3xl cursor-pointer" />
                 </div>
               </div>
             </div>
@@ -97,7 +118,7 @@ function Times() {
         </div>
       </div>
 
-      {openModal && <Modal />}
+      {openModal && <Modal setopenmodal={SetopenModal} openModal={openModal} />}
     </div>
   );
 }
