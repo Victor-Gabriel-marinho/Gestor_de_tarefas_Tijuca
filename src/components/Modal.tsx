@@ -23,9 +23,9 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
 
 
     return (
-        <div className="w-screen h-screen flex items-center justify-center bg-balck/50 backdrop-blur-sm fixed inset-0">
-            <div className="bg-[#524D50] w-[652px] h-[674px] rounded-[50px] shadow-2xl shadow-[#524D50]">
-                <div className="flex flex-col text-white m-9 gap-7 items-center">
+        <div className="w-screen h-screen flex items-center justify-center bg-balck/50 backdrop-blur-sm fixed inset-0" onClick={handleModal}>
+            <div className="bg-[#524D50] w-[300px] h-[400px] sm:w-[652px] sm:h-[674px] rounded-[20px] sm:rounded-[50px] shadow-2xl shadow-[#524D50]" onClick={(event) => event.stopPropagation()}>
+                <div className="flex flex-col text-white m-4 sm:m-9 gap-7 items-center">
 
                     <div className="flex flex-row items-center w-full justify-between">
                         <h2 className="text-2xl">Adicionar membros</h2>
@@ -34,7 +34,7 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
 
                     <div className="w-full flex flex-row justify-between gap-4 items-center">
                         <input type="email" placeholder="Email" className="border w-10/12 outline-0 border-[#746E72] p-2 font-semibold text-xl rounded-[10px]" />
-                        <input type="button" value="Convidar" className="bg-[#251F1F] cursor-pointer p-3.5 w-2/12 font-semibold rounded-2xl"/>                    
+                        <input type="button" value="Convidar" className="bg-[#251F1F] cursor-pointer text-sm sm:text-base p-3.5 w-4/12 sm:w-2/12 font-semibold rounded-2xl"/>                    
                      </div>
 
                      <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
@@ -47,7 +47,7 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
                             </div>
                             
                             <div className="flex flex-row gap-2 items-center">
-                                <p className="text-xl">Colaborador</p>
+                                <p className="text-xl hidden sm:block">Colaborador</p>
                                 <div className="relative">
                                     <BiSolidDownArrow className={`text-xl ${popUp ? 'rotate-180' : ''} cursor-pointer`} onClick={HandlePopUp} />
                                     {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp}/>}
