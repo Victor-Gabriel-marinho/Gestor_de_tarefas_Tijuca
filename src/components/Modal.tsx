@@ -12,6 +12,7 @@ type ModalProps = {
 function Modal ({openModal, setopenmodal} : ModalProps) {
 
     const [popUp, setpopUp] = useState<boolean>(false)
+    const [role, SetRole] = useState<string>('Colaborador')
 
     function HandlePopUp () {
         setpopUp(!popUp)
@@ -47,10 +48,10 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
                             </div>
                             
                             <div className="flex flex-row gap-2 items-center">
-                                <p className="text-xl hidden sm:block">Colaborador</p>
+                                <p className="text-xl " onClick={HandlePopUp}>{role}</p>
                                 <div className="relative">
-                                    <BiSolidDownArrow className={`text-xl ${popUp ? 'rotate-180' : ''} cursor-pointer`} onClick={HandlePopUp} />
-                                    {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp}/>}
+                                    <BiSolidDownArrow className={`text-xl hidden ${popUp ? 'rotate-180' : ''} cursor-pointer`} onClick={HandlePopUp} />
+                                    {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp} SetRole= {SetRole} />}
                                 </div>
                             </div>
                     </div>  
