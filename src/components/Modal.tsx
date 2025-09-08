@@ -11,8 +11,13 @@ type ModalProps = {
 
 function Modal ({openModal, setopenmodal} : ModalProps) {
 
+<<<<<<< HEAD
   const [popUp, setpopUp] = useState<boolean>(false);
   const [role, SetRole] = useState<string>("Colaborador");
+=======
+    const [popUp, setpopUp] = useState<boolean>(false)
+    const [role, SetRole] = useState<string>('Colaborador')
+>>>>>>> 53acb9c (ajustando funcionalidades do frontend)
 
   function HandlePopUp () {
     setpopUp(!popUp);
@@ -42,9 +47,22 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
                     
           <div className="flex items-center justify-between w-full">
 
-            <div className="items-center flex flex-row gap-2">
-              <FaUserCircle className="text-white text-5xl" />
-              <p className="text-xl">Nome</p>
+                            <div className="items-center flex flex-row gap-2">
+                                <FaUserCircle className="text-white text-5xl" />
+                                <p className="text-xl">Nome</p>
+                            </div>
+                            
+                            <div className="flex flex-row gap-2 items-center">
+                                <p className="text-xl " onClick={HandlePopUp}>{role}</p>
+                                <div className="relative">
+                                    <BiSolidDownArrow className={`text-xl hidden ${popUp ? 'rotate-180' : ''} cursor-pointer`} onClick={HandlePopUp} />
+                                    {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp} SetRole= {SetRole} />}
+                                </div>
+                            </div>
+                    </div>  
+                              
+                </div>
+               
             </div>
                             
             <div className="flex flex-row gap-2 items-center">
