@@ -1,4 +1,4 @@
-import RoutesApp from "./routes"
+import RoutesApp from "./routes";
 
 function App() {
 
@@ -6,7 +6,7 @@ function App() {
     <>
       <RoutesApp/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
