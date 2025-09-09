@@ -9,12 +9,17 @@ import { useParams } from "react-router-dom";
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [options, Setoptions] = useState<boolean>(false);
   const {id} = useParams();
 =======
   const [options, Setoptions] = useState<boolean>(false)
   const {id} = useParams()
 >>>>>>> 53acb9c (ajustando funcionalidades do frontend)
+=======
+  const [options, Setoptions] = useState<boolean>(false);
+  const {id} = useParams();
+>>>>>>> 2645210 (terminando funcionalidades)
 
   function Handlemodal() {
     SetopenModal(!openModal);
@@ -30,6 +35,9 @@ function Times() {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2645210 (terminando funcionalidades)
       <main className="bg-[#20282F] w-full h-full min-w-[50px] pt-2 px-3 sm:pt-10 sm:px-15 flex flex-col gap-8 sm:gap-15">
         <div className="flex flex-row items-center justify-between">
           <h1 className="text-white text-3xl sm:text-6xl font-semibold"> Membros do time {id} </h1>
@@ -43,6 +51,7 @@ function Times() {
         <div className="w-full h-full">
           <div className="flex flex-col gap-4 sm:gap-8">
             {options ? (
+<<<<<<< HEAD
 =======
           <main className="bg-[#20282F] w-full h-full min-w-[50px] pt-2 px-3 sm:pt-10 sm:px-15 flex flex-col gap-8 sm:gap-15">
             <div className="flex flex-row items-center justify-between">
@@ -58,6 +67,8 @@ function Times() {
               <div className="flex flex-col gap-4 sm:gap-8">
               {options ? (
 >>>>>>> 53acb9c (ajustando funcionalidades do frontend)
+=======
+>>>>>>> 2645210 (terminando funcionalidades)
 
               <Options>
 
@@ -98,6 +109,9 @@ function Times() {
               <BsThreeDotsVertical className="text-white text-xl sm:text-3xl cursor-pointer" onClick={handleOptions} />
             </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2645210 (terminando funcionalidades)
             <div className="flex-row flex gap-2 justify-between items-center ">
               <div className="flex gap-4 items-center">
                 <FaUserCircle className="text-white text-3xl sm:text-5xl" />
@@ -111,9 +125,12 @@ function Times() {
           </div>
         </div>
       </main>
+<<<<<<< HEAD
 =======
           </main>
 >>>>>>> 53acb9c (ajustando funcionalidades do frontend)
+=======
+>>>>>>> 2645210 (terminando funcionalidades)
 
       {openModal && <Modal setopenmodal={SetopenModal} openModal={openModal} />}
     </div>

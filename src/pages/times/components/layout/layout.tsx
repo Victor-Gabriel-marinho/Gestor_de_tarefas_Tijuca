@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Side_bar from "./side_Bar";
 import { Outlet } from "react-router-dom";
 import { useFont } from "../../../../components/font";
@@ -29,29 +30,37 @@ export default Layout;
 =======
 import Side_bar from "./side_Bar"
 import { Outlet } from "react-router-dom"
+=======
+import Side_bar from "./side_Bar";
+import { Outlet } from "react-router-dom";
+>>>>>>> 2645210 (terminando funcionalidades)
 import { useFont } from "../../../font";
 
 function Layout() {
 
-    useFont(" 'Poppins', 'SansSerif' ");
+  useFont(" 'Poppins', 'SansSerif' ");
     
-    return(
+  return(
 
     <div className="w-screen h-screen flex flex-col">
-        <nav className="w-full h-10 sm:h-17 bg-[#524D50]"></nav>
-        <div className="flex-1 flex flex-row">
+      <nav className="w-full h-10 sm:h-17 bg-[#524D50]"></nav>
+      <div className="flex-1 flex flex-row">
 
-            <Side_bar />
+        <Side_bar />
 
-            <main className="flex flex-1">
-                <Outlet />
-            </main>
+        <main className="flex flex-1">
+          <Outlet />
+        </main>
 
-        </div>
       </div>
-    )
+    </div>
+  );
 }
 
 
+<<<<<<< HEAD
 export default Layout
 >>>>>>> 53acb9c (ajustando funcionalidades do frontend)
+=======
+export default Layout;
+>>>>>>> 2645210 (terminando funcionalidades)

@@ -6,6 +6,9 @@ function Options({children}: OptionsProps) {
 
     
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2645210 (terminando funcionalidades)
   return (
     <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col">
       {children}
@@ -15,6 +18,7 @@ function Options({children}: OptionsProps) {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
 
 export default Options;
@@ -32,3 +36,8 @@ export default Options;
 
 export default Options
 >>>>>>> 53acb9c (ajustando funcionalidades do frontend)
+=======
+}
+
+export default Options;
+>>>>>>> 2645210 (terminando funcionalidades)
