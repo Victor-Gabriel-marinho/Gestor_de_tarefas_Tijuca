@@ -50,7 +50,7 @@ function Modal ({openModal, setopenmodal} : ModalProps) {
             <div className="flex flex-row gap-2 items-center">
               <p className="text-xl " onClick={HandlePopUp}>{role}</p>
               <div className="relative">
-                <BiSolidDownArrow className={`text-xl hidden ${popUp ? "rotate-180" : ""} cursor-pointer`} onClick={HandlePopUp} />
+                <BiSolidDownArrow className={`text-xl hidden sm:block ${popUp ? "rotate-180" : ""} cursor-pointer`} onClick={HandlePopUp} />
                 {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp} SetRole= {SetRole} />}
               </div>
             </div>
