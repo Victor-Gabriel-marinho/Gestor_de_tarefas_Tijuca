@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
-import { useFont } from "../font";
-=======
-import { Link } from "react-router-dom"
 import { useFont } from "../../components/font";
->>>>>>> feature/lista-de-tarefas
 import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
@@ -14,6 +9,7 @@ function Login() {
   useFont("'Inter', sans-serif ");
 
   const setToken = useAuthStore((state) => state.setToken);
+  const navigate = useNavigate();
 
   async function CreatAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,7 +23,8 @@ function Login() {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
       setToken(new_auth.Token)
-      console.log(new_auth)
+      navigate('/quadros')
+
 
     } catch (err) {
       console.log(err);

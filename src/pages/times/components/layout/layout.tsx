@@ -1,6 +1,6 @@
 import Side_bar from "./side_Bar";
 import { Outlet } from "react-router-dom";
-import { useFont } from "../../../font";
+import { useFont } from "../../../../components/font";
 
 function Layout() {
 

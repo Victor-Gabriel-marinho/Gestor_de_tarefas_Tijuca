@@ -1,11 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/Modal.jsx";
-<<<<<<< HEAD
 import Options from "./components/Options.js";
-=======
-import { useFont } from "../../components/font.js";
->>>>>>> feature/lista-de-tarefas
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 

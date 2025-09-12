@@ -1,17 +1,11 @@
-<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
-import { useFont } from "../font";
 import card from "../../assets/card.png";
 import { useState, type FormEvent } from "react";
 import { UserService } from "../../api/services/userService";
 import { IoCloseOutline } from "react-icons/io5";
 import { validateEmail } from "../../utils/isEmail";
 import { useAuthStore } from "../../store/Auth";
-=======
-import { Link } from "react-router-dom"
 import { useFont } from "../../components/font"
-import card from "../../assets/card.png"
->>>>>>> feature/lista-de-tarefas
 
 function Cadastro() {
   useFont("'Poppins', sans-serif ");
