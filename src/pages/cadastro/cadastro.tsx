@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useFont } from "../font"
+import { useFont } from "../../components/font"
 import card from "../../assets/card.png"
 
 function Cadastro() {

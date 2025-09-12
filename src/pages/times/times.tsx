@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/Modal.jsx";
-import { useFont } from "../font";
+import { useFont } from "../../components/font.js";
 import { useState } from "react";
 
 function Times() {
