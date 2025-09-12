@@ -2,14 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFont } from "../font";
 import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
-import { useState, type FormEvent } from "react";
-import type { Auth } from "../../api/types/Auth";
+import { type FormEvent } from "react";
+import { useAuthStore } from "../../store/Auth";
 
 function Login() {
   useFont("'Inter', sans-serif ");
 
-  const [Auth, SetAuth] = useState<Auth>();
-  const navigate = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
 
   async function CreatAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,10 +21,9 @@ function Login() {
     try {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
-      SetAuth(new_auth);
-      console.log(new_auth);
+      setToken(new_auth.Token)
+      console.log(new_auth)
 
-      navigate("/quadros");
     } catch (err) {
       console.log(err);
     }
@@ -60,7 +58,7 @@ function Login() {
               <input
                 type="submit"
                 value="Entrar"
-                className="bg-[#22C55E] p-3 text-white rounded-2xl w-full max-w-sm "
+                className="bg-[#22C55E] cursor-pointer p-3 text-white rounded-2xl w-full max-w-sm "
               />
             </div>
             <div className="flex gap-2 w-3xl">

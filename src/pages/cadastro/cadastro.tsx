@@ -4,15 +4,15 @@ import card from "../../assets/card.png";
 import { useState, type FormEvent } from "react";
 import { UserService } from "../../api/services/userService";
 import { IoCloseOutline } from "react-icons/io5";
-import type { User } from "../../api/types/User";
 import { validateEmail } from "../../utils/isEmail";
+import { useAuthStore } from "../../store/Auth";
 
 function Cadastro() {
   useFont("'Poppins', sans-serif ");
 
-  const [User, setUser] = useState<User>();
   const [erro, seterro] = useState<boolean>(false);
   const [menssage, setmenssage] = useState<string>("");
+  const setToken = useAuthStore((state) => state.setToken);
 
   const navigate = useNavigate();
 
@@ -40,8 +40,7 @@ function Cadastro() {
     try {
       const new_user = await UserService.CreateUser({ Name, Email, Password });
 
-      setUser(new_user);
-      console.log(new_user);
+      setToken(new_user.Auth.Token);
       navigate("/quadros");
     } catch (err) {
       seterro(true);

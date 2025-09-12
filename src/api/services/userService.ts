@@ -1,9 +1,10 @@
 import { api } from "../api";
-import type { CreateUserDTO, User } from "../types/User";
+import type { Return_Auth } from "../types/AuthUser";
+import type { CreateUserDTO } from "../types/User";
 
 export const UserService = {
-  async CreateUser(user: CreateUserDTO): Promise<User> {
-    const { data } = await api.post<User>("/user", user);
+  async CreateUser(user: CreateUserDTO): Promise<Return_Auth> {
+    const { data } = await api.post<Return_Auth>("/user", user);
 
     return data;
   },
