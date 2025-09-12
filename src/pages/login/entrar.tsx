@@ -74,26 +74,10 @@ function Login() {
           </form>
         </div>
 
-<<<<<<< HEAD
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1">
           <img src={card} alt="" className="w-[448px] h-[448px]" />
         </div>
       </div>
-=======
-
-          </form>
-        </div>
-
-        <div className="bg-[#1F2937] w-1/2 mr-auto z-10  hidden md:flex justify-center items-center flex-1">
-          <img src={card} alt="max-w-md w-full" />
-        </div>
-
-      </div>
-
-
-
-
->>>>>>> 2645210 (terminando funcionalidades)
     </>
   );
 }
