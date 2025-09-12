@@ -19,8 +19,6 @@ function Login() {
     const Email = formdata.get("Email") as string;
     const Password = formdata.get("Password") as string;
 
-    const navigate = useNavigate();
-
     try {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
