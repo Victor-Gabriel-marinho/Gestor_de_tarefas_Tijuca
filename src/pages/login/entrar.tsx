@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
 import { useFont } from "../font";
+=======
+import { Link } from "react-router-dom"
+import { useFont } from "../../components/font";
+>>>>>>> feature/lista-de-tarefas
 import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
