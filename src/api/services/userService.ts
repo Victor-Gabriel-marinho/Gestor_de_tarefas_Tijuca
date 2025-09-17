@@ -1,5 +1,6 @@
-import { api } from "../api";
+import api from "../api";
 import type { Return_Auth } from "../types/AuthUser";
+import type { Role } from "../types/Role";
 import type { CreateUserDTO } from "../types/User";
 
 export const UserService = {
@@ -8,4 +9,12 @@ export const UserService = {
 
     return data;
   },
+  async get_userRole(token: string, id_team: string): Promise<Role> {
+    const { data } = await api.get<Role>(`/user/get_role/${id_team}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data
+  }
 };

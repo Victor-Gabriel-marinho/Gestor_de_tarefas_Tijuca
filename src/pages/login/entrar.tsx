@@ -25,7 +25,6 @@ function Login() {
       setToken(new_auth.Token)
       navigate('/quadros')
 
-
     } catch (err) {
       console.log(err);
     }

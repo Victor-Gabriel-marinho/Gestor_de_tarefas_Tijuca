@@ -2,17 +2,22 @@ import { BiSolidDownArrow } from "react-icons/bi";
 
 
 type PopUpProps = {
-    popUp: boolean;
-    setpopUp: React.Dispatch<React.SetStateAction<boolean>>;
-    ClassName?: string;
-    SetRole: React.Dispatch<React.SetStateAction<string>>
+  popUp: boolean;
+  setpopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  ClassName?: string;
+  SetRole: React.Dispatch<React.SetStateAction<string>>;
+  SetRole_id: React.Dispatch<React.SetStateAction<string>>;
+};
 
-}
-
-function PopUp ({popUp, setpopUp, ClassName="", SetRole, ...Props}: PopUpProps) {
+function PopUp ({popUp, setpopUp, ClassName="", SetRole,SetRole_id, ...Props}: PopUpProps) {
 
   function alterarRole (role: string){
-    SetRole(role);
+    if (role === "Gestor") {
+      SetRole_id("2")
+    } else {
+      SetRole_id("3")
+    }
+      SetRole(role);
     setpopUp(!popUp);
   }
 
