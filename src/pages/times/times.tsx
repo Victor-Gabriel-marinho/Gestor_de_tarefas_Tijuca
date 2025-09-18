@@ -23,6 +23,10 @@ function Times() {
   const { users, loading } = Get_usersInTeams(id ?? "");
   const { userRole, loadingRole } = Get_userRole(team);
 
+  console.log(users, "users");
+  
+  
+
   function Handlemodal() {
     SetopenModal((prev) => !prev);
   }
