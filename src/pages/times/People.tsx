@@ -31,8 +31,4 @@ function People() {
         
 }
 
-<<<<<<< HEAD
 export default People
-=======
-export default People;
->>>>>>> 2645210 (terminando funcionalidades)

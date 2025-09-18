@@ -15,26 +15,12 @@ type ModalProps = {
 function Modal({ openModal, setopenmodal }: ModalProps) {
   const token = useAuthStore((state) => state.token);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   const [popUp, setpopUp] = useState<boolean>(false);
-  const [role, SetRole] = useState<string>("Colaborador");
-<<<<<<< HEAD
-=======
-    const [popUp, setpopUp] = useState<boolean>(false)
-    const [role, SetRole] = useState<string>('Colaborador')
->>>>>>> 53acb9c (ajustando funcionalidades do frontend)
-=======
-  const [popUp, setpopUp] = useState<boolean>(false);
-  const [role, SetRole] = useState<string>("Colaborador");
->>>>>>> 2645210 (terminando funcionalidades)
-=======
-  const [Role_id, setRole_id] = useState<string>("3");
+  const [Role_id, SetRole] = useState<string>("3");
   const [error, seterror] = useState<string>('')
   const location = useLocation();
   const navigate = useNavigate();
   const team_id = location.state?.team.id;
->>>>>>> feature/integrando_com_temaService_da_API
 
   function HandlePopUp() {
     setpopUp(!popUp);
@@ -123,14 +109,7 @@ function Modal({ openModal, setopenmodal }: ModalProps) {
                 {role}
               </p>
               <div className="relative">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <BiSolidDownArrow className={`text-xl hidden sm:block ${popUp ? "rotate-180" : ""} cursor-pointer`} onClick={HandlePopUp} />
-=======
-                <BiSolidDownArrow className={`text-xl hidden ${popUp ? "rotate-180" : ""} cursor-pointer`} onClick={HandlePopUp} />
->>>>>>> 2645210 (terminando funcionalidades)
-                {popUp &&  <PopUp ClassName="bg-[#251F1F]" popUp = {popUp} setpopUp = {setpopUp} SetRole= {SetRole} />}
-=======
+
                 <BiSolidDownArrow
                   className={`text-xl hidden sm:block ${
                     popUp ? "rotate-180" : ""
@@ -143,10 +122,9 @@ function Modal({ openModal, setopenmodal }: ModalProps) {
                     popUp={popUp}
                     setpopUp={setpopUp}
                     SetRole={SetRole}
-                    SetRole_id={setRole_id}
+                    SetRole_id={SetRole}
                   />
                 )}
->>>>>>> feature/integrando_com_temaService_da_API
               </div>
             </div>
           </div>
