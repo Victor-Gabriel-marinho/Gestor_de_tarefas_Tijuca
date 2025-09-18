@@ -36,6 +36,7 @@ function Modal({ openModal, setopenmodal }: ModalProps) {
     const formdata = new FormData(event.currentTarget);
 
     const Email = formdata.get("Email") as string;
+    console.log(Role_id)
 
     try {
       if (!token) return;
@@ -106,7 +107,7 @@ function Modal({ openModal, setopenmodal }: ModalProps) {
 
             <div className="flex flex-row gap-2 items-center">
               <p className="text-xl " onClick={HandlePopUp}>
-                {role}
+                {Role_id}
               </p>
               <div className="relative">
 
