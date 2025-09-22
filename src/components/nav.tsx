@@ -2,10 +2,14 @@ import { MdPeople } from "react-icons/md";
 import { BsFillHouseFill } from "react-icons/bs";
 import { IoFilter } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Filtrar from "./filtro";
-import { useState } from "react";
+import {useState } from "react";
+import type { ReactNode } from "react";
 
-function Nav() {
+type Navprops = {
+    children?: ReactNode
+}
+
+function Nav({children}: Navprops) {
 
     const [filtrartask, Setfiltrartask] = useState<boolean>(false)
 
@@ -23,7 +27,7 @@ function Nav() {
                     {filtrartask && (
                      <div className="relative">
                             
-                        <Filtrar/>
+                        {children}
                         
                     </div>
                 )}

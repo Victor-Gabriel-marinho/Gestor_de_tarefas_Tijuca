@@ -5,15 +5,28 @@ import { IoMdPricetag } from "react-icons/io"
 import { FaTrashCan } from "react-icons/fa6"
 import { GoPaperAirplane } from "react-icons/go"
 import { useFont } from "./font"
+import { useState } from "react"
 
 function Modaltaf({ task, onClose }: { task: string, onClose: () => void }) {
 
     useFont(" 'Poppins', 'SansSerif' ");
 
+    const [date, Setdate] = useState<boolean>(false)
+    const [prazo, Setprazo] = useState<string>("")
+    const hoje = new Date()
+    let mensagem = ""
+
+    if (new Date(prazo) < hoje) {
+        mensagem = "Atrasada"   
+    } else if (new Date(prazo) == hoje) {
+        mensagem = "Vence hoje"
+    } else  {
+        mensagem = "Normal"
+    }
+        
+    console.log(prazo)
 
     return (
-
-
         <>
 
             <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed top-0 left-0 right-0 backdrop-blur-[20px]">
@@ -29,10 +42,18 @@ function Modaltaf({ task, onClose }: { task: string, onClose: () => void }) {
                         </div>
 
                         <div>
+                            {date && (
+                                <input type="date" name="" id="" className="absolute z-50 mt-25 outline-none"
+                                value={prazo}
+                                onChange={(e) => Setprazo(e.target.value)}
+                                />
+                                
+                            )}
+
                             
+
                             <div className="absolute top-[70px] flex gap-3 p-1">
-                               
-                                <FaClock className="hover:scale-110" size={30} />
+                                <FaClock className="hover:scale-110" size={30} onClick={() => Setdate(!date)}/>
                                 <GoPaperclip className="hover:scale-110" size={30} />
                                 <IoMdPricetag className="hover:scale-110" size={30} />
                                 <FaTrashCan className="hover:scale-110" color="red" size={30} />
@@ -42,7 +63,14 @@ function Modaltaf({ task, onClose }: { task: string, onClose: () => void }) {
 
                                 <button className="absolute w-[30px] h-[30px] p-1 left-[245px] bg-[#4b3f3f] hover:bg-[#574848] rounded-[10px] flex items-center justify-center"><GoPaperAirplane /></button>
                             </div>
-                            
+                            {mensagem && <p className={`p-4 ${
+                                mensagem === "Atrasada"
+                                ? "text-red-600"
+                                : mensagem === "Vence hoje"
+                                ?"text-yellow-600"
+                                :"text-green-600"
+                            }`}>{mensagem}
+                            </p>}
                         </div>
                             
                     </div>

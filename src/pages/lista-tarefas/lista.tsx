@@ -3,9 +3,21 @@ import Modaltaf from "../../components/Modaltaf"
 import { useState } from "react";
 import { useFont } from "../../components/font";
 import { FiMinimize2 } from "react-icons/fi";
+import Filtrar from "../../components/filtro";
+
 
 
 function Lista() {
+
+    
+   
+
+
+  
+
+
+
+
     {/*hook para trazer a fonte*/}
     useFont(" 'Poppins', 'SansSerif' ");
 
@@ -53,7 +65,10 @@ function Lista() {
         <>
             <div className="bg-[#1F2937] h-screen w-screen">
                 {/*navbar da página*/}
-                <Nav />
+                <Nav>
+                    <Filtrar />
+                    
+                </Nav>
 
                 <main className=" flex  flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
                     <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row ">
@@ -70,9 +85,14 @@ function Lista() {
                                 </div>
                             </div>
 
+
+  
+   
+  
                             {/*função minimizar do pendente*/}                           
                             {!minimize.pendente && (
                                 <>
+                                
                                     <p className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]" onClick={() => { Setselect("Começar API"); Setmodaltask(true) }}>Começar API</p>
                                     <p className={`bg-white cursor-pointer truncate text-center p-1 rounded-[5px] ${tarefapen ? 'block h-[35px]' : 'hidden'}`} onClick={() => { Setselect(tarefapen); Setmodaltask(true) }}>{tarefapen}</p>
                                     {inputpen && (<textarea placeholder="nome" className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
