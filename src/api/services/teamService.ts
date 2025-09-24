@@ -1,5 +1,5 @@
 import api  from "../api";
-import type { id_team, User_Team } from "../types/id_teamDTO";
+import type { Create_User_Team, id_team} from "../types/id_teamDTO";
 import type { Team } from "../types/Team";
 import type { user_in_team } from "../types/User";
 
@@ -7,14 +7,11 @@ import type { user_in_team } from "../types/User";
 export const TeamService = {
   // Adiciona um usuário ao seu time
   async Add_user(
-    Email: string,
-    TeamId: string,
-    Role: string,
+    users: Create_User_Team[],
     token: string
-  ): Promise<User_Team> {
-    const { data } = await api.post<User_Team>(
-      "/time/new-user",
-      { Email, TeamId, Role },
+  ): Promise<{count: number}> {
+    const { data } = await api.post<{count: number}>(
+      "/time/new-user",users,
       {
         headers: {
           Authorization: `Bearer ${token}`,

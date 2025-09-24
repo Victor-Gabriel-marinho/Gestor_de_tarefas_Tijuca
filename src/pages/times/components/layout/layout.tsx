@@ -1,5 +1,6 @@
 import Side_bar from "./side_Bar";
 import { Outlet } from "react-router-dom";
+import Nav from "../../../../components/nav";
 import { useFont } from "../../../../components/font";
 
 function Layout() {
@@ -7,9 +8,9 @@ function Layout() {
 
 
   return (
-    <div className="w-screen h-screen flex flex-col">
-      <nav className="w-full h-10 sm:h-17 bg-[#524D50]"></nav>
-      <div className="flex-1 flex flex-row">
+    <div className="w-screen h-screen flex flex-col ">
+      <Nav />
+      <div className="flex-1 flex flex-col-reverse sm:flex-row">
         <Side_bar />
         <main className="flex flex-1">
           <Outlet />

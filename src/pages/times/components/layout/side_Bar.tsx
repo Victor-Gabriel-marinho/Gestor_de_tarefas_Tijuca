@@ -1,71 +1,84 @@
 import { MdSupervisedUserCircle } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import type { Team } from "../../../../api/types/Team";
 import Get_teams from "../../../../hooks/get_teams";
-
-
 
 function Side_bar() {
 
   const [hiddenteams, Sethiddenteams] = useState<boolean>(false);
-  const [Peoples, SetPeoples] = useState<boolean>(true);
+  const { id } = useParams(); 
 
   const { Teams, loading, first_team } = Get_teams();
-
-  function HandlePeoples() {
-    SetPeoples(!Peoples);
-
-  }
-
-  function falsePeoples() {
-    SetPeoples(false);
-  }
 
   function handlehiddenteams(): void {
     Sethiddenteams(!hiddenteams);
   }
 
-  console.log(Teams, "teams")
   return (
-    <div className="h-full w-30 sm:w-60 bg-[#251F1F] flex flex-col gap-3 pt-4 sm:pt-10">
-      <div className=" flex flex-col gap-2">
-        <span className={`flex flex-row items-center justify-center gap-2 h-10 sm:h-20 ${!Peoples ? "bg-[#7E7878]" : ""}`} onClick={falsePeoples}>
-          <Link to={`times/${first_team?.Name}`}>
-            <h2 className=" text-white font-semibold text-xl sm:text-4xl cursor-pointer"> Times </h2>
+    <div className="h-15 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center static flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
+      <div
+        className={` ${
+          hiddenteams
+            ? "flex items-center justify-center h-full sm:h-20 gap-2 w-1/2 sm:w-full"
+            : "flex items-center gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
+        }`}
+      >
+        <span
+          className={`flex flex-row items-center justify-center gap-2 h-10 sm:h-20`}
+        >
+          <Link to={`times/${first_team?.id}`}>
+            <h2 className=" text-white font-semibold text-xl sm:text-4xl cursor-pointer">
+              Times
+            </h2>
           </Link>
-          <IoIosArrowDown className={`text-white w-6 h-6 sm:w-9 sm:h-9 cursor-pointer rotate-180 ${hiddenteams ? "rotate-none" : ""}`} onClick={handlehiddenteams} />
+          <IoIosArrowDown
+            className={`text-white w-6 h-6 sm:w-9 sm:h-9 cursor-pointer rotate-180 ${
+              hiddenteams ? "rotate-none" : ""
+            }`}
+            onClick={handlehiddenteams}
+          />
         </span>
 
         {!hiddenteams && (
-          <div className='flex justify-start items-center flex-col gap-4 sm:gap-7 '>
-
-            {loading ? (<div>Carregando...</div>)
-              :
+          <div className="flex h-80 w-50 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl pt-3 left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
+            {loading ? (
+              <div>Carregando...</div>
+            ) : (
               Teams.map((team: Team) => (
                 <Link
                   to={`/times/${team.id}`}
                   state={{ team }}
+                  onClick={() => {
+                  if (window.innerWidth < 640){
+                    handlehiddenteams()}}}
                   key={team.id}
-                  className="flex items-center gap-4 justify-center"
-                  onClick={falsePeoples}
+                  className={`items-center gap-4 h-15 w-full justify-center flex ${
+                    team.id === id ? "bg-[#7E7878]" : ""
+                  }`}
                 >
                   <MdSupervisedUserCircle className="text-white w-7 h-7 sm:w-9 sm:h-9" />
-                  <p className="text-white hidden sm:block sm:text-xl">{team.Name}</p>
+                  <p className="text-white block sm:text-xl truncate">
+                    {team.Name}
+                  </p>
                 </Link>
-              ))}
+              ))
+            )}
           </div>
         )}
-
       </div>
 
-      <Link to={"/"} onClick={HandlePeoples}>
-        <div className={`flex justify-center items-center ${Peoples ? "bg-[#7E7878] h-10 sm:h-20" : ""}`}>
-          <h2 className=" text-white font-semibold text-xl sm:text-4xl cursor-pointer" > Pessoas </h2>
-        </div>
+      <Link
+        to={"/"}
+        className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-center ${
+          !id ? "bg-[#7E7878] " : ""
+        }`}
+      >
+        <h2 className="text-white font-semibold text-xl sm:text-4xl cursor-pointer">
+          Pessoas
+        </h2>
       </Link>
-
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Get_usersInTeams } from "../../hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
 import { useAuthStore } from "../../store/Auth.js";
 import { Get_userRole } from "../../hooks/get_userRole.js";
+import Get_teams from "../../hooks/get_teams.js";
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
@@ -20,12 +21,10 @@ function Times() {
   const token = useAuthStore((state) => state.token);
   const payload = decodeJWT(token);
 
-  const { users, loading } = Get_usersInTeams(id ?? "");
+  const { users, loading, refetch } = Get_usersInTeams(id ?? "");
   const { userRole, loadingRole } = Get_userRole(team);
+  const {first_team} = Get_teams()
 
-  console.log(users, "users");
-  
-  
 
   function Handlemodal() {
     SetopenModal((prev) => !prev);
@@ -43,16 +42,16 @@ function Times() {
           Carregando...
         </div>
       ) : (
-        <main className="bg-[#20282F] h-full w-full flex flex-col p-8 gap-10">
+        <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-10">
           <div className="flex flex-row items-center justify-between">
-            <h1 className="text-white text-3xl sm:text-6xl font-semibold">
-              Membros do time {team?.Name}
+            <h1 className="text-white text-2xl sm:text-6xl font-semibold">
+              Membros do time {first_team?.id === id ? first_team?.Name : team?.Name }
             </h1>
 
             {userRole?.id === "1" && (
               <div
                 onClick={Handlemodal}
-                className="h-7 w-7 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer"
+                className="h-10 w-10 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70"
               >
                 <span className="text-white text-xl sm:text-2xl font-semibold">
                   +
@@ -68,7 +67,7 @@ function Times() {
               ) : (
                 users.map((user) =>
                   options === user.id ? (
-                    <Options id={user.id} key={user.id}>
+                    <Options id={user.id} refetch={refetch} key={user.id}>
                       <div className="flex flex-row gap-2 m-2 justify-between items-center">
                         <div className="flex gap-4">
                           <FaUserCircle className="text-white text-3xl sm:text-5xl" />
@@ -111,7 +110,7 @@ function Times() {
 
                       {payload?.sub !== user.id && userRole?.id === "1" && (
                         <BsThreeDotsVertical
-                          className="text-white text-xl sm:text-3xl cursor-pointer"
+                          className="text-white text-xl sm:text-3xl cursor-pointer hover:opacity-70"
                           id={user.id}
                           onClick={handleOptions}
                         />
@@ -125,7 +124,13 @@ function Times() {
         </main>
       )}
 
-      {openModal && <Modal setopenmodal={SetopenModal} openModal={openModal} />}
+      {openModal && (
+        <Modal
+          setopenmodal={SetopenModal}
+          openModal={openModal}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 }

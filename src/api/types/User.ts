@@ -14,4 +14,10 @@ export interface user_in_team {
   Role: string;
 }
 
+export interface user_for_invite {
+  id: string;
+  Email: string;
+  Name: string;
+}
+
 export type CreateUserDTO = Omit<User_out_team, "id">;

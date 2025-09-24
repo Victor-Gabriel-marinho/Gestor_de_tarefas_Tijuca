@@ -4,10 +4,9 @@ import Get_allPeoples_in_your_teams from "../../hooks/get_allPeoples_in_your_tea
 function People() {
 
   const {users, loading} = Get_allPeoples_in_your_teams()
-  console.log(users)
        
   return (
-    <main className="bg-[#20282F] w-full h-full min-w-[50px] pt-2 px-3 sm:pt-10 sm:px-15 flex flex-col gap-8 sm:gap-15">
+    <main className="bg-[#20282F] w-full h-full min-w-[50px] p-5 sm:pt-10 sm:px-15 flex flex-col gap-8 sm:gap-15">
       <div className="flex flex-row items-center justify-start">
         <h1 className="text-white text-3xl sm:text-6xl font-semibold">
           {" "}

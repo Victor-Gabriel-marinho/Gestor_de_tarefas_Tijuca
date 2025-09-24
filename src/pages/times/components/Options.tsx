@@ -1,19 +1,19 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { TeamService } from "../../../api/services/teamService";
 import type { MouseEvent } from "react";
 import { useAuthStore } from "../../../store/Auth";
 
 type OptionsProps = {
+  refetch: () => void;
   id: string;
   children?: React.ReactNode;
 };
 
-function Options({id, children }: OptionsProps) {
+function Options({refetch, id, children }: OptionsProps) {
 
   const location = useLocation();
   const team_id = location.state?.team.id
   const token = useAuthStore((state)=> state.token)
-  const navigate = useNavigate();
 
   async function Delete_User(event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) {
     event.preventDefault()
@@ -21,7 +21,7 @@ function Options({id, children }: OptionsProps) {
       if (!token) return
       const response = await TeamService.Remove_User_from_team(team_id, id,token)
       if (response) {
-        navigate(0)
+        refetch()
         console.log(response)
       }
     } 
