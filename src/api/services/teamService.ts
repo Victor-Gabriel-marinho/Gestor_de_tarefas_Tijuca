@@ -5,6 +5,17 @@ import type { user_in_team } from "../types/User";
 
 
 export const TeamService = {
+
+  //Criar um time
+  async Create_Team(Team_Name: string, token: string): Promise<Team>{
+    const {data} = await api.post<Team>("/time/create", {"Name":Team_Name}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return data
+  },
+
   // Adiciona um usuário ao seu time
   async Add_user(
     users: Create_User_Team[],
@@ -59,6 +70,15 @@ export const TeamService = {
     });
 
     return data;
+  },
+
+  async Delete_Team(idTeam: string,token: string): Promise<void> { 
+    const {data} = await api.delete<void>(`time/delete-team/${idTeam}`, {headers: {
+      Authorization: `Bearer ${token}`
+    },
+  })
+
+  return data 
   },
 
   // Remove um usuário de um time

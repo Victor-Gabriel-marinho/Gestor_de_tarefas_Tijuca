@@ -40,9 +40,11 @@ function Cadastro() {
 
     try {
       const new_user = await UserService.CreateUser({ Name, Email, Password });
-
-      setToken(new_user.Auth.Token);
-      navigate("/quadros");
+      
+      if (new_user) {
+        setToken(new_user.token.Token);
+        navigate("/");
+    }
     } catch (err) {
       seterro(true);
       setmenssage("Ja existe um usuário com este Email");

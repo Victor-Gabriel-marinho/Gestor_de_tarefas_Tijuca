@@ -10,14 +10,14 @@ function Side_bar() {
   const [hiddenteams, Sethiddenteams] = useState<boolean>(false);
   const { id } = useParams(); 
 
-  const { Teams, loading, first_team } = Get_teams();
+  const { Teams, loading, first_team} = Get_teams();
 
   function handlehiddenteams(): void {
     Sethiddenteams(!hiddenteams);
   }
 
   return (
-    <div className="h-15 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center static flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
+    <div className="h-15 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center static flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10" >
       <div
         className={` ${
           hiddenteams
@@ -42,7 +42,7 @@ function Side_bar() {
         </span>
 
         {!hiddenteams && (
-          <div className="flex h-80 w-50 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl pt-3 left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
+          <div className="flex max-h-80 overflow-y-auto w-50 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl pt-3 left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
             {loading ? (
               <div>Carregando...</div>
             ) : (

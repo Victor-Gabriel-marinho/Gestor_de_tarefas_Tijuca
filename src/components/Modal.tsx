@@ -16,8 +16,8 @@ type ModalProps = {
 };
 
 function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
+  
   const token = useAuthStore((state) => state.token);
-
   const [popUp, setpopUp] = useState<string>("");
   const [Role_id, SetRole_id] = useState<string>("3");
   const [loading, Setloading] = useState<boolean>(false)

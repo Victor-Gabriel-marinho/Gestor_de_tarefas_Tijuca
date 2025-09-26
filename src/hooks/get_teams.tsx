@@ -1,6 +1,6 @@
 import { TeamService } from "../api/services/teamService";
 import { useAuthStore } from "../store/Auth";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Team } from "../api/types/Team";
 
 export default function Get_teams() {
@@ -10,27 +10,28 @@ export default function Get_teams() {
   const [loading, Setloading] = useState<boolean>(false);
   const [first_team, Setfirst_team] = useState<Team>();
 
-  useEffect(() => {
+  
+  const fetch_Teams = 
+  useCallback( async () => {
     if (!Token) return;
     Setloading(true);
+    try {
+      const response = await TeamService.Get_Teams(Token);
+      SetTeams(response);
+      Setloading(false)
+      Setfirst_team(response[0])
+      
+      return first_team
 
-    const fetch_Teams = async () => {
-      try {
-        const response = await TeamService.Get_Teams(Token);
-        SetTeams(response);
-        Setloading(false)
-        Setfirst_team(response[0])
-        
-        return first_team
+    } catch (error) {
+      console.log(error);
+    }
+  }, [Token])
 
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
+  useEffect(() => {
     fetch_Teams();
-  }, [Token]);
+  }, [Token, fetch_Teams]);
 
-  return {Teams,loading, first_team}
+  return {Teams,loading, first_team, refetch_teams:fetch_Teams}
 
 }

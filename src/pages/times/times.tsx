@@ -8,11 +8,14 @@ import { Get_usersInTeams } from "../../hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
 import { useAuthStore } from "../../store/Auth.js";
 import { Get_userRole } from "../../hooks/get_userRole.js";
+import { FaTrashCan } from "react-icons/fa6";
 import Get_teams from "../../hooks/get_teams.js";
+import Confirm_delete from "../../components/confirmDelete.js";
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
   const [options, Setoptions] = useState<string | null>(null);
+  const [confirm, Setconfirm] = useState<boolean>(false)
 
   const { id } = useParams();
   const location = useLocation();
@@ -30,6 +33,10 @@ function Times() {
     SetopenModal((prev) => !prev);
   }
 
+  function handleComfirm() { 
+    Setconfirm(!confirm)
+  }
+
   function handleOptions(event: MouseEvent<SVGElement, globalThis.MouseEvent>) {
     const id = event.currentTarget.id;
     Setoptions((prev) => (prev === id ? null : id));
@@ -45,17 +52,27 @@ function Times() {
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-10">
           <div className="flex flex-row items-center justify-between">
             <h1 className="text-white text-2xl sm:text-6xl font-semibold">
-              Membros do time {first_team?.id === id ? first_team?.Name : team?.Name }
+              Membros do time{" "}
+              {first_team?.id === id ? first_team?.Name : team?.Name}
             </h1>
 
             {userRole?.id === "1" && (
-              <div
-                onClick={Handlemodal}
-                className="h-10 w-10 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70"
-              >
-                <span className="text-white text-xl sm:text-2xl font-semibold">
-                  +
-                </span>
+              <div className="flex flex-row gap-3 items-center">
+                <div
+                  onClick={Handlemodal}
+                  className="h-10 w-10 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70 hover:scale-110"
+                >
+                  <span className="text-white text-xl sm:text-2xl font-semibold">
+                    +
+                  </span>
+                </div>
+                <div className="" onClick={handleComfirm}>
+                  <FaTrashCan
+                    className="hover:scale-110 cursor-pointer "
+                    color="red"
+                    size={30}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -89,7 +106,7 @@ function Times() {
                     </Options>
                   ) : (
                     <div
-                      className={`flex flex-row gap-2 justify-between items-center ${
+                      className={`flex flex-row gap-2 justify-between items-center hover:bg-[#303d47] rounded-2xl p-2 ${
                         payload?.sub === user.id
                           ? "bg-zinc-900 h-20 pl-2 rounded-xl"
                           : ""
@@ -129,6 +146,14 @@ function Times() {
           setopenmodal={SetopenModal}
           openModal={openModal}
           refetch={refetch}
+        />
+      )}
+
+      {confirm && (
+        <Confirm_delete
+        id= {id}
+        token = {token}
+        Setconfirm={Setconfirm}
         />
       )}
     </div>
