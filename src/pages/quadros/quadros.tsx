@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import { useState, type FormEvent } from "react";
 import { useFont } from "../../components/font.tsx";
 import Get_teams from "../../hooks/get_teams.tsx";
-import { useAuthStore } from "../../store/Auth.ts";
 import { TeamService } from "../../api/services/teamService.ts";
 
 function Quadros() {
   useFont(" 'Poppins', 'SansSerif' ");
 
   const [criar, Setcriar] = useState(false);
-  const token = useAuthStore((state) => state.token)
   const { Teams, loading, refetch_teams } = Get_teams();
 
   const create_team = async (
@@ -23,8 +21,8 @@ function Quadros() {
     const Team_Name = formdata.get("Nome_do_time") as string;
 
     try {
-      if (!Team_Name || !token) return;
-      const response = await TeamService.Create_Team(Team_Name, token);
+      if (!Team_Name) return;
+      const response = await TeamService.Create_Team(Team_Name);
       if (response) {
         refetch_teams();
         Setcriar(false)
@@ -52,7 +50,7 @@ function Quadros() {
             ) : (
               Teams.map((team) => (
                 <Link
-                  to="/lista"
+                  to={`/lista/${team.id}`}
                   className="w-30 h-30 sm:w-40 sm:h-40 bg-white rounded-2xl hover:scale-110 flex items-baseline-last"
                   key={team.id}
                 >

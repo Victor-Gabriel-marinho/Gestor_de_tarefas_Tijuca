@@ -152,7 +152,6 @@ function Times() {
       {confirm && (
         <Confirm_delete
         id= {id}
-        token = {token}
         Setconfirm={Setconfirm}
         />
       )}

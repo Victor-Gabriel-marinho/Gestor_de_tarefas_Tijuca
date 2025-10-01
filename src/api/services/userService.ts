@@ -1,7 +1,7 @@
 import api from "../api";
-import type { Return_Auth } from "../types/AuthUser";
-import type { Role } from "../types/Role";
-import type { CreateUserDTO, user_for_invite } from "../types/User";
+import type { Return_Auth } from "../types/AuthTypes/AuthUser";
+import type { Role } from "../types/UserTypes/Role";
+import type { CreateUserDTO, user_for_invite } from "../types/UserTypes/User";
 
 export const UserService = {
   async CreateUser(user: CreateUserDTO): Promise<Return_Auth> {
@@ -9,21 +9,15 @@ export const UserService = {
 
     return data;
   },
-  async get_userRole(token: string, id_team: string): Promise<Role> {
-    const { data } = await api.get<Role>(`/user/get_role/${id_team}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return data
+  async get_userRole(id_team: string): Promise<Role> {
+    const { data } = await api.get<Role>(`/user/get_role/${id_team}`);
+    return data;
   },
 
-  async search_user(token: string, idteam: string) : Promise<user_for_invite[]>{
-    const { data } = await api.get<user_for_invite[]>(`/user/search/${idteam}`, {
-      headers: {
-        Authorization: `Brearer ${token}`,
-      }
-    })
-    return data
-  }
+  async search_user(idteam: string): Promise<user_for_invite[]> {
+    const { data } = await api.get<user_for_invite[]>(
+      `/user/search/${idteam}`
+    );
+    return data;
+  },
 };

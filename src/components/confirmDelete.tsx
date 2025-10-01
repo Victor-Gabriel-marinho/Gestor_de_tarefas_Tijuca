@@ -4,10 +4,9 @@ import { TeamService } from "../api/services/teamService";
  type confirmProps = {
    Setconfirm: React.Dispatch<React.SetStateAction<boolean>>;
    id: string | undefined;
-   token: string | null;
  };
  
- function Confirm_delete({Setconfirm, id, token}: confirmProps) {
+ function Confirm_delete({Setconfirm, id}: confirmProps) {
  
   const navigate = useNavigate()
      
@@ -17,8 +16,8 @@ import { TeamService } from "../api/services/teamService";
 
     async function delete_Team() {
       try {
-        if (!id || !token) return
-        await TeamService.Delete_Team(id, token)
+        if (!id) return
+        await TeamService.Delete_Team(id)
         navigate(`/`)
         window.location.reload()
         handleComfirm()

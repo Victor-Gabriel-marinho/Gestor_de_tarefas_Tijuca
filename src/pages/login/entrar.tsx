@@ -22,7 +22,6 @@ function Login() {
     try {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
-      navigate("/")
       setToken(new_auth.Token)
       navigate('/quadros')
 

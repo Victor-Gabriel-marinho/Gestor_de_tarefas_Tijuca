@@ -4,9 +4,8 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import PopUp from "./PopUp";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { TeamService } from "../api/services/teamService";
-import { useAuthStore } from "../store/Auth";
 import { useLocation } from "react-router-dom";
-import type { user_for_invite } from "../api/types/User";
+import type { user_for_invite } from "../api/types/UserTypes/User";
 import { UserService } from "../api/services/userService";
 
 type ModalProps = {
@@ -16,27 +15,25 @@ type ModalProps = {
 };
 
 function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
-  
-  const token = useAuthStore((state) => state.token);
   const [popUp, setpopUp] = useState<string>("");
   const [Role_id, SetRole_id] = useState<string>("3");
-  const [loading, Setloading] = useState<boolean>(false)
-  const [userroles, SetUserroles] = useState<Record<string,string>>({});
-  const [Email, setEmail] = useState<string>("")
-  const [emailselected, Setemailselected] = useState<user_for_invite[]>([])
-  const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([])
-  const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([])
-  const RoleMap: Record<string,string> = {
+  const [loading, Setloading] = useState<boolean>(false);
+  const [userroles, SetUserroles] = useState<Record<string, string>>({});
+  const [Email, setEmail] = useState<string>("");
+  const [emailselected, Setemailselected] = useState<user_for_invite[]>([]);
+  const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
+  const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
+  const RoleMap: Record<string, string> = {
     Gestor: "2",
     Colaborador: "3",
   };
-  const [error, seterror] = useState<string>('')
+  const [error, seterror] = useState<string>("");
   const location = useLocation();
   const team_id = location.state?.team.id;
 
-  function HandlePopUp(event:any) {
-    const id = event.currentTarget.id
-    setpopUp((prev) => prev === id ? null : id);
+  function HandlePopUp(event: any) {
+    const id = event.currentTarget.id;
+    setpopUp((prev) => (prev === id ? null : id));
   }
 
   function alterarRole(userid: string, role: string) {
@@ -52,10 +49,9 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
   async function send_invitation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-  
+
     try {
-      Setloading(true)
-      if (!token) return;
+      Setloading(true);
 
       const users_to_add = selectUsers_id.map((user) => ({
         UserId: user.id,
@@ -63,67 +59,61 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
         Role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
       }));
 
-      const response = await TeamService.Add_user(
-        users_to_add,
-        token
-      );
+      const response = await TeamService.Add_user(users_to_add);
       if (response) {
-        Setloading(false)
+        Setloading(false);
         handleModal();
-        refetch()
-        search_users()
+        refetch();
+        search_users();
         console.log(response);
       }
     } catch (error) {
-      Setloading(false)
+      Setloading(false);
       console.log("erro ao fazer requisição", error);
-      seterror('este usuário já está no time')
+      seterror("este usuário já está no time");
     }
   }
 
-  function selectuser (user: user_for_invite) {
+  function selectuser(user: user_for_invite) {
     SetselectUsers_id((prev) => {
-    if (prev.find((u) => u.id === user.id)) {
-      return prev;
-    }
-    return [...prev, {id : user.id} as user_for_invite]; 
-  })
-  Setemailselected((prev) => {
-    if (prev.find((u) => u.Email === user.Email)) {
-      return prev;
-    }
-    return [...prev, {Email: user.Email} as user_for_invite]; 
-  })
-
-}
+      if (prev.find((u) => u.id === user.id)) {
+        return prev;
+      }
+      return [...prev, { id: user.id } as user_for_invite];
+    });
+    Setemailselected((prev) => {
+      if (prev.find((u) => u.Email === user.Email)) {
+        return prev;
+      }
+      return [...prev, { Email: user.Email } as user_for_invite];
+    });
+  }
 
   const search_users = useCallback(async () => {
-    try { 
-      if (!token) return
-      const response =  await UserService.search_user(team_id, token)
-      if (response){
-      Setusers_to_invite(response)
+    try {
+      const response = await UserService.search_user(team_id);
+      if (response) {
+        Setusers_to_invite(response);
+      }
+    } catch (error) {
+      console.log("erro ao fazer a requisição", error);
     }
-    }
-    catch(error){ 
-      console.log("erro ao fazer a requisição", error)
-    }
-  }, [token])
+  }, []);
 
-  const filter_users = (email:string, users:user_for_invite[]) => {
-    if (!email) return users
-    return users.filter((user) => 
-    user.Email.toLocaleLowerCase().includes(email.toLocaleLowerCase()))
-  }
+  const filter_users = (email: string, users: user_for_invite[]) => {
+    if (!email) return users;
+    return users.filter((user) =>
+      user.Email.toLocaleLowerCase().includes(email.toLocaleLowerCase())
+    );
+  };
 
   useEffect(() => {
-    search_users()
-  }, [team_id, search_users()])
-
+    search_users();
+  }, [team_id, search_users]);
 
   return (
     <div
-      className="w-screen h-screen flex items-center justify-center bg-balck/50 backdrop-blur-sm fixed inset-0"
+      className="w-screen h-screen flex items-center justify-center bg-black/50 backdrop-blur-sm fixed inset-0"
       onClick={handleModal}
     >
       <div
@@ -154,7 +144,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
             />
             <input
               type="submit"
-            value={`${loading ? "Carregando..." : "Convidar"}`}
+              value={`${loading ? "Carregando..." : "Convidar"}`}
               className="bg-[#251F1F] cursor-pointer text-sm  p-3.5 text-center w-4/12 sm:w-2/12 font-semibold rounded-2xl"
             />
           </form>

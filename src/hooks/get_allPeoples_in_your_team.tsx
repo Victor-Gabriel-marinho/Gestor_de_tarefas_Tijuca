@@ -1,33 +1,28 @@
 import { useEffect, useState } from "react";
-import { useAuthStore } from "../store/Auth";
 import { TeamService } from "../api/services/teamService";
-import type { user_in_team } from "../api/types/User";
+import type { user_in_team } from "../api/types/UserTypes/User";
 
-export default function Get_allPeoples_in_your_teams () {
-    const token = useAuthStore((state) => state.token)
-    const [loading, Setloading] = useState<boolean>(false);
-    const [users, setusers] = useState<user_in_team[]>([])
+export default function Get_allPeoples_in_your_teams() {
+  const [loading, Setloading] = useState<boolean>(false);
+  const [users, setusers] = useState<user_in_team[]>([]);
 
+  useEffect(() => {
+    Setloading(true);
 
-    useEffect(() => {
-        if (!token) return
-        Setloading(true)
-
-        const fetch_peoples_in_all_teams = async () => {
-            try {
-                const response = await TeamService.Get_All_users_in_your_team(token)
-                if (response) {
-                    Setloading(false)
-                    setusers(response)
-                }
-            }
-            catch (error) {
-                console.log(error)
-            }
+    const fetch_peoples_in_all_teams = async () => {
+      try {
+        const response = await TeamService.Get_All_users_in_your_team();
+        if (response) {
+          Setloading(false);
+          setusers(response);
         }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-        fetch_peoples_in_all_teams()
-    }, []) 
+    fetch_peoples_in_all_teams();
+  }, []);
 
-    return {loading, users}
+  return { loading, users };
 }

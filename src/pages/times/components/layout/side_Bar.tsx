@@ -2,22 +2,21 @@ import { MdSupervisedUserCircle } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { Team } from "../../../../api/types/Team";
+import type { Team } from "../../../../api/types/TeamTypes/Team";
 import Get_teams from "../../../../hooks/get_teams";
 
 function Side_bar() {
-
   const [hiddenteams, Sethiddenteams] = useState<boolean>(false);
-  const { id } = useParams(); 
+  const { id } = useParams();
 
-  const { Teams, loading, first_team} = Get_teams();
+  const { Teams, loading, first_team } = Get_teams();
 
   function handlehiddenteams(): void {
     Sethiddenteams(!hiddenteams);
   }
 
   return (
-    <div className="h-15 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center static flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10" >
+    <div className="h-15 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center static flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
       <div
         className={` ${
           hiddenteams
@@ -51,8 +50,10 @@ function Side_bar() {
                   to={`/times/${team.id}`}
                   state={{ team }}
                   onClick={() => {
-                  if (window.innerWidth < 640){
-                    handlehiddenteams()}}}
+                    if (window.innerWidth < 640) {
+                      handlehiddenteams();
+                    }
+                  }}
                   key={team.id}
                   className={`items-center gap-4 h-15 w-full justify-center flex ${
                     team.id === id ? "bg-[#7E7878]" : ""

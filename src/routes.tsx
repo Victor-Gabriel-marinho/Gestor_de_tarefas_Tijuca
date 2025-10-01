@@ -23,17 +23,9 @@ function RoutesApp() {
                         <Route index element={<People />} />
                         <Route path="/times/:id" element={<Times />} />
                     </Route>
-                        <Route path="/lista" element={<Lista />} />
+                        <Route path="/lista/:id" element={<Lista />} />
                         <Route path="/quadros" element={<Quadros />} />
                 </Route>
-                <Route path="/cadastro" element={<Cadastro/>}/>
-                <Route path="/" element={<Layout/>}> 
-                    <Route index element={<People/>} />
-                    <Route path="/times/:id" element={<Times/>}/>
-                </Route>       
-                <Route path="/entrar" element={<Login/>}/>
-                 <Route path="/quadros" element={<Quadros/>}/>
-                <Route path="/quadros" element={<Quadros/>}/>
             </Routes>
         </BrowserRouter>
     );
