@@ -2,7 +2,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/Modal.jsx";
 import Options from "./components/Options.js";
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Get_usersInTeams } from "../../hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
@@ -11,6 +11,7 @@ import { Get_userRole } from "../../hooks/get_userRole.js";
 import { FaTrashCan } from "react-icons/fa6";
 import Get_teams from "../../hooks/get_teams.js";
 import Confirm_delete from "../../components/confirmDelete.js";
+import { Loading_anim } from "../../components/loading.js";
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
@@ -43,13 +44,13 @@ function Times() {
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className={`relative flex h-full w-full min-w-[50px]`}>
       {loadingRole ? (
         <div className="bg-[#20282F] w-full h-full text-white flex items-center justify-center">
           Carregando...
         </div>
       ) : (
-        <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-10">
+        <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
             <h1 className="text-white text-2xl sm:text-6xl font-semibold">
               Membros do time{" "}
@@ -60,27 +61,23 @@ function Times() {
               <div className="flex flex-row gap-3 items-center">
                 <div
                   onClick={Handlemodal}
-                  className="h-10 w-10 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70 hover:scale-110"
+                  className="h-9 w-9 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70 hover:scale-110"
                 >
                   <span className="text-white text-xl sm:text-2xl font-semibold">
                     +
                   </span>
                 </div>
                 <div className="" onClick={handleComfirm}>
-                  <FaTrashCan
-                    className="hover:scale-110 cursor-pointer "
-                    color="red"
-                    size={30}
-                  />
+                  <FaTrashCan className="hover:scale-110 cursor-pointer text-red-600 text-2xl" />
                 </div>
               </div>
             )}
           </div>
 
-          <div className="w-full h-full">
+          <div className="w-full sm:max-h-90 lg:max-h-160 max-h-120 min-h-55 overflow-y-auto">
             <div className="flex flex-col gap-4 sm:gap-8">
               {loading ? (
-                <div className="text-white">Carregando...</div>
+                <Loading_anim />
               ) : (
                 users.map((user) =>
                   options === user.id ? (
@@ -149,12 +146,7 @@ function Times() {
         />
       )}
 
-      {confirm && (
-        <Confirm_delete
-        id= {id}
-        Setconfirm={Setconfirm}
-        />
-      )}
+      {confirm && <Confirm_delete id={id} Setconfirm={Setconfirm} />}
     </div>
   );
 }

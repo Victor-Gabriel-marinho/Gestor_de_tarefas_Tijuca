@@ -20,30 +20,34 @@ function Nav({children}: Navprops) {
     }
 
    return (
-   <nav className="bg-[#524D50] w-screen h-10 ">
+     <nav className="bg-[#44383e] w-screen h-10 sm:h-15 p-1 sm:p-3">
+       <div className="flex gap-4 p-1 justify-between items-center relative">
+         <Link to="/quadros">
+           <BsFillHouseFill className="cursor-pointer text-white text-xl sm:text-3xl" />
+         </Link>
+         <div className="flex gap-6 items-center">
+           <div className="relative">
+             <IoFilter
+               className="cursor-pointer text-xl sm:text-3xl"
+               color="white"
+               onClick={() => Setfiltrartask(!filtrartask)}
+             />
 
-        <div className="flex gap-4 p-1 justify-between">
-            <Link to="/quadros">
-                <BsFillHouseFill className="cursor-pointer" color="white" size={30}/>
-            </Link>
-            <div className="flex gap-4">
-                <div className="relative">
-                    <IoFilter className="cursor-pointer" color="white" size={30} onClick={() => Setfiltrartask(!filtrartask)}/>
-                    
-                    {filtrartask && (
-                     <div className="relative">                 
-                        {children}                 
-                    </div>
-                )}   
-                </div>
-                <div className="bg-red-800 rounded-xl p-1 px-6 cursor-pointer text-white" onClick={delete_Token}>logout</div>
-                <Link to="/">
-                    <MdPeople className="cursor-pointer" color="white" size={30}/>
-                </Link>
-            </div>
-        </div >
-    </nav>    
-   )
+             {filtrartask && <div className="relative">{children}</div>}
+           </div>
+           <Link to="/">
+             <MdPeople className="cursor-pointer text-white text-2xl sm:text-3xl" />
+           </Link>
+           <div
+             className="bg-red-800 rounded-xl p-1 px-6 cursor-pointer text-sm text-white"
+             onClick={delete_Token}
+           >
+             logout
+           </div>
+         </div>
+       </div>
+     </nav>
+   );
 }
 
 export default Nav

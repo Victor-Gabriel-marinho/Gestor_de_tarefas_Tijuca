@@ -6,15 +6,14 @@ import { useFont } from "../../../../components/font";
 function Layout() {
   useFont(" 'Poppins', 'SansSerif' ");
 
-
   return (
-    <div className="w-screen h-screen flex flex-col ">
+    <div className="w-screen h-screen flex flex-col overflow-hidden">
       <Nav />
       <div className="flex-1 flex flex-col-reverse sm:flex-row">
         <Side_bar />
-        <main className="flex flex-1">
+        <main className="relative flex-1">
           <Outlet />
-        </main>
+        </main> 
       </div>
     </div>
   );

@@ -13,11 +13,13 @@ export default function Get_allPeoples_in_your_teams() {
       try {
         const response = await TeamService.Get_All_users_in_your_team();
         if (response) {
-          Setloading(false);
           setusers(response);
         }
       } catch (error) {
         console.log(error);
+      }
+      finally{
+        Setloading(false)
       }
     };
 

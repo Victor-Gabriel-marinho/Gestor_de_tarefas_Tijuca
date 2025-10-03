@@ -20,7 +20,6 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [loading, Setloading] = useState<boolean>(false);
   const [userroles, SetUserroles] = useState<Record<string, string>>({});
   const [Email, setEmail] = useState<string>("");
-  const [emailselected, Setemailselected] = useState<user_for_invite[]>([]);
   const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
   const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
   const RoleMap: Record<string, string> = {
@@ -76,16 +75,10 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
   function selectuser(user: user_for_invite) {
     SetselectUsers_id((prev) => {
-      if (prev.find((u) => u.id === user.id)) {
-        return prev;
-      }
-      return [...prev, { id: user.id } as user_for_invite];
-    });
-    Setemailselected((prev) => {
-      if (prev.find((u) => u.Email === user.Email)) {
-        return prev;
-      }
-      return [...prev, { Email: user.Email } as user_for_invite];
+     if (prev.some((u) => u.id === user.id)) {
+      return prev.filter((u) => u.id !== user.id)
+     }
+     return [...prev, user]
     });
   }
 
@@ -109,11 +102,13 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
   useEffect(() => {
     search_users();
-  }, [team_id, search_users]);
+  }, [team_id, search_users]);  
+
+  console.log(selectUsers_id)
 
   return (
     <div
-      className="w-screen h-screen flex items-center justify-center bg-black/50 backdrop-blur-sm fixed inset-0"
+      className="w-screen h-screen flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm fixed inset-0"
       onClick={handleModal}
     >
       <div
@@ -139,7 +134,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
               name="Email"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
-              value={emailselected.map((email) => email.Email).join(",")}
+              value={Email}
               className="border w-10/12 outline-0 border-[#746E72] p-2 font-semibold truncate text-xl rounded-[10px]"
             />
             <input
@@ -161,19 +156,23 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
 
-          <div className="w-full flex flex-col gap-7 max-h-100 px-5 overflow-y-auto">
-            {filter_users(Email, users_to_invite).map((user) => (
+          <div className="w-full flex flex-col gap-7 max-h-40 sm:max-h-100 sm:min-h-50 px-2 sm:px-5 overflow-y-auto">
+            {filter_users(Email, users_to_invite).map((user) => {
+              
+              const isSelected = selectUsers_id.some((u) => u.id === user.id )
+
+              return (
               <div
-                className={`flex items-center justify-between w-full cursor-pointer `}
+                className={`flex items-center justify-between w-full cursor-pointer p-2 rounded-xl ${isSelected ? "bg-zinc-800" : "" } `}
                 key={user.id}
                 onClick={() => selectuser(user)}
               >
                 <div className="items-center flex flex-row gap-2">
-                  <FaUserCircle className="text-white text-5xl" />
+                  <FaUserCircle className="text-white text-3xl sm:text-5xl" />
                   <p className="text-xl">{user.Name}</p>
                 </div>
                 <div className="flex flex-row gap-2 items-center">
-                  <p className="text-xl " onClick={HandlePopUp}>
+                  <p className="text-sm sm:text-lg font-semibold" onClick={HandlePopUp}>
                     {userroles[user.id] ?? "Colaborador"}
                   </p>
                   <div className="relative">
@@ -196,7 +195,8 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                   </div>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
