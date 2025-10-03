@@ -7,186 +7,207 @@ import Filtrar from "../../components/filtro";
 import { Get_Tasks } from "../../hooks/get_Tasks";
 import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
+import Criar from "../../components/criartarefa"
+
 
 function Lista() {
-  {
-    /*hook para trazer a fonte*/
-  }
-  useFont(" 'Poppins', 'SansSerif' ");
+    {
+        /*hook para trazer a fonte*/
+    }
+    useFont(" 'Poppins', 'SansSerif' ");
 
-  {
-    /*constantes para o input e a tarefa da lista pendente*/
-  }
-  const [inputpen, Setinputpen] = useState<boolean>(false);
-  const [tarefapen, Settarefapen] = useState<string>("");
-
-  {
-    /*constantes para o input e a tarefa da lista em progresso*/
-  }
-  const [inputprog, Setinputprog] = useState<boolean>(false);
-  const [tarefaprog, Settarefaprog] = useState<string>("");
-
-  {
-    /*constantes para o input e a tarefa da lista concluídas*/
-  }
-  const [inputconc, Setinputconc] = useState<boolean>(false);
-  const [tarefaconc, Settarefaconc] = useState<string>("");
-
-  {
-    /*constantes para criar nova lista e guardar o seu nome*/
-  }
-  const [novaListaInput, setNovaListaInput] = useState<string>("");
-  const [novalista, Setnovalista] = useState<boolean>(false);
-  const [nomelista, Setnomelista] = useState<string>("");
-
-  {
-    /*constantes para criar uma nova tarefa para ela*/
-  }
-  const [novatarefa, Setnovatarefa] = useState<boolean>(false);
-  const [tarefaNovaLista, SettarefaNovaLista] = useState<string>("");
-
-  {
-    /*constantes para para chamar o componente modal_taf para a tarefa selecionada*/
-  }
-  const [modaltask, Setmodaltask] = useState<boolean>(false);
-  const [select, Setselect] = useState<string>("");
-
-  {
-    /*objeto para minimizar as listas*/
-  }
-  const [minimize, setMinimize] = useState({
-    pendente: false,
-    fazendo: false,
-    concluido: false,
-    nova: false,
-  });
-
-  const { id } = useParams();
-  const { tasks, loading } = id ? Get_Tasks(id) : { tasks: [], loading: false };
-  console.log(tasks);
-  
+    {
+        /*constantes para o input e a tarefa da lista pendente*/
+    }
+    const [inputpen, Setinputpen] = useState<boolean>(false);
 
 
-  const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
-  const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
-  const [doneTasks, setDoneTasks] = useState<Task[]>([]);
+    {/*constantes para o input e a tarefa da lista pendente*/ }
+    const [tarefapen, Settarefapen] = useState<string>("")
 
-  useEffect(() => {
-    if (!tasks) return;
+    {/*constantes para o input e a tarefa da lista em progresso*/ }
+    const [tarefaprog, Settarefaprog] = useState<string>("")
 
-    const pend = tasks.filter((t) => t.Status === "Pendente");
-    const prog = tasks.filter((t) => t.Status === "Progresso");
-    const conc = tasks.filter((t) => t.Status === "Concluido");
+    {/*constantes para o input e a tarefa da lista concluídas*/ }
+    const [tarefaconc, Settarefaconc] = useState<string>("")
 
-    setPendingTasks(pend)
-    setInProgressTasks(prog)
-    setDoneTasks(conc)
+    {
+        /*constantes para criar uma nova tarefa para ela*/
+    }
+    const [novatarefa, Setnovatarefa] = useState<boolean>(false);
+    const [tarefaNovaLista, SettarefaNovaLista] = useState<string>("");
 
-  }, [tasks]);
+    {
+        /*constantes para para chamar o componente modal_taf para a tarefa selecionada*/
+    }
+    const [modaltask, Setmodaltask] = useState<boolean>(false);
+    const [select, Setselect] = useState<string>("");
 
-  {
-    /*constante que necessita do objeto para minimizar a tarefa*/
-  }
-  const toggleMinimize = (key: keyof typeof minimize) => {
-    setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+    {
+        /*objeto para minimizar as listas*/
+    }
+    const [minimize, setMinimize] = useState({
+        pendente: false,
+        fazendo: false,
+        concluido: false,
+        nova: false,
+    });
 
-  return (
-    <>
-      <div className="bg-[#1F2937] h-screen w-screen">
-        {/*navbar da página*/}
-        <Nav>
-          <Filtrar />
-        </Nav>
+    const { id } = useParams();
+    const { tasks, loading } = id ? Get_Tasks(id) : { tasks: [], loading: false };
+    console.log(tasks);
 
-        <main className=" flex  flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
-          <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row ">
-            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
-              {/*lista de tarefas pendente*/}
-              <div className="flex items-center justify-between ">
-                <p className="text-white font-semibold flex-1 text-center">
-                  Pendente
-                </p>
 
-                <div className="flex justify-end p-1 rounded-[15px]">
-                  {/*icone para minimizar tarefa*/}
-                  <FiMinimize2
-                    color="white"
-                    className="hover:scale-125  cursor-pointer"
-                    onClick={() => toggleMinimize("pendente")}
-                  />
-                </div>
-              </div>
 
-              {/*função minimizar do pendente*/}
-              {!minimize.pendente && (
-                pendingTasks.map((pentask) =>
-                <div key={pentask.id}>
-                  <div>
-                    <p
-                      className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]"
-                      onClick={() => {
-                        Setselect("Começar API");
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {pentask.Name}
-                    </p>
-                  </div>
-                  <div>
-                    <p
-                      className={`bg-white cursor-pointer truncate text-center p-1 rounded-[5px] ${
-                        tarefapen ? "block h-[35px]" : "hidden"
-                      }`}
-                      onClick={() => {
-                        Setselect(tarefapen);
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {tarefapen}
-                    </p>
-                  </div>
-                  {inputpen && (
-                    <textarea
-                      placeholder="nome"
-                      className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
-                      value={tarefapen}
-                      onChange={(e) => Settarefapen(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          event.preventDefault();
-                          if (tarefapen.trim() !== "") {
-                            Setinputpen(false);
-                          }
-                        }
-                      }}
-                    />
-                  )}
-                </div>)
-              )}
-                  <button
-                    className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
-                    onClick={() => Setinputpen(!inputpen)}
-                  >
-                    + Criar Tarefa
-                  </button>
-            </div>
-            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
-              {/*lista de terfas em progresso*/}
-              <div className="flex items-center justify-between">
-                <p className="text-white font-semibold flex-1 text-center">
-                  Em progresso
-                </p>
+    const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
+    const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
+    const [doneTasks, setDoneTasks] = useState<Task[]>([]);
 
-                <div className="flex justify-end p-1 rounded-[15px]">
-                  {/*icone para minimizar tarefa*/}
-                  <FiMinimize2
-                    color="white"
-                    className="hover:scale-125 cursor-pointer"
-                    onClick={() => toggleMinimize("fazendo")}
-                  />
-                </div>
-              </div>
+    useEffect(() => {
+        if (!tasks) return;
+        const [tarefaatrasadas, Settarefasatrasadas] = useState<string>("")
+        {/*constantes para para chamar o componente modal_taf para a tarefa selecionada*/ }
+        const [modaltask, Setmodaltask] = useState<boolean>(false)
+        const [select, Setselect] = useState<string>("")
+
+        const [criar, Setcriar] = useState<boolean>(false)
+        const [ListaAlvo, Setlistaalvo] = useState<"pendente" | "progresso" | "concluido" | "atrasadas" | "nova" | null>(null);
+
+        {/*objeto para minimizar as listas*/ }
+        const [minimize, setMinimize] = useState({
+            pendente: false,
+            fazendo: false,
+            concluido: false,
+            atrasadas: false,
+            nova: false,
+        });
+
+        const pend = tasks.filter((t) => t.Status === "Pendente");
+        const prog = tasks.filter((t) => t.Status === "Progresso");
+        const conc = tasks.filter((t) => t.Status === "Concluido");
+
+        setPendingTasks(pend)
+        setInProgressTasks(prog)
+        setDoneTasks(conc)
+
+    }, [tasks]);
+
+    {
+        /*constante que necessita do objeto para minimizar a tarefa*/
+    }
+    const toggleMinimize = (key: keyof typeof minimize) => {
+        setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
+    };
+
+
+    return (
+        <>
+            <div className="bg-[#1F2937] h-screen w-screen">
+                {/*navbar da página*/}
+                <Nav>
+                    <Filtrar />
+                </Nav>
+
+                <main className=" flex  flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
+
+                    <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row ">
+                        <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
+                            {/*lista de tarefas pendente*/}
+                            <div className="flex items-center justify-between ">
+                                <p className="text-white font-semibold flex-1 text-center">Pendente</p>
+
+                                <main className=" flex  flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
+                                    <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row ">
+                                        <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
+                                            {/*lista de tarefas pendente*/}
+                                            <div className="flex items-center justify-between ">
+                                                <p className="text-white font-semibold flex-1 text-center">
+                                                    Pendente
+                                                </p>
+
+                                                <div className="flex justify-end p-1 rounded-[15px]">
+                                                    {/*icone para minimizar tarefa*/}
+                                                    <FiMinimize2
+                                                        color="white"
+                                                        className="hover:scale-125  cursor-pointer"
+                                                        onClick={() => toggleMinimize("pendente")}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/*função minimizar do pendente*/}
+                                            {!minimize.pendente && (
+                                                pendingTasks.map((pentask) =>
+                                                    <div key={pentask.id}>
+                                                        <div>
+                                                            <p
+                                                                className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]"
+                                                                onClick={() => {
+                                                                    Setselect("Começar API");
+                                                                    Setmodaltask(true);
+                                                                }}
+                                                            >
+                                                                {pentask.Name}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <p
+                                                                className={`bg-white cursor-pointer truncate text-center p-1 rounded-[5px] ${tarefapen ? "block h-[35px]" : "hidden"
+                                                                    }`}
+                                                                onClick={() => {
+                                                                    Setselect(tarefapen);
+                                                                    Setmodaltask(true);
+                                                                }}
+                                                            >
+                                                                {tarefapen}
+                                                            </p>
+                                                        </div>
+                                                        {inputpen && (
+                                                            <textarea
+                                                                placeholder="nome"
+                                                                className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
+                                                                value={tarefapen}
+                                                                onChange={(e) => Settarefapen(e.target.value)}
+                                                                onKeyDown={(event) => {
+                                                                    if (event.key === "Enter") {
+                                                                        event.preventDefault();
+                                                                        if (tarefapen.trim() !== "") {
+                                                                            Setinputpen(false);
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </div>)
+                                            )}
+                                            <button
+                                                className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
+                                                onClick={() => Setinputpen(!inputpen)}
+                                            >
+                                                + Criar Tarefa
+                                            </button>
+                                        </div>
+                                        <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
+                                            {/*lista de terfas em progresso*/}
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-white font-semibold flex-1 text-center">
+                                                    Em progresso
+                                                </p>
+
+                                                {modaltask && select && (<Modaltaf task={select} onClose={() => Setmodaltask(false)} onDelete={() => {
+                if (select === tarefapen) Settarefapen("");
+                else if (select === tarefaprog) Settarefaprog("");
+                else if (select === tarefaconc) Settarefaconc("");
+                else if (select === tarefaNovaLista) SettarefaNovaLista("")
+                else if (select === tarefaatrasadas) Settarefasatrasadas("")
+            }}
+                onUpdateTask={(novoNome: string) => {
+                    if (select === tarefapen) Settarefapen(novoNome);
+                    else if (select === tarefaprog) Settarefaprog(novoNome);
+                    else if (select === tarefaconc) Settarefaconc(novoNome);
+                    else if (select === tarefaNovaLista) SettarefaNovaLista(novoNome);
+                    else if (select ===  tarefaatrasadas) Settarefasatrasadas(novoNome);
+                }}
 
               {/*minimizar das tarefas em progresso*/}
               {!minimize.fazendo && (
@@ -239,189 +260,202 @@ function Lista() {
                     + Criar Tarefa
                   </button>
             </div>
-            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
-              {/*lista de tarefas concluídas*/}
-              <div className="flex items-center justify-between">
-                <p className="text-white font-semibold flex-1 text-center">
-                  Concluído
-                </p>
-                <div className="flex justify-end p-1 rounded-[15px]">
-                  {/*icone para minimizar tarefa*/}
-                  <FiMinimize2
-                    color="white"
-                    className="hover:scale-125 cursor-pointer"
-                    onClick={() => toggleMinimize("concluido")}
-                  />
-                </div>
-              </div>
-              {/*função de minimizar concluídas*/}
-              {!minimize.concluido && (
-                doneTasks.map((taskdone) =>
-                <div key={taskdone.id}>
-                  <p
-                    className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
-                    onClick={() => {
-                      Setselect("Fazer Design");
-                      Setmodaltask(!modaltask);
-                    }}
-                  >
-                    {taskdone.Name}
-                  </p>
-                  <p
-                    className={`bg-white cursor-pointer truncate text-center p-1 rounded-[5px] ${
-                      tarefaconc ? "block h-[35px]" : "hidden"
-                    }`}
-                    onClick={() => {
-                      Setselect(tarefaconc);
-                      Setmodaltask(true);
-                    }}
-                  >
-                    {tarefaconc}
-                  </p>
-                  {inputconc && (
-                    <textarea
-                      placeholder="nome"
-                      className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
-                      value={tarefaconc}
-                      onChange={(e) => Settarefaconc(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          event.preventDefault();
-                          if (tarefaconc.trim() !== "") {
-                            Setinputconc(false);
-                          }
-                        }
-                      }}
-                    />
-                  )}
-                  {/*botão para criar tarefa da lista de concluídas*/}
-                </div>)
-              )}
-                  <button
-                    className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
-                    onClick={() => Setinputconc(!inputconc)}
-                  >
-                    + Criar Tarefa
-                  </button>
-            </div>
-            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full  gap-y-1 max-w-60">
-              {/*botão para criar nova lista*/}
-              <div className="flex items-center justify-center">
-                <p className="text-white font-semibold truncate resize-none p-1">
-                  {nomelista}
-                </p>
+                                            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
+                                                {/*lista de tarefas concluídas*/}
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-white font-semibold flex-1 text-center">
+                                                        Concluído
+                                                    </p>
+                                                    <div className="flex justify-end p-1 rounded-[15px]">
+                                                        {/*icone para minimizar tarefa*/}
+                                                        <FiMinimize2
+                                                            color="white"
+                                                            className="hover:scale-125 cursor-pointer"
+                                                            onClick={() => toggleMinimize("concluido")}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {/*função de minimizar concluídas*/}
+                                                {!minimize.concluido && (
+                                                    doneTasks.map((taskdone) =>
+                                                        <div key={taskdone.id}>
+                                                            <p
+                                                                className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
+                                                                onClick={() => {
+                                                                    Setselect("Fazer Design");
+                                                                    Setmodaltask(!modaltask);
+                                                                }}
+                                                            >
+                                                                {taskdone.Name}
+                                                            </p>
+                                                            <p
+                                                                className={`bg-white cursor-pointer truncate text-center p-1 rounded-[5px] ${tarefaconc ? "block h-[35px]" : "hidden"
+                                                                    }`}
+                                                                onClick={() => {
+                                                                    Setselect(tarefaconc);
+                                                                    Setmodaltask(true);
+                                                                }}
+                                                            >
+                                                                {tarefaconc}
+                                                            </p>
+                                                            {inputconc && (
+                                                                <textarea
+                                                                    placeholder="nome"
+                                                                    className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
+                                                                    value={tarefaconc}
+                                                                    onChange={(e) => Settarefaconc(e.target.value)}
+                                                                    onKeyDown={(event) => {
+                                                                        if (event.key === "Enter") {
+                                                                            event.preventDefault();
+                                                                            if (tarefaconc.trim() !== "") {
+                                                                                Setinputconc(false);
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            )}
+                                                            {/*botão para criar tarefa da lista de concluídas*/}
+                                                        </div>)
+                                                )}
+                                                <button
+                                                    className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
+                                                    onClick={() => Setinputconc(!inputconc)}
+                                                >
+                                                    + Criar Tarefa
+                                                </button>
+                                            </div>
+                                            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full  gap-y-1 max-w-60">
+                                                {/*botão para criar nova lista*/}
+                                                <div className="flex items-center justify-center">
+                                                    <p className="text-white font-semibold truncate resize-none p-1">
+                                                        {nomelista}
+                                                    </p>
 
-                {nomelista && tarefaNovaLista && (
-                  <div className="flex justify-end p-1 rounded-[15px]">
-                    {/*icone para minimizar tarefa*/}
-                    <FiMinimize2
-                      color="white"
-                      className="hover:scale-125 ml-[170px]"
-                      onClick={() => toggleMinimize("nova")}
-                    />
-                  </div>
-                )}
-              </div>
-              {/*função para minimizar nova lista*/}
-              {!minimize.nova && (
-                <>
-                  {novalista && (
-                    <textarea
-                      className="bg-white text-black outline-none placeholder-gray-400 h-[35px]  w-full truncate resize-none"
-                      value={novaListaInput}
-                      onChange={(e) => setNovaListaInput(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (
-                          event.key === "Enter" &&
-                          novaListaInput.trim() !== ""
-                        ) {
-                          event.preventDefault();
-                          Setnomelista(novaListaInput);
-                          setNovaListaInput("");
-                          Setnovalista(false);
-                        }
-                      }}
-                    />
-                  )}
+                                                    {nomelista && tarefaNovaLista && (
+                                                        <div className="flex justify-end p-1 rounded-[15px]">
+                                                            {/*icone para minimizar tarefa*/}
+                                                            <FiMinimize2
+                                                                color="white"
+                                                                className="hover:scale-125 ml-[170px]"
+                                                                onClick={() => toggleMinimize("nova")}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {/*função para minimizar nova lista*/}
+                                                {!minimize.nova && (
+                                                    <>
+                                                        {novalista && (
+                                                            <textarea
+                                                                className="bg-white text-black outline-none placeholder-gray-400 h-[35px]  w-full truncate resize-none"
+                                                                value={novaListaInput}
+                                                                onChange={(e) => setNovaListaInput(e.target.value)}
+                                                                onKeyDown={(event) => {
+                                                                    if (
+                                                                        event.key === "Enter" &&
+                                                                        novaListaInput.trim() !== ""
+                                                                    ) {
+                                                                        event.preventDefault();
+                                                                        Setnomelista(novaListaInput);
+                                                                        setNovaListaInput("");
+                                                                        Setnovalista(false);
+                                                                    }
+                                                                }}
+                                                            />
+                                                        )}
 
-                  {tarefaNovaLista && (
-                    <p
-                      className="bg-white cursor-pointer truncate h-[35px] text-center p-1 rounded-[5px]"
-                      onClick={() => {
-                        Setselect(tarefaNovaLista);
-                        Setmodaltask(!modaltask);
-                      }}
-                    >
-                      {tarefaNovaLista}
-                    </p>
-                  )}
+                                                        {tarefaNovaLista && (
+                                                            <p
+                                                                className="bg-white cursor-pointer truncate h-[35px] text-center p-1 rounded-[5px]"
+                                                                onClick={() => {
+                                                                    Setselect(tarefaNovaLista);
+                                                                    Setmodaltask(!modaltask);
+                                                                }}
+                                                            >
+                                                                {tarefaNovaLista}
+                                                            </p>
+                                                        )}
 
-                  {nomelista && novatarefa && (
-                    <textarea
-                      placeholder="digite"
-                      className="bg-white outline-none placeholder-gray-400 h-[35px] w-full truncate resize-none"
-                      value={tarefaNovaLista}
-                      onChange={(e) => SettarefaNovaLista(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (
-                          event.key === "Enter" &&
-                          tarefaNovaLista.trim() !== ""
-                        ) {
-                          event.preventDefault();
-                          if (tarefaNovaLista.trim() !== "") {
-                            event.preventDefault();
-                            Setnovatarefa(false);
-                          }
-                        }
-                      }}
-                    />
-                  )}
+                                                        {nomelista && novatarefa && (
+                                                            <textarea
+                                                                placeholder="digite"
+                                                                className="bg-white outline-none placeholder-gray-400 h-[35px] w-full truncate resize-none"
+                                                                value={tarefaNovaLista}
+                                                                onChange={(e) => SettarefaNovaLista(e.target.value)}
+                                                                onKeyDown={(event) => {
+                                                                    if (
+                                                                        event.key === "Enter" &&
+                                                                        tarefaNovaLista.trim() !== ""
+                                                                    ) {
+                                                                        event.preventDefault();
+                                                                        if (tarefaNovaLista.trim() !== "") {
+                                                                            event.preventDefault();
+                                                                            Setnovatarefa(false);
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            />
+                                                        )}
 
-                  {/*botão para criar nova lista*/}
-                  {!nomelista && (
-                    <button
-                      id="bnt-lista"
-                      className="bg-[#251F1F] text-white text-center  rounded-[5px] p-1  hover:bg-[#493f3f]  w-full cursor-pointer "
-                      onClick={() => Setnovalista(true)}
-                    >
-                      + Criar nova lista
-                    </button>
-                  )}
-                  {/*botão para criar tarefa para nova lista*/}
-                  {nomelista && (
-                    <button
-                      className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434]  cursor-pointer "
-                      onClick={() => Setnovatarefa(true)}
-                    >
-                      + Criar tarefa
-                    </button>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-        </main>
-      </div>
+                                                        {/*botão para criar nova lista*/}
+                                                        {!nomelista && (
+                                                            <button
+                                                                id="bnt-lista"
+                                                                className="bg-[#251F1F] text-white text-center  rounded-[5px] p-1  hover:bg-[#493f3f]  w-full cursor-pointer "
+                                                                onClick={() => Setnovalista(true)}
+                                                            >
+                                                                + Criar nova lista
+                                                            </button>
+                                                        )}
+                                                        {/*botão para criar tarefa para nova lista*/}
+                                                        {nomelista && (
+                                                            <button
+                                                                className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434]  cursor-pointer "
+                                                                onClick={() => Setnovatarefa(true)}
+                                                            >
+                                                                + Criar tarefa
+                                                            </button>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                </main>
+                            </div>
 
-      {modaltask && select && (
-        <Modaltaf
-          task={select}
-          onClose={() => Setmodaltask(false)}
-          onDelete={() => {
-            if (select === tarefapen) Settarefapen("");
-            else if (select === tarefaprog) Settarefaprog("");
-            else if (select === tarefaconc) Settarefaconc("");
-            else if (select === tarefaNovaLista) SettarefaNovaLista("");
-          }}
-          onUpdateTask={(novoNome: string) => {
-            if (select === tarefapen) Settarefapen(novoNome);
-            else if (select === tarefaprog) Settarefaprog(novoNome);
-            else if (select === tarefaconc) Settarefaconc(novoNome);
-          }}
-        />
-      )}
-    </>
-  );
+                            {modaltask && select && (
+                                <Modaltaf
+                                    task={select}
+                                    onClose={() => Setmodaltask(false)}
+                                    onDelete={() => {
+                                        if (select === tarefapen) Settarefapen("");
+                                        else if (select === tarefaprog) Settarefaprog("");
+                                        else if (select === tarefaconc) Settarefaconc("");
+                                        else if (select === tarefaNovaLista) SettarefaNovaLista("");
+                                    }}
+                                    onUpdateTask={(novoNome: string) => {
+                                        if (select === tarefapen) Settarefapen(novoNome);
+                                        else if (select === tarefaprog) Settarefaprog(novoNome);
+                                        else if (select === tarefaconc) Settarefaconc(novoNome);
+                                    }}
+                                />
+                            )}
+                        </>
+                        );
+                        {criar && (<Criar onClose={() => Setcriar(false)} task={(nome: string) => {
+                            if (ListaAlvo === "pendente") Settarefapen(nome);
+                            else if (ListaAlvo === "progresso") Settarefaprog(nome);
+                            else if (ListaAlvo === "concluido") Settarefaconc(nome);
+                            else if (ListaAlvo === "nova") SettarefaNovaLista(nome);
+                            else if (ListaAlvo === "atrasadas") Settarefasatrasadas(nome);
+                        }} />)}
+
+
+
+                    </>
+                    )
 }
+}
+                    )
 
-export default Lista;
+                    export default Lista;
