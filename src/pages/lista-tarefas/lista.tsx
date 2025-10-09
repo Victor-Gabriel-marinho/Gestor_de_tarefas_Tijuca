@@ -34,7 +34,6 @@ function Lista() {
   // Criar tarefa
   const [criar, Setcriar] = useState<boolean>(false);
   const [ListaAlvo, Setlistaalvo] = useState<"pendente" | "progresso" | "concluido" | "nova" | null>(null);
-
   // Minimizar listas
   const [minimize, setMinimize] = useState({
     pendente: false,
