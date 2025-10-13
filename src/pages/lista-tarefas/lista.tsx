@@ -39,6 +39,8 @@ function Lista() {
   const toggleMinimize = (key: keyof typeof minimize) => {
     setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+ //filtro  de status e prazo
+const [filtro, setFiltro] = useState<{status?:string; prazo?:string}>({})
 
   // Buscar tasks
   const { id } = useParams();
@@ -57,17 +59,93 @@ function Lista() {
     setDoneTasks(tasks.filter((t) => t.Status === "Concluido"));
   }, [tasks]);
 
+  // função que auxilia para filtrar por status
+  const filtrarPorStatus = (t: Task, status?: string) => {
+  if (!status) return true;
+  switch (status) {
+    case "concluido":
+      return t.Status === "Concluido";
+    case "naoConcluido":
+      return t.Status !== "Concluido";
+    case "pendente":
+      return t.Status === "Pendente";
+    default:
+      return true;
+  }
+}
+
+//função que auxilia a filtrar por prazo
+const filtrarprazo = (t: Task, prazo?:string) => {
+  if (!prazo) return true 
+  const hoje = new Date()
+  const prazoData = new Date(t.EndDate)
+
+  switch (prazo) {
+    case "atrasadas":
+      return prazoData < hoje 
+    case "dia":
+      return prazoData <= new Date(hoje.getTime() + 24 * 60 * 60 * 1000) //24h * 60min * 60s * 1000ms
+      
+    case "semana":
+      return prazoData <= new Date(hoje.getTime() + 7 * 60 * 60 * 1000)
+    case "mes":
+      return prazoData <= new Date(hoje.getTime() + 30 * 60 * 60 * 1000)
+    default:
+      return true
+  }
+}
+
+//aplica os filtros ás listas já separadas por status
+const pendingTasksFiltradas = pendingTasks.filter(
+  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+);
+const inProgressTasksFiltradas = inProgressTasks.filter(
+  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+);
+const doneTasksFiltradas = doneTasks.filter(
+  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+);
+
+
+console.log("filtro atual:", filtro )
+
+const nenhumFiltroAtivo = 
+  (filtro.status === 'todas' || filtro.status === undefined) &&
+  (filtro.prazo === 'todas' || filtro.prazo === undefined)
+
+ 
+
+
+const verificaLista = 
+  !!nomelista || 
+  // 2. Mostrar se está no modo de criação (o textarea está ativo)
+  novalista || 
+  // 3. Mostrar se tem uma tarefa para exibir
+  !!tarefaNovaLista || 
+  // 4. Mostrar se os filtros não estão ativos (para exibir o botão '+ Criar nova lista')
+  (nenhumFiltroAtivo && !nomelista); 
+
+
+   useEffect(() => {
+    if (!nenhumFiltroAtivo) {
+        Setnovalista(false); // Força o fechamento do textarea/input de criar lista
+    }
+}, [nenhumFiltroAtivo]);
+
   return (
     <>
+    
       <div className="bg-[#1F2937] h-screen w-screen">
         {/* Navbar */}
         <Nav>
-          <Filtrar />
+        {/*o filtro envia suas mudanças de status /prazo via prop*/}
+          <Filtrar onFiltroChange={(f) => setFiltro(f)}/>
         </Nav>
 
         <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
           <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row">
             {/* Pendentes */}
+            {pendingTasksFiltradas.length > 0 && (
             <ListTar
               title="Pendente"
               minimizeKey="pendente"
@@ -78,7 +156,8 @@ function Lista() {
                 setstatusForCreate("Pendente");
               }}
             >
-              {pendingTasks.map((pentask) => (
+              {/*{pendingTasks.map((pentask)*/}
+             {pendingTasksFiltradas.map((pentask)  => (
                 <div key={pentask.id}>
                   <p
                     className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]"
@@ -92,8 +171,9 @@ function Lista() {
                 </div>
               ))}
             </ListTar>
-
+            )}
             {/* Em progresso */}
+            {inProgressTasksFiltradas.length > 0 && (
             <ListTar
               title="Progresso"
               minimizeKey="progresso"
@@ -104,7 +184,8 @@ function Lista() {
                 setstatusForCreate("Progresso");
               }}
             >
-              {inProgressTasks.map((progtask) => (
+              {/*{inProgressTasks.map((progtask)*/}
+              {inProgressTasksFiltradas.map((progtask) => (
                 <div key={progtask.id}>
                   <p
                     className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
@@ -118,8 +199,10 @@ function Lista() {
                 </div>
               ))}
             </ListTar>
+            )}
 
             {/* Concluídas */}
+            {doneTasksFiltradas.length > 0 && (
             <ListTar
               title="Concluidas"
               minimizeKey="concluido"
@@ -130,7 +213,8 @@ function Lista() {
                 setstatusForCreate("Concluido");
               }}
             >
-              {doneTasks.map((taskdone) => (
+              {/* doneTasks.map((taskdone)*/}
+              { doneTasksFiltradas.map((taskdone) => (
                 <div key={taskdone.id}>
                   <p
                     className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
@@ -144,6 +228,7 @@ function Lista() {
                 </div>
               ))}
             </ListTar>
+            )}
 
             {/* Tarefas atrasadas */}
             {/* <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
@@ -197,7 +282,9 @@ function Lista() {
             </div> */}
 
             {/* Nova lista */}
-            <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full gap-y-1 max-w-60">
+            {
+              verificaLista && (
+               <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full gap-y-1 max-w-60">
               <p className="text-white font-semibold truncate resize-none p-1">
                 {nomelista}
               </p>
@@ -223,7 +310,7 @@ function Lista() {
                     />
                   )}
 
-                  {tarefaNovaLista && (
+                  { tarefaNovaLista && (
                     <p
                       className="bg-white cursor-pointer truncate h-[35px] text-center p-1 rounded-[5px]"
                       onClick={() => {
@@ -234,7 +321,7 @@ function Lista() {
                     </p>
                   )}
 
-                  {!nomelista && (
+                  {!nomelista &&  nenhumFiltroAtivo &&(
                     <button
                       id="bnt-lista"
                       className="bg-[#251F1F] text-white text-center rounded-[5px] p-1 hover:bg-[#493f3f] w-full cursor-pointer"
@@ -257,7 +344,7 @@ function Lista() {
                   )}
                 </>
               )}
-            </div>
+            </div>)}
           </div>
         </main>
 
