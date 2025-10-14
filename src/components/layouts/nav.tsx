@@ -4,7 +4,7 @@ import { IoFilter } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import {useState } from "react";
 import type { ReactNode } from "react";
-import { useAuthStore } from "../store/Auth";
+import { useAuthStore } from "../../store/Auth";
 
 type Navprops = {
     children?: ReactNode

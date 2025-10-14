@@ -1,6 +1,6 @@
 import { FaUserCircle } from "react-icons/fa";
 import Get_allPeoples_in_your_teams from "../../hooks/get_allPeoples_in_your_team";
-import { Loading_anim } from "../../components/loading";
+import { Loading_anim } from "../../components/commons/loading";
 
 function People() {
 

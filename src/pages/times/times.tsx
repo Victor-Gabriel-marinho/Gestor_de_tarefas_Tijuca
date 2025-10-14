@@ -11,7 +11,7 @@ import { Get_userRole } from "../../hooks/get_userRole.js";
 import { FaTrashCan } from "react-icons/fa6";
 import Get_teams from "../../hooks/get_teams.js";
 import Confirm_delete from "../../components/confirmDelete.js";
-import { Loading_anim } from "../../components/loading.js";
+import { Loading_anim } from "../../components/commons/loading.js";
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);

@@ -6,8 +6,8 @@ import Times from "./pages/times/times";
 import Lista from "./pages/lista-tarefas/lista";
 import Layout from "./pages/times/components/layout/layout";
 import People from "./pages/times/People";
-import { PrivateRoute } from "./components/PrivateRoute";
-import { BlockRouter } from "./components/BlockRoute";
+import { PrivateRoute } from "./components/auth/PrivateRoute";
+import { BlockRouter } from "./components/auth/BlockRoute";
 
 function RoutesApp() {
     return (

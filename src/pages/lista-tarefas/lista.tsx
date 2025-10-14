@@ -1,13 +1,13 @@
-import Nav from "../../components/nav";
-import Modaltaf from "../../components/Modaltaf";
+import Nav from "../../components/layouts/nav";
+import Modaltaf from "./components/Modaltaf";
 import { useEffect, useState } from "react";
 import { useFont } from "../../components/font";
-import Filtrar from "../../components/filtro";
+import Filtrar from "./components/filtertask";
 import { Get_Tasks } from "../../hooks/get_Tasks";
 import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
-import Criar from "../../components/criartarefa";
-import ListTar from "../../components/ListTar";
+import Criar from "./components/criartarefa";
+import ListTar from "./components/ListTar";
 
 function Lista() {
   // Hook para trazer a fonte
