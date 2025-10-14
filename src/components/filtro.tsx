@@ -47,13 +47,7 @@ function Filtrar({ onFiltroChange }: { onFiltroChange: (filtro: any) => void }) 
               onChange={handleStatusChange}
             />
             <p className="pl-2">
-              {id === "todas"
-                ? "Todas"
-                : id === "concluido"
-                ? "Concluídas"
-                : id === "naoConcluido"
-                ? "Em progresso"
-                : "Pendentes"}
+              {id}
             </p>
           </li>
         ))}
@@ -73,15 +67,7 @@ function Filtrar({ onFiltroChange }: { onFiltroChange: (filtro: any) => void }) 
               onChange={handlePrazoChange}
             />
             <p className="pl-2">
-              {id === "todas"
-                ? "Todas"
-                : id === "atraso"
-                ? "Em atraso"
-                : id === "dia"
-                ? "Em um dia"
-                : id === "semana"
-                ? "Em uma semana"
-                : "Em um mês"}
+              {id}
             </p>
           </li>
         ))}

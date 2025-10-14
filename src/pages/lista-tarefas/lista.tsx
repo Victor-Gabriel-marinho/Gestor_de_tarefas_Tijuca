@@ -106,15 +106,9 @@ const doneTasksFiltradas = doneTasks.filter(
   (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
 );
 
-
-console.log("filtro atual:", filtro )
-
 const nenhumFiltroAtivo = 
   (filtro.status === 'todas' || filtro.status === undefined) &&
   (filtro.prazo === 'todas' || filtro.prazo === undefined)
-
- 
-
 
 const verificaLista = 
   !!nomelista || 
@@ -132,102 +126,110 @@ const verificaLista =
     }
 }, [nenhumFiltroAtivo]);
 
+  const setall = () => {
+    setFiltro(prevfiltro => ({
+      ...prevfiltro,
+      status:'todas',
+      prazo:""
+    }))
+  }
+
+
   return (
     <>
-    
       <div className="bg-[#1F2937] h-screen w-screen">
         {/* Navbar */}
-        <Nav>
-        {/*o filtro envia suas mudanças de status /prazo via prop*/}
-          <Filtrar onFiltroChange={(f) => setFiltro(f)}/>
+        <Nav SetAll={setall}>
+          {/*o filtro envia suas mudanças de status /prazo via prop*/}
+          <Filtrar onFiltroChange={(f) => setFiltro(f)} />
         </Nav>
 
         <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
           <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row">
             {/* Pendentes */}
-            {pendingTasksFiltradas.length > 0 && (
-            <ListTar
-              title="Pendente"
-              minimizeKey="pendente"
-              minimized={minimize.pendente}
-              onToggleMinimize={toggleMinimize}
-              onCreateClick={() => {
-                Setcriar("Criar");
-                setstatusForCreate("Pendente");
-              }}
-            >
-              {/*{pendingTasks.map((pentask)*/}
-             {pendingTasksFiltradas.map((pentask)  => (
-                <div key={pentask.id}>
-                  <p
-                    className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]"
-                    onClick={() => {
-                      Setselect(pentask);
-                      Setmodaltask(true);
-                    }}
-                  >
-                    {pentask.Name}
-                  </p>
-                </div>
-              ))}
-            </ListTar>
+            {pendingTasksFiltradas.length >= 0 && (
+              <ListTar
+                title="Pendente"
+                minimizeKey="pendente"
+                minimized={minimize.pendente}
+                onToggleMinimize={toggleMinimize}
+                onCreateClick={() => {
+                  Setcriar("Criar");
+                  setstatusForCreate("Pendente");
+                }}
+              >
+                {/*{pendingTasks.map((pentask)*/}
+                {pendingTasksFiltradas.map((pentask) => (
+                  <div key={pentask.id}>
+                    <p
+                      className="bg-white cursor-pointer p-1 flex justify-center items-center flex-wrap truncate  text-center rounded-[5px]"
+                      onClick={() => {
+                        Setselect(pentask);
+                        Setmodaltask(true);
+                      }}
+                    >
+                      {pentask.Name}
+                    </p>
+                  </div>
+                ))}
+              </ListTar>
             )}
             {/* Em progresso */}
-            {inProgressTasksFiltradas.length > 0 && (
-            <ListTar
-              title="Progresso"
-              minimizeKey="progresso"
-              minimized={minimize.pendente}
-              onToggleMinimize={toggleMinimize}
-              onCreateClick={() => {
-                Setcriar("Criar");
-                setstatusForCreate("Progresso");
-              }}
-            >
-              {/*{inProgressTasks.map((progtask)*/}
-              {inProgressTasksFiltradas.map((progtask) => (
-                <div key={progtask.id}>
-                  <p
-                    className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
-                    onClick={() => {
-                      Setselect(progtask);
-                      Setmodaltask(true);
-                    }}
-                  >
-                    {progtask.Name}
-                  </p>
-                </div>
-              ))}
-            </ListTar>
+            {inProgressTasksFiltradas.length >= 0 && (
+              <ListTar
+                title="Progresso"
+                minimizeKey="progresso"
+                minimized={minimize.pendente}
+                onToggleMinimize={toggleMinimize}
+                onCreateClick={() => {
+                  Setcriar("Criar");
+                  setstatusForCreate("Progresso");
+                }}
+              >
+                {/*{inProgressTasks.map((progtask)*/}
+                {inProgressTasksFiltradas.map((progtask) => (
+                  <div key={progtask.id}>
+                    <p
+                      className="bg-white cursor-pointer text-center flex justify-center items-center flex-wrap max-w-[216px] p-1 rounded-[5px]"
+                      onClick={() => {
+                        Setselect(progtask);
+                        Setmodaltask(true);
+                      }}
+                    >
+                      {progtask.Name}
+                    </p>
+                  </div>
+                ))}
+              </ListTar>
             )}
 
             {/* Concluídas */}
-            {doneTasksFiltradas.length > 0 && (
-            <ListTar
-              title="Concluidas"
-              minimizeKey="concluido"
-              minimized={minimize.pendente}
-              onToggleMinimize={toggleMinimize}
-              onCreateClick={() => {
-                Setcriar("Criar");
-                setstatusForCreate("Concluido");
-              }}
-            >
-              {/* doneTasks.map((taskdone)*/}
-              { doneTasksFiltradas.map((taskdone) => (
-                <div key={taskdone.id}>
-                  <p
-                    className="bg-white cursor-pointer h-[35px] text-center p-1 rounded-[5px]"
-                    onClick={() => {
-                      Setselect(taskdone);
-                      Setmodaltask(true);
-                    }}
-                  >
-                    {taskdone.Name}
-                  </p>
-                </div>
-              ))}
-            </ListTar>
+            {doneTasksFiltradas.length >= 0 && (
+              <ListTar
+                title="Concluidas"
+                minimizeKey="concluido"
+                minimized={minimize.pendente}
+                onToggleMinimize={toggleMinimize}
+                onCreateClick={() => {
+                  Setcriar("Criar");
+                  setstatusForCreate("Concluido");
+                }}
+              >
+                {/* doneTasks.map((taskdone)*/}
+                {doneTasksFiltradas.map((taskdone) => (
+                  <div key={taskdone.id}>
+                    <p
+                      className="bg-white cursor-pointer flex flex-wrap truncate text-center p-1 rounded-[5px]"
+                      onClick={() => {
+                        Setselect(taskdone);
+                        Setmodaltask(true);
+                      }}
+                    >
+                      {taskdone.Name}
+                    </p>
+                  </div>
+                ))}
+              </ListTar>
             )}
 
             {/* Tarefas atrasadas */}
@@ -282,69 +284,69 @@ const verificaLista =
             </div> */}
 
             {/* Nova lista */}
-            {
-              verificaLista && (
-               <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full gap-y-1 max-w-60">
-              <p className="text-white font-semibold truncate resize-none p-1">
-                {nomelista}
-              </p>
+            {verificaLista && (
+              <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full gap-y-1 max-w-60">
+                <p className="text-white font-semibold truncate resize-none p-1">
+                  {nomelista}
+                </p>
 
-              {!minimize.nova && (
-                <>
-                  {novalista && (
-                    <textarea
-                      className="bg-white text-black outline-none placeholder-gray-400 h-[35px] w-full truncate resize-none"
-                      value={novaListaInput}
-                      onChange={(e) => setNovaListaInput(e.target.value)}
-                      onKeyDown={(event) => {
-                        if (
-                          event.key === "Enter" &&
-                          novaListaInput.trim() !== ""
-                        ) {
-                          event.preventDefault();
-                          Setnomelista(novaListaInput);
-                          setNovaListaInput("");
-                          Setnovalista(false);
-                        }
-                      }}
-                    />
-                  )}
+                {!minimize.nova && (
+                  <>
+                    {novalista && (
+                      <textarea
+                        className="bg-white text-black outline-none placeholder-gray-400 h-[35px] w-full truncate resize-none"
+                        value={novaListaInput}
+                        onChange={(e) => setNovaListaInput(e.target.value)}
+                        onKeyDown={(event) => {
+                          if (
+                            event.key === "Enter" &&
+                            novaListaInput.trim() !== ""
+                          ) {
+                            event.preventDefault();
+                            Setnomelista(novaListaInput);
+                            setNovaListaInput("");
+                            Setnovalista(false);
+                          }
+                        }}
+                      />
+                    )}
 
-                  { tarefaNovaLista && (
-                    <p
-                      className="bg-white cursor-pointer truncate h-[35px] text-center p-1 rounded-[5px]"
-                      onClick={() => {
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {tarefaNovaLista}
-                    </p>
-                  )}
+                    {tarefaNovaLista && (
+                      <p
+                        className="bg-white cursor-pointer truncate h-[35px] text-center p-1 rounded-[5px]"
+                        onClick={() => {
+                          Setmodaltask(true);
+                        }}
+                      >
+                        {tarefaNovaLista}
+                      </p>
+                    )}
 
-                  {!nomelista &&  nenhumFiltroAtivo &&(
-                    <button
-                      id="bnt-lista"
-                      className="bg-[#251F1F] text-white text-center rounded-[5px] p-1 hover:bg-[#493f3f] w-full cursor-pointer"
-                      onClick={() => Setnovalista(true)}
-                    >
-                      + Criar nova lista
-                    </button>
-                  )}
+                    {!nomelista && nenhumFiltroAtivo && (
+                      <button
+                        id="bnt-lista"
+                        className="bg-[#251F1F] text-white text-center rounded-[5px] p-1 hover:bg-[#493f3f] w-full cursor-pointer"
+                        onClick={() => Setnovalista(true)}
+                      >
+                        + Criar nova lista
+                      </button>
+                    )}
 
-                  {nomelista && (
-                    <button
-                      className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
-                      onClick={() => {
-                        Setcriar("Criar");
-                        setstatusForCreate("Nova");
-                      }}
-                    >
-                      + Criar tarefa
-                    </button>
-                  )}
-                </>
-              )}
-            </div>)}
+                    {nomelista && (
+                      <button
+                        className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
+                        onClick={() => {
+                          Setcriar("Criar");
+                          setstatusForCreate("Nova");
+                        }}
+                      >
+                        + Criar tarefa
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </main>
 
@@ -353,6 +355,7 @@ const verificaLista =
           <Modaltaf
             task={select}
             onClose={() => Setmodaltask(false)}
+            refetchtask={refetchTasks}
             idSelected={select.id}
             setcriar={() => Setcriar("Editar")}
           />
@@ -362,7 +365,8 @@ const verificaLista =
           <Criar
             title={criar}
             onClose={() => Setcriar("")}
-            idSelected= {select?.id}
+            closeModal={() => Setmodaltask(false)}
+            idSelected={select?.id}
             refetchTasks={refetchTasks}
             statusForCreate={statusForCreate}
             id_team={id}

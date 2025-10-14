@@ -8,11 +8,12 @@ type CreateProps = {
   id_team: string | undefined;
   idSelected: string | undefined;
   onClose: () => void;
+  closeModal?: () => void;
   refetchTasks: (() => Promise<void>) | undefined;
   statusForCreate: string;
 };
 
-function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, idSelected }: CreateProps) {
+function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, idSelected, closeModal }: CreateProps) {
   const [tarefa, Settarefa] = useState<string>("");
 
   async function Criar(e: React.FormEvent<HTMLFormElement>) {
@@ -60,7 +61,8 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, idSelect
       if (!idSelected) return
       const response = await TaskService.EditTask(idSelected,task)
       if (response) {
-        refetchTasks?.();
+        refetchTasks?.()
+        closeModal?.()
         onClose();
       }
     }

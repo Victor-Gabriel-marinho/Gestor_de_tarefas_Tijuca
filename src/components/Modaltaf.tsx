@@ -1,31 +1,36 @@
-{/*ícones usados no modal*/ }
-import { IoIosClose } from "react-icons/io"
-import { FaClock } from "react-icons/fa"
-import { GoPaperclip } from "react-icons/go"
-import { IoMdPricetag } from "react-icons/io"
-import { FaTrashCan } from "react-icons/fa6"
-import { GoPaperAirplane } from "react-icons/go"
+{
+  /*ícones usados no modal*/
+}
+import { IoIosClose } from "react-icons/io";
+import { GoPaperclip } from "react-icons/go";
+import { IoMdPricetag } from "react-icons/io";
+import { FaTrashCan } from "react-icons/fa6";
+import { GoPaperAirplane } from "react-icons/go";
+import { FaUserPlus } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { useFont } from "./font"
-import { useState, useRef, useEffect} from "react"
-import Tag from "./tags" 
-import type { Task } from "../api/types/TaskTypes/TaskDTO"
+import { useFont } from "./font";
+import { useState, useRef, useEffect } from "react";
+import Tag from "./tags";
+import type { Task } from "../api/types/TaskTypes/TaskDTO";
+import { TaskService } from "../api/services/TaskService";
 
 type ModalProps = {
   task: Task;
   idSelected: string;
-  setcriar: () => void
+  setcriar: () => void;
   onClose: () => void;
+  refetchtask: (() => Promise<void>) | undefined;
 };
 
-function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
+function Modaltaf({
+  task,
+  onClose,
+  setcriar,
+  idSelected,
+  refetchtask,
+}: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
 
-  {
-    /*controle do input type date*/
-  }
-  
-  
   {
     /*upload de arquivos*/
   }
@@ -36,7 +41,7 @@ function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
   }
   const [preview, Setpreview] = useState<string | null>(null);
   const [zoomimg, Setzoomimg] = useState<string | null>(null);
-  const inputfile = useRef<HTMLInputElement | null>(null); //referencia para o input type file
+  const inputfile = useRef<HTMLInputElement | null>(null); 
 
   {
     /*abre o seletor de arquivos ao clicar no botão com o clip*/
@@ -52,29 +57,54 @@ function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
 
   const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
+
+  const [view, Setview] = useState<boolean>(false);
+
+  const Delete_task = async (id: string) => {
+    try {
+      const response = await TaskService.DeleteTask(id);
+      if (response) {
+        console.log(response);
+        if (refetchtask) {
+          refetchtask();
+        }
+        onClose();
+      }
+    } catch (error) {
+      console.log("erro ao fazer requisição", error);
+    }
+  };
+
   useEffect(() => {
     Setedittask(idSelected);
   }, [task]);
 
   return (
     <>
-      <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed top-0 left-0 right-0 backdrop-blur-[20px]">
+      <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed inset-0 backdrop-blur-[20px]">
         {/*caixa do modal*/}
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] w-[400px] h-[250px] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
           <div className="flex w-full h-full gap-2 flex-col">
             <div className="flex w-full gap-5 items-center">
-              <button
-                className="absolute top-4 right-4 cursor-pointer "
-                onClick={onClose}
-              >
-                <IoIosClose size={40} />
-              </button>
+              <div className="flex flex-col items-center gap-2 absolute top-3 right-3">
+                <button
+                  className=" cursor-pointer hover:scale-110"
+                  onClick={onClose}
+                >
+                  <IoIosClose size={40} />
+                </button>
+                <MdEdit
+                  className="w-5 h-5 cursor-pointer hover:scale-110"
+                  onClick={setcriar}
+                />
+              </div>
               <input type="checkbox" name="" className="accent-[#22C55E]" />
-              <p className="flex-wrap text-xl font-semibold max-w-60">{task.Name}</p>
-              <MdEdit className="w-5 h-5 cursor-pointer" onClick={setcriar} />
+              <p className="max-w-[240px] text-xl font-semibold line-clamp-2">
+                {task.Name}
+              </p>
             </div>
 
-            <div className="w-full h-full flex flex-col gap-6 pl-5 pt-5 items-start justify-start">
+            <div className="w-full h-full flex flex-col gap-6 p-5 items-start justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
               <input
                 type="file"
@@ -100,23 +130,30 @@ function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
               />
 
               {/* bara de botões*/}
-              <div className="w-1/2 flex justify-between gap-3">
-                <FaClock className="hover:scale-110" size={30} />
+              <div className="w-3/4 mx-5 flex justify-between gap-3">
+                <FaUserPlus
+                  className="hover:scale-110 cursor-pointer"
+                  size={30}
+                />
                 {/*botão responsável por ativar o input type file*/}
                 <button onClick={selectfile}>
-                  <GoPaperclip className="hover:scale-110" size={30} />
+                  <GoPaperclip
+                    className="hover:scale-110 cursor-pointer"
+                    onClick={() => Setview(true)}
+                    size={30}
+                  />
                 </button>
                 <IoMdPricetag
-                  className="hover:scale-110"
+                  className="hover:scale-110 cursor-pointer"
                   size={30}
                   onClick={() => Settag(!tag)}
                 />
                 <FaTrashCan
-                  className="hover:scale-110"
+                  className="hover:scale-110 cursor-pointer"
                   color="red"
                   size={30}
                   onClick={() => {
-                    onClose();
+                    Delete_task(task.id);
                   }}
                 />
               </div>
@@ -186,7 +223,7 @@ function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
                 <a
                   href={URL.createObjectURL(file)}
                   target="_blank"
-                  rel="noopener noreferrer" //por segurança
+                  rel="noopener noreferrer"
                   type="application/pdf"
                   className="text-blue-400 underline"
                 >
@@ -205,9 +242,10 @@ function Modaltaf({ task, onClose, setcriar, idSelected }: ModalProps) {
             }}
           />
         )}
+
       </div>
     </>
   );
 }
 
-export default Modaltaf
+export default Modaltaf;

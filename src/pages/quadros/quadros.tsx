@@ -34,15 +34,7 @@ function Quadros() {
     }
   };
 
-  function getUrl(e: ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]){
-    const file = e.target.files[0]
-    const url = URL.createObjectURL(file)
-    setimage(url)
-  }
     
-  }
-
   return (
     <>
       <div className="bg-[#1F2937] w-screen h-screen flex flex-col">
@@ -113,11 +105,6 @@ function Quadros() {
                 >
                   Cancelar
                 </button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => getUrl(e)}
-                />
               </form>
             </div>
           </div>

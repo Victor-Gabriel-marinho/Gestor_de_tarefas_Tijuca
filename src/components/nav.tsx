@@ -8,9 +8,10 @@ import { useAuthStore } from "../store/Auth";
 
 type Navprops = {
     children?: ReactNode
+    SetAll?: () => void
 }
 
-function Nav({children}: Navprops) {
+function Nav({children, SetAll}: Navprops) {
 
     const [filtrartask, Setfiltrartask] = useState<boolean>(false)
     const clearToken = useAuthStore((state) => state.clearToken);
