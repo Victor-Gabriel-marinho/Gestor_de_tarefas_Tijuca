@@ -1,3 +1,4 @@
+import { LiaDeafSolid } from "react-icons/lia";
 import api from "../api";
 import type { Return_Auth } from "../types/AuthTypes/AuthUser";
 import type { Role } from "../types/UserTypes/Role";
@@ -19,5 +20,5 @@ export const UserService = {
       `/user/search/${idteam}`
     );
     return data;
-  },
+  }, 
 };
