@@ -1,6 +1,6 @@
 import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import Modal from "../../components/Modal.jsx";
+import Modal from "../../components/commons/Modal.js";
 import Options from "./components/Options.js";
 import { useEffect, useState, type MouseEvent } from "react";
 import { useParams, useLocation } from "react-router-dom";
@@ -10,7 +10,7 @@ import { useAuthStore } from "../../store/Auth.js";
 import { Get_userRole } from "../../hooks/get_userRole.js";
 import { FaTrashCan } from "react-icons/fa6";
 import Get_teams from "../../hooks/get_teams.js";
-import Confirm_delete from "../../components/confirmDelete.js";
+import Confirm_delete from "../../components/commons/confirmDelete.js";
 import { Loading_anim } from "../../components/commons/loading.js";
 
 function Times() {

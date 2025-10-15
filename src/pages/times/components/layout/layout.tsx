@@ -1,6 +1,6 @@
 import Side_bar from "./side_Bar";
 import { Outlet } from "react-router-dom";
-import Nav from "../../../../components/nav";
+import Nav from "../../../../components/layouts/nav";
 import { useFont } from "../../../../components/font";
 
 function Layout() {

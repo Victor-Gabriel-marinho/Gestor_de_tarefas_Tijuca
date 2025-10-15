@@ -8,11 +8,12 @@ import { FaTrashCan } from "react-icons/fa6";
 import { GoPaperAirplane } from "react-icons/go";
 import { FaUserPlus } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { useFont } from "./font";
+import { useFont } from "../../../components/font";
 import { useState, useRef, useEffect } from "react";
 import Tag from "./tags";
-import type { Task } from "../api/types/TaskTypes/TaskDTO";
-import { TaskService } from "../api/services/TaskService";
+import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
+import { TaskService } from "../../../api/services/TaskService";
+import { Modal_taskUser } from "./AddTaskUser";
 
 type ModalProps = {
   task: Task;
@@ -30,7 +31,6 @@ function Modaltaf({
   refetchtask,
 }: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
-
   {
     /*upload de arquivos*/
   }
@@ -58,7 +58,7 @@ function Modaltaf({
   const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
-  const [view, Setview] = useState<boolean>(false);
+  const [viewusers, Setviewusers] = useState<boolean>(false);
 
   const Delete_task = async (id: string) => {
     try {
@@ -79,9 +79,13 @@ function Modaltaf({
     Setedittask(idSelected);
   }, [task]);
 
+  console.log(viewusers);
+  
+
   return (
     <>
       <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed inset-0 backdrop-blur-[20px]">
+        {viewusers && <Modal_taskUser />}
         {/*caixa do modal*/}
         <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
           <div className="flex w-full h-full gap-2 flex-col">
@@ -133,18 +137,18 @@ function Modaltaf({
               <div className="w-3/4 mx-5 flex justify-between gap-3">
                 <FaUserPlus
                   className="hover:scale-110 cursor-pointer"
+                  onClick={() => Setviewusers(!viewusers)}
                   size={30}
                 />
                 {/*botão responsável por ativar o input type file*/}
                 <button onClick={selectfile}>
                   <GoPaperclip
                     className="hover:scale-110 cursor-pointer"
-                    onClick={() => Setview(true)}
                     size={30}
                   />
                 </button>
                 <IoMdPricetag
-                  className="hover:scale-110 cursor-pointer"
+                  className="hover:scale-110  cursor-pointer"
                   size={30}
                   onClick={() => Settag(!tag)}
                 />
@@ -242,7 +246,6 @@ function Modaltaf({
             }}
           />
         )}
-
       </div>
     </>
   );

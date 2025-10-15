@@ -219,7 +219,7 @@ const verificaLista =
                 {doneTasksFiltradas.map((taskdone) => (
                   <div key={taskdone.id}>
                     <p
-                      className="bg-white cursor-pointer flex flex-wrap truncate text-center p-1 rounded-[5px]"
+                      className="bg-white cursor-pointer flex flex-wrap truncate text-center p-1 justify-center rounded-[5px]"
                       onClick={() => {
                         Setselect(taskdone);
                         Setmodaltask(true);

@@ -28,8 +28,8 @@ export const TaskService = {
         return data
     },
 
-    async CreateTaskUser(TaskUser: CreateTaskUserDTO): Promise<{menssage:string}> {
-        const {data} = await api.post<{menssage: string}>("/tasks/Create_task", TaskUser)
+    async CreateTaskUser(TaskUser: CreateTaskUserDTO[]): Promise<{menssage:string}> {
+        const {data} = await api.post<{menssage: string}>("/tasks/Create_taskUser", TaskUser)
         return data 
     }
 }
