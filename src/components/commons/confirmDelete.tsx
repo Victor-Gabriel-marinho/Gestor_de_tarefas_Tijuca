@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TeamService } from "../api/services/teamService";
+import { TeamService } from "../../api/services/teamService";
 
  type confirmProps = {
    Setconfirm: React.Dispatch<React.SetStateAction<boolean>>;

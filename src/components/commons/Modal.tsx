@@ -1,12 +1,12 @@
 import { FaUserCircle } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { BiSolidDownArrow } from "react-icons/bi";
-import PopUp from "./PopUp";
+import PopUp from "../../pages/times/components/PopUp.js";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { TeamService } from "../api/services/teamService";
+import { TeamService } from "../../api/services/teamService.js";
 import { useLocation } from "react-router-dom";
-import type { user_for_invite } from "../api/types/UserTypes/User";
-import { UserService } from "../api/services/userService";
+import type { user_for_invite } from "../../api/types/UserTypes/User";
+import { UserService } from "../../api/services/userService";
 
 type ModalProps = {
   refetch: () => void;
@@ -104,7 +104,6 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
     search_users();
   }, [team_id, search_users]);  
 
-  console.log(selectUsers_id)
 
   return (
     <div

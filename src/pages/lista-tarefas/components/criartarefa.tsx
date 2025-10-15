@@ -1,7 +1,7 @@
 import { IoIosClose } from "react-icons/io";
 import React, { useState } from "react";
-import { TaskService } from "../api/services/TaskService";
-import type { CreateTaskDTO } from "../api/types/TaskTypes/TaskDTO";
+import { TaskService } from "../../../api/services/TaskService";
+import type { CreateTaskDTO } from "../../../api/types/TaskTypes/TaskDTO";
 
 type CreateProps = {
   title: string;

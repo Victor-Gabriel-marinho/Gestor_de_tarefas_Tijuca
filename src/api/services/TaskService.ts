@@ -1,4 +1,5 @@
 import api from "../api"
+import type { CreateTaskUserDTO } from "../types/TaskTypes/CreateTaskUserDTO"
 import type { CreateTaskDTO, Task } from "../types/TaskTypes/TaskDTO"
 
 export const TaskService = {
@@ -25,5 +26,10 @@ export const TaskService = {
         const {data} = await api.patch<Task>(`tasks/Edit_task/${idTask}`, taskEdited)
 
         return data
+    },
+
+    async CreateTaskUser(TaskUser: CreateTaskUserDTO[]): Promise<{menssage:string}> {
+        const {data} = await api.post<{menssage: string}>("/tasks/Create_taskUser", TaskUser)
+        return data 
     }
 }
