@@ -4,7 +4,9 @@ import { IoFilter } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import {useState } from "react";
 import type { ReactNode } from "react";
-import { useAuthStore } from "../../store/Auth";
+import Perfil  from "../commons/Perfil";
+import { FaCircleUser } from "react-icons/fa6";
+
 
 type Navprops = {
     children?: ReactNode
@@ -14,14 +16,19 @@ type Navprops = {
 function Nav({children, SetAll}: Navprops) {
 
     const [filtrartask, Setfiltrartask] = useState<boolean>(false)
-    const clearToken = useAuthStore((state) => state.clearToken);
+    const [aberto, setAberto] = useState(false);
 
-    function delete_Token () {
-        clearToken()
-    }
+    const AbrirPerfil =() => {
+        setAberto(!aberto)
+    };
+
+    
 
    return (
      <nav className="bg-[#44383e] w-screen h-10 sm:h-15 p-1 sm:p-3">
+
+
+       
        <div className="flex gap-4 p-1 justify-between items-center relative">
          <Link to="/quadros">
            <BsFillHouseFill className="cursor-pointer text-white text-xl sm:text-3xl" />
@@ -39,12 +46,15 @@ function Nav({children, SetAll}: Navprops) {
            <Link to="/">
              <MdPeople className="cursor-pointer text-white text-2xl sm:text-3xl" />
            </Link>
-           <div
-             className="bg-red-800 rounded-xl p-1 px-6 cursor-pointer text-sm text-white"
-             onClick={delete_Token}
-           >
-             logout
-           </div>
+            <div className="relative">
+            <button 
+            onClick={AbrirPerfil}
+            className=" text-white  text-xl cursor-pointer"
+            >
+            {aberto ? <FaCircleUser className="w-6 h-6"/> : <FaCircleUser className="w-6 h-6"/>}
+            </button>
+            {aberto && <Perfil />}
+        </div>
          </div>
        </div>
      </nav>

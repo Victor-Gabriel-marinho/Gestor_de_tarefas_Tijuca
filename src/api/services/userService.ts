@@ -21,4 +21,11 @@ export const UserService = {
     );
     return data;
   }, 
+  async get_users_by_id(ids: string[]): Promise<user_for_invite[] | null> {
+    const ids_param = ids.join(',');
+    const { data } = await api.get<user_for_invite[] | null>(`/user/get-users-by-id/${ids_param}`);
+    return data;
+  }
+
+  
 };

@@ -31,5 +31,10 @@ export const TaskService = {
     async CreateTaskUser(TaskUser: CreateTaskUserDTO[]): Promise<{menssage:string}> {
         const {data} = await api.post<{menssage: string}>("/tasks/Create_taskUser", TaskUser)
         return data 
+    },
+
+    async GetTasksByUser(): Promise<Task[]> {
+        const {data} = await api.get<Task[]>(`/tasks/TasksByUser`)
+        return data
     }
 }
