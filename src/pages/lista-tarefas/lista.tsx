@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
 import Criar from "./components/criartarefa";
 import ListTar from "./components/ListTar";
+import { Get_userRole } from "../../hooks/get_userRole";
 
 function Lista() {
   // Hook para trazer a fonte
@@ -135,9 +136,11 @@ const verificaLista =
   }
 
 
+ 
+
   return (
     <>
-      <div className="bg-[#1F2937] h-screen w-screen">
+      <div className="bg-[#1F2937] h-screen w-screen" >
         {/* Navbar */}
         <Nav SetAll={setall}>
           {/*o filtro envia suas mudanças de status /prazo via prop*/}
@@ -145,7 +148,7 @@ const verificaLista =
         </Nav>
 
         <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
-          <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row">
+          <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
             {/* Pendentes */}
             {pendingTasksFiltradas.length >= 0 && (
               <ListTar
@@ -162,7 +165,7 @@ const verificaLista =
                 {pendingTasksFiltradas.map((pentask) => (
                   <div key={pentask.id}>
                     <p
-                      className="bg-white cursor-pointer p-1 flex justify-center items-center flex-wrap truncate  text-center rounded-[5px]"
+                      className="bg-white cursor-pointer p-1 flex justify-center items-center hover:scale-110  flex-wrap truncate  text-center rounded-[5px]"
                       onClick={() => {
                         Setselect(pentask);
                         Setmodaltask(true);
@@ -179,7 +182,7 @@ const verificaLista =
               <ListTar
                 title="Progresso"
                 minimizeKey="progresso"
-                minimized={minimize.pendente}
+                minimized={minimize.progresso}
                 onToggleMinimize={toggleMinimize}
                 onCreateClick={() => {
                   Setcriar("Criar");
@@ -190,7 +193,7 @@ const verificaLista =
                 {inProgressTasksFiltradas.map((progtask) => (
                   <div key={progtask.id}>
                     <p
-                      className="bg-white cursor-pointer text-center flex justify-center items-center flex-wrap max-w-[216px] p-1 rounded-[5px]"
+                      className="bg-white cursor-pointer text-center flex justify-center items-center hover:scale-110 flex-wrap max-w-[216px] p-1 rounded-[5px]"
                       onClick={() => {
                         Setselect(progtask);
                         Setmodaltask(true);
@@ -208,7 +211,7 @@ const verificaLista =
               <ListTar
                 title="Concluidas"
                 minimizeKey="concluido"
-                minimized={minimize.pendente}
+                minimized={minimize.concluido}
                 onToggleMinimize={toggleMinimize}
                 onCreateClick={() => {
                   Setcriar("Criar");
@@ -219,7 +222,7 @@ const verificaLista =
                 {doneTasksFiltradas.map((taskdone) => (
                   <div key={taskdone.id}>
                     <p
-                      className="bg-white cursor-pointer flex flex-wrap truncate text-center p-1 justify-center rounded-[5px]"
+                      className="bg-white cursor-pointer flex flex-wrap truncate hover:scale-110  text-center p-1 justify-center rounded-[5px]"
                       onClick={() => {
                         Setselect(taskdone);
                         Setmodaltask(true);
@@ -366,7 +369,7 @@ const verificaLista =
             title={criar}
             onClose={() => Setcriar("")}
             closeModal={() => Setmodaltask(false)}
-            idSelected={select?.id}
+            Selected={select}
             refetchTasks={refetchTasks}
             statusForCreate={statusForCreate}
             id_team={id}

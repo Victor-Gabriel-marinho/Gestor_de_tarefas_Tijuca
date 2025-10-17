@@ -79,36 +79,28 @@ function Modaltaf({
     Setedittask(idSelected);
   }, [task]);
 
-  console.log(viewusers);
-  
 
   return (
     <>
       <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed inset-0 backdrop-blur-[20px]">
-        {viewusers && <Modal_taskUser />}
+        {viewusers && <Modal_taskUser id_task={task.id} />}
         {/*caixa do modal*/}
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[300px] w-[500px] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
           <div className="flex w-full h-full gap-2 flex-col">
             <div className="flex w-full gap-5 items-center">
-              <div className="flex flex-col items-center gap-2 absolute top-3 right-3">
-                <button
-                  className=" cursor-pointer hover:scale-110"
-                  onClick={onClose}
-                >
-                  <IoIosClose size={40} />
-                </button>
-                <MdEdit
-                  className="w-5 h-5 cursor-pointer hover:scale-110"
-                  onClick={setcriar}
-                />
-              </div>
+              <button
+                className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
+                onClick={onClose}
+              >
+                <IoIosClose size={40} />
+              </button>
               <input type="checkbox" name="" className="accent-[#22C55E]" />
-              <p className="max-w-[240px] text-xl font-semibold line-clamp-2">
+              <p className="max-w-[240px] text-2xl font-bold line-clamp-2">
                 {task.Name}
               </p>
             </div>
 
-            <div className="w-full h-full flex flex-col gap-6 p-5 items-start justify-start">
+            <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
               <input
                 type="file"
@@ -134,7 +126,7 @@ function Modaltaf({
               />
 
               {/* bara de botões*/}
-              <div className="w-3/4 mx-5 flex justify-between gap-3">
+              <div className="w-full mx-5 flex justify-around gap-3">
                 <FaUserPlus
                   className="hover:scale-110 cursor-pointer"
                   onClick={() => Setviewusers(!viewusers)}
@@ -152,6 +144,11 @@ function Modaltaf({
                   size={30}
                   onClick={() => Settag(!tag)}
                 />
+                <MdEdit
+                  className="cursor-pointer hover:scale-110"
+                  size={30}
+                  onClick={setcriar}
+                />
                 <FaTrashCan
                   className="hover:scale-110 cursor-pointer"
                   color="red"
@@ -162,6 +159,26 @@ function Modaltaf({
                 />
               </div>
 
+              {/* Descrição e Data */}
+              <div className="flex items-start justify-center flex-col gap-3 max-w-[400px]">
+                <p className="text-lg">
+                  <span className="font-semibold text-xl flex">Descrição: </span>
+                  <span className="flex truncate max-w-[350px]">{task.Content}</span>
+                </p>
+                <p className="flex text-lg gap-2">
+                  <span className="font-semibold text-xl">
+                    Data de entrega: 
+                  </span>
+                  {task.EndDate.toString().split("T")[0].replaceAll("-", "/")}
+                </p>
+                <p className="flex text-lg gap-2">
+                  <span className="font-semibold text-xl">
+                    Prioridade:
+                  </span>
+                  {task.Priority}
+                </p>
+              </div>
+
               {tagvalue && (
                 <div className="m-1 ">
                   <span className="text-white bg-blue-500 p-1 rounded-[5px]">
@@ -169,19 +186,6 @@ function Modaltaf({
                   </span>
                 </div>
               )}
-
-              <div className="flex items-center gap-2">
-                <form action="" className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Adicionar comentário"
-                    className=" w-50 h-[35px] left-10 bg-white outline-none placeholder-gray-400 text-black rounded-[5px] p-1 ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500 truncate"
-                  />
-                  <button className=" w-[35px] h-[35px] p-1 left-[245px] bg-[#4b3f3f] hover:bg-[#574848] rounded-[10px] flex items-center justify-center">
-                    <GoPaperAirplane />
-                  </button>
-                </form>
-              </div>
 
               {edit && (
                 <div className="flex gap-2">
