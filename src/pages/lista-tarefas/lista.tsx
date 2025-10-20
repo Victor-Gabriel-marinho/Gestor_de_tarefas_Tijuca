@@ -7,7 +7,11 @@ import { Get_Tasks } from "../../hooks/get_Tasks";
 import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
 import Criar from "./components/criartarefa";
-import ListTar from "./components/ListTar";
+import { Get_userRole } from "../../hooks/get_userRole";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+import DraggableTask from "./components/DragAndDrop/DraggableTask";
+import DroppableLane from "./components/DragAndDrop/DroppableLane";
+import { TaskService } from "../../api/services/TaskService";
 
 function Lista() {
   // Hook para trazer a fonte
@@ -39,13 +43,15 @@ function Lista() {
   const toggleMinimize = (key: keyof typeof minimize) => {
     setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
   };
- //filtro  de status e prazo
-const [filtro, setFiltro] = useState<{status?:string; prazo?:string}>({})
+
+  //filtro  de status e prazo
+  const [filtro, setFiltro] = useState<{ status?: string; prazo?: string }>({});
 
   // Buscar tasks
   const { id } = useParams();
   const { tasks, refetchTasks } = id ? Get_Tasks(id) : { tasks: [] };
-
+  const team = { id: id ?? "", Name: "" };
+  const { userRole } = Get_userRole(team);
   // States para
   const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
   const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
@@ -61,83 +67,94 @@ const [filtro, setFiltro] = useState<{status?:string; prazo?:string}>({})
 
   // função que auxilia para filtrar por status
   const filtrarPorStatus = (t: Task, status?: string) => {
-  if (!status) return true;
-  switch (status) {
-    case "concluido":
-      return t.Status === "Concluido";
-    case "naoConcluido":
-      return t.Status !== "Concluido";
-    case "pendente":
-      return t.Status === "Pendente";
-    default:
-      return true;
-  }
-}
-
-//função que auxilia a filtrar por prazo
-const filtrarprazo = (t: Task, prazo?:string) => {
-  if (!prazo) return true 
-  const hoje = new Date()
-  const prazoData = new Date(t.EndDate)
-
-  switch (prazo) {
-    case "atrasadas":
-      return prazoData < hoje 
-    case "dia":
-      return prazoData <= new Date(hoje.getTime() + 24 * 60 * 60 * 1000) //24h * 60min * 60s * 1000ms
-      
-    case "semana":
-      return prazoData <= new Date(hoje.getTime() + 7 * 60 * 60 * 1000)
-    case "mes":
-      return prazoData <= new Date(hoje.getTime() + 30 * 60 * 60 * 1000)
-    default:
-      return true
-  }
-}
-
-//aplica os filtros ás listas já separadas por status
-const pendingTasksFiltradas = pendingTasks.filter(
-  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-);
-const inProgressTasksFiltradas = inProgressTasks.filter(
-  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-);
-const doneTasksFiltradas = doneTasks.filter(
-  (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-);
-
-const nenhumFiltroAtivo = 
-  (filtro.status === 'todas' || filtro.status === undefined) &&
-  (filtro.prazo === 'todas' || filtro.prazo === undefined)
-
-const verificaLista = 
-  !!nomelista || 
-  // 2. Mostrar se está no modo de criação (o textarea está ativo)
-  novalista || 
-  // 3. Mostrar se tem uma tarefa para exibir
-  !!tarefaNovaLista || 
-  // 4. Mostrar se os filtros não estão ativos (para exibir o botão '+ Criar nova lista')
-  (nenhumFiltroAtivo && !nomelista); 
-
-
-   useEffect(() => {
-    if (!nenhumFiltroAtivo) {
-        Setnovalista(false); // Força o fechamento do textarea/input de criar lista
+    if (!status) return true;
+    switch (status) {
+      case "concluido":
+        return t.Status === "Concluido";
+      case "naoConcluido":
+        return t.Status !== "Concluido";
+      case "pendente":
+        return t.Status === "Pendente";
+      default:
+        return true;
     }
-}, [nenhumFiltroAtivo]);
+  };
+
+  //função que auxilia a filtrar por prazo
+  const filtrarprazo = (t: Task, prazo?: string) => {
+    if (!prazo) return true;
+    const hoje = new Date();
+    const prazoData = new Date(t.EndDate);
+
+    switch (prazo) {
+      case "atrasadas":
+        return prazoData < hoje;
+      case "dia":
+        return prazoData <= new Date(hoje.getTime() + 24 * 60 * 60 * 1000); //24h * 60min * 60s * 1000ms
+
+      case "semana":
+        return prazoData <= new Date(hoje.getTime() + 7 * 60 * 60 * 1000);
+      case "mes":
+        return prazoData <= new Date(hoje.getTime() + 30 * 60 * 60 * 1000);
+      default:
+        return true;
+    }
+  };
+
+  //aplica os filtros ás listas já separadas por status
+  const pendingTasksFiltradas = pendingTasks.filter(
+    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+  );
+  const inProgressTasksFiltradas = inProgressTasks.filter(
+    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+  );
+  const doneTasksFiltradas = doneTasks.filter(
+    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
+  );
+
+  const nenhumFiltroAtivo =
+    (filtro.status === "todas" || filtro.status === undefined) &&
+    (filtro.prazo === "todas" || filtro.prazo === undefined);
+
+  useEffect(() => {
+    if (!nenhumFiltroAtivo) {
+      Setnovalista(false); // Força o fechamento do textarea/input de criar lista
+    }
+  }, [nenhumFiltroAtivo]);
 
   const setall = () => {
-    setFiltro(prevfiltro => ({
+    setFiltro((prevfiltro) => ({
       ...prevfiltro,
-      status:'todas',
-      prazo:""
-    }))
-  }
+      status: "todas",
+      prazo: "",
+    }));
+  };
 
+  const handleDragend = async (event:DragEndEvent ) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    const draggedTaskId = active.id.toString();
+    const newStatus = over.id.toString(); 
+
+    if (active.data.current?.status === newStatus) return;
+
+    try {
+      const response = await TaskService.AlterStatus(draggedTaskId, newStatus)
+      if (response) {
+        if (refetchTasks) {
+          await refetchTasks();
+        }
+      }
+    } catch(error){
+      console.log("erro ao fazer requisição", error)
+    }   
+  }
 
   return (
     <>
-      <div className="bg-[#1F2937] h-screen w-screen">
+      <div className="bg-[#1F2937] h-screen w-screen overflow-hidden">
         {/* Navbar */}
         <Nav SetAll={setall}>
           {/*o filtro envia suas mudanças de status /prazo via prop*/}
@@ -145,146 +162,97 @@ const verificaLista =
         </Nav>
 
         <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
-          <div className="flex items-center justify-center flex-col gap-5 w-10/12 sm:flex-row">
-            {/* Pendentes */}
-            {pendingTasksFiltradas.length >= 0 && (
-              <ListTar
-                title="Pendente"
-                minimizeKey="pendente"
-                minimized={minimize.pendente}
-                onToggleMinimize={toggleMinimize}
-                onCreateClick={() => {
-                  Setcriar("Criar");
-                  setstatusForCreate("Pendente");
-                }}
-              >
-                {/*{pendingTasks.map((pentask)*/}
-                {pendingTasksFiltradas.map((pentask) => (
-                  <div key={pentask.id}>
-                    <p
-                      className="bg-white cursor-pointer p-1 flex justify-center items-center flex-wrap truncate  text-center rounded-[5px]"
-                      onClick={() => {
-                        Setselect(pentask);
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {pentask.Name}
-                    </p>
-                  </div>
-                ))}
-              </ListTar>
-            )}
-            {/* Em progresso */}
-            {inProgressTasksFiltradas.length >= 0 && (
-              <ListTar
-                title="Progresso"
-                minimizeKey="progresso"
-                minimized={minimize.pendente}
-                onToggleMinimize={toggleMinimize}
-                onCreateClick={() => {
-                  Setcriar("Criar");
-                  setstatusForCreate("Progresso");
-                }}
-              >
-                {/*{inProgressTasks.map((progtask)*/}
-                {inProgressTasksFiltradas.map((progtask) => (
-                  <div key={progtask.id}>
-                    <p
-                      className="bg-white cursor-pointer text-center flex justify-center items-center flex-wrap max-w-[216px] p-1 rounded-[5px]"
-                      onClick={() => {
-                        Setselect(progtask);
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {progtask.Name}
-                    </p>
-                  </div>
-                ))}
-              </ListTar>
-            )}
+          <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
+          
+            <DndContext onDragEnd={handleDragend}>
 
-            {/* Concluídas */}
-            {doneTasksFiltradas.length >= 0 && (
-              <ListTar
-                title="Concluidas"
-                minimizeKey="concluido"
-                minimized={minimize.pendente}
-                onToggleMinimize={toggleMinimize}
-                onCreateClick={() => {
-                  Setcriar("Criar");
-                  setstatusForCreate("Concluido");
-                }}
-              >
-                {/* doneTasks.map((taskdone)*/}
-                {doneTasksFiltradas.map((taskdone) => (
-                  <div key={taskdone.id}>
-                    <p
-                      className="bg-white cursor-pointer flex flex-wrap truncate text-center p-1 justify-center rounded-[5px]"
-                      onClick={() => {
-                        Setselect(taskdone);
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {taskdone.Name}
-                    </p>
-                  </div>
-                ))}
-              </ListTar>
-            )}
-
-            {/* Tarefas atrasadas */}
-            {/* <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full h-full gap-y-2 max-w-60">
-              <div className="flex items-center justify-between">
-                <p className="text-white font-semibold flex-1 text-center">Atrasadas</p>
-                <div className="flex justify-end p-1 rounded-[15px]">
-                  <FiMinimize2
-                    color="white"
-                    className="hover:scale-125 cursor-pointer"
-                    onClick={() => toggleMinimize("pendente")}
-                  />
-                </div>
-              </div>
-
-              {!minimize.pendente &&
-                pendingTasks.map((pentask) => (
-                  <div key={pentask.id}>
-                    <p
-                      className="bg-white cursor-pointer h-[35px] p-1 text-center rounded-[5px]"
-                      onClick={() => {
-                        Setselect(pentask.Name);
-                        Setmodaltask(true);
-                      }}
-                    >
-                      {pentask.Name}
-                    </p>
-
-                    {inputpen && (
-                      <textarea
-                        placeholder="nome"
-                        className="bg-white outline-none placeholder-gray-400 h-[35px] resize-none"
-                        value={tarefapen}
-                        onChange={(e) => Settarefapen(e.target.value)}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter" && tarefapen.trim() !== "") {
-                            event.preventDefault();
-                            Setinputpen(false);
-                          }
-                        }}
-                      />
-                    )}
-                  </div>
-                ))}
-
-              <button
-                className="bg-[#251F1F] text-white text-center hover:bg-[#3d3434] cursor-pointer"
-                 onClick={() => {Setcriar(!criar); setstatusForCreate("Pendente")}}
-              >
-                + Criar Tarefa
-              </button>
-            </div> */}
+              {/* Pendentes */}
+              {pendingTasksFiltradas.length >= 0 && (
+                <DroppableLane
+                id="Pendente"
+                  userrole={userRole?.id}
+                  title="Pendente"
+                  minimizeKey="pendente"
+                  minimized={minimize.pendente}
+                  onToggleMinimize={toggleMinimize}
+                  onCreateClick={() => {
+                    Setcriar("Criar");
+                    setstatusForCreate("Pendente");
+                  }}
+                >
+                  {/*{pendingTasks.map((pentask)*/}
+                  {pendingTasksFiltradas.map((pentask) => (
+                   <DraggableTask
+                    key={pentask.id}
+                    taskname={pentask.Name}
+                    setModal={()=>{
+                    Setselect(pentask);
+                    Setmodaltask(true);}}
+                    id= {pentask.id}
+                   />
+                  ))}
+                </DroppableLane>
+              )}
+              {/* Em progresso */}
+              {inProgressTasksFiltradas.length >= 0 && (
+                <DroppableLane
+                  userrole={userRole?.id}
+                  id="Progresso"
+                  title="Progresso"
+                  minimizeKey="progresso"
+                  minimized={minimize.progresso}
+                  onToggleMinimize={toggleMinimize}
+                  onCreateClick={() => {
+                    Setcriar("Criar");
+                    setstatusForCreate("Progresso");
+                  }}
+                >
+                  {/*{inProgressTasks.map((progtask)*/}
+                  {inProgressTasksFiltradas.map((progtask) => (
+                   <DraggableTask
+                   key={progtask.id}
+                   id= {progtask.id}
+                    taskname={progtask.Name}
+                    setModal={()=>{
+                    Setselect(progtask);
+                    Setmodaltask(true);}}
+                   />
+                  ))}
+                </DroppableLane>
+              )}
+              {/* Concluídas */}
+              {doneTasksFiltradas.length >= 0 && (
+                <DroppableLane
+                id="Concluido"
+                  userrole={userRole?.id}
+                  title="Concluidas"
+                  minimizeKey="concluido"
+                  minimized={minimize.concluido}
+                  onToggleMinimize={toggleMinimize}
+                  onCreateClick={() => {
+                    Setcriar("Criar");
+                    setstatusForCreate("Concluido");
+                  }}
+                >
+                  {/* doneTasks.map((taskdone)*/}
+                  {doneTasksFiltradas.map((taskdone) => (
+                   <DraggableTask
+                   key={taskdone.id}
+                   id= {taskdone.id}
+                    taskname={taskdone.Name}
+                    setModal={()=>{
+                    Setselect(taskdone);
+                    Setmodaltask(true);}}
+                   />
+                  ))}
+                </DroppableLane>
+              )}
+            </DndContext>
 
             {/* Nova lista */}
-            {verificaLista && (
+            {userRole?.id === "3" ? (
+              <div></div>
+            ) : (
               <div className="bg-[#251F1F] text-center p-3 rounded-[5px] flex flex-col w-full gap-y-1 max-w-60">
                 <p className="text-white font-semibold truncate resize-none p-1">
                   {nomelista}
@@ -353,6 +321,7 @@ const verificaLista =
         {/* Modals */}
         {modaltask && select && (
           <Modaltaf
+            userrole={userRole?.id}
             task={select}
             onClose={() => Setmodaltask(false)}
             refetchtask={refetchTasks}
@@ -366,7 +335,7 @@ const verificaLista =
             title={criar}
             onClose={() => Setcriar("")}
             closeModal={() => Setmodaltask(false)}
-            idSelected={select?.id}
+            Selected={select}
             refetchTasks={refetchTasks}
             statusForCreate={statusForCreate}
             id_team={id}

@@ -1,16 +1,20 @@
 import { useState } from "react";
-import type { user_in_team } from "../../../api/types/UserTypes/User";
+import type { UserWithNotInTask } from "../../../api/types/UserTypes/User";
 import { Loading_anim } from "../../../components/commons/loading";
-import { Get_usersInTeams } from "../../../hooks/get_usersInTeams";
 import { useParams } from "react-router-dom";
 import { TaskService } from "../../../api/services/TaskService";
+import { get_UsersWithNotInTask } from "../../../hooks/get_UsersWithNotInTask";
 
-export function Modal_taskUser() {
+type Modal_taskUserProps = {
+    id_task: string;
+}
+
+export function Modal_taskUser({id_task}:Modal_taskUserProps) {
     const {id} = useParams()
 
-    const [selectedUser, SetselectedUser] = useState<user_in_team[]>([])
+    const [selectedUser, SetselectedUser] = useState<UserWithNotInTask[]>([])
 
-      function selectUser(user: user_in_team) {
+      function selectUser(user: UserWithNotInTask) {
         SetselectedUser((prev) => {
          if (prev.some((u) => u.id === user.id)) {
           return prev.filter((u) => u.id !== user.id)
@@ -22,12 +26,12 @@ export function Modal_taskUser() {
     const CreateUserTask = async () => {
         const taskUser = selectedUser.map((user) => ({
             id_user: user.id,
-            id_task: id ?? ""
+            id_task: id_task
         }))
         try {
             const response = await TaskService.CreateTaskUser(taskUser)
             if(response) {
-                console.log(response);
+                refetchUsersWithNotInTask()
             }
 
             SetselectedUser([])
@@ -36,7 +40,7 @@ export function Modal_taskUser() {
         }
     }
 
-    const {users, loading} = Get_usersInTeams(id ?? "")
+    const {usersWithNotInTask, loading, refetchUsersWithNotInTask} = get_UsersWithNotInTask(id_task, id ?? "")
     
 
     return (
@@ -47,7 +51,7 @@ export function Modal_taskUser() {
         <div className="h-full w-full p-5 flex items-center justify-center flex-col gap-3">
             <h2 className="text-white font-semibold text-lg">Atribuir tarefa</h2>
             <div className="w-full h-full flex flex-col gap-2 max-h-[241px]">
-             {users.map((user) => { 
+             {usersWithNotInTask.map((user) => { 
                 const isSelected = selectedUser.some((u) => u.id === user.id)
                 
                 return (

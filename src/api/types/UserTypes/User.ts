@@ -20,4 +20,10 @@ export interface user_for_invite {
   Name: string;
 }
 
+export interface UserWithNotInTask {
+  id: string;
+  Name: string;
+  Role: string;
+}
+
 export type CreateUserDTO = Omit<User_out_team, "id">;

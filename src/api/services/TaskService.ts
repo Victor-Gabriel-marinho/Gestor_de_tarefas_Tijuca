@@ -16,6 +16,12 @@ export const TaskService = {
         return data
     },
 
+    async GetById(idTask: string): Promise<Task> {
+        const {data} = await api.get<Task>(`/tasks/GetById/${idTask}`)
+        
+        return data
+    },
+
     async DeleteTask(idTask: string){
         const {data} = await api.delete<{menssage:string}>(`/tasks/Delete_Task/${idTask}`)
 
@@ -35,6 +41,16 @@ export const TaskService = {
 
     async GetTasksByUser(): Promise<Task[]> {
         const {data} = await api.get<Task[]>(`/tasks/TasksByUser`)
+        return data
+    },
+    
+    async GetUsersNotInTask(idTask: string, idTeam: string) {
+        const {data} = await api.get(`/tasks/GetUsersNotInTask/${idTask}/${idTeam}`)
+        return data 
+    },
+
+    async AlterStatus(idtask: string, NewTaskStatus: string): Promise<Task> {
+        const { data } = await api.patch<Task>(`/tasks/EditTaskStatus/${idtask}`, {NewTaskStatus});
         return data
     }
 }

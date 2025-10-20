@@ -2,7 +2,7 @@ export interface Task {
   id: string;
   id_team: string;
   Name: string;
-  content?: string;
+  Content?: string;
   Priority: string;
   Status: string;
   StartDate?: Date;
