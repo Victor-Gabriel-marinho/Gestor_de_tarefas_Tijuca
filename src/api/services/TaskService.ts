@@ -47,5 +47,10 @@ export const TaskService = {
     async GetUsersNotInTask(idTask: string, idTeam: string) {
         const {data} = await api.get(`/tasks/GetUsersNotInTask/${idTask}/${idTeam}`)
         return data 
+    },
+
+    async AlterStatus(idtask: string, NewTaskStatus: string): Promise<Task> {
+        const { data } = await api.patch<Task>(`/tasks/EditTaskStatus/${idtask}`, {NewTaskStatus});
+        return data
     }
 }

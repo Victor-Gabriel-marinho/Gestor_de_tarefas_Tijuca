@@ -124,7 +124,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
               name="Name"
               placeholder="Nome"
               className="bg-white text-black rounded-[5px] outline-none p-2"
-              value={TaskSelected?.Name}
+              value={title === "Criar" ? "" : TaskSelected?.Name}
               onChange={handlechange}
             />
           </div>
@@ -133,7 +133,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
             <p className="text-lg font-semibold">Descrição da tarefa</p>
             <textarea
               name="Content"
-              value={TaskSelected?.Content}
+              value={title === "Criar" ? "" : TaskSelected?.Content}
               placeholder="Descrição (opcional)"
               className="bg-white text-black resize-none rounded-[5px] outline-none p-2"
               onChange={handlechange}
@@ -144,7 +144,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
             <p className="text-lg font-semibold">Prioridade</p>
             <select
               name="Priority"
-              value={TaskSelected?.Priority}
+              value={title === "Criar" ? "" : TaskSelected?.Priority}
               className="bg-white text-black rounded-[5px] p-2"
               onChange={handlechange}
             >

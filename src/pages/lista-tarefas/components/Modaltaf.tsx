@@ -5,7 +5,6 @@ import { IoIosClose } from "react-icons/io";
 import { GoPaperclip } from "react-icons/go";
 import { IoMdPricetag } from "react-icons/io";
 import { FaTrashCan } from "react-icons/fa6";
-import { GoPaperAirplane } from "react-icons/go";
 import { FaUserPlus } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useFont } from "../../../components/font";
@@ -17,6 +16,7 @@ import { Modal_taskUser } from "./AddTaskUser";
 
 type ModalProps = {
   task: Task;
+  userrole?: string;
   idSelected: string;
   setcriar: () => void;
   onClose: () => void;
@@ -29,6 +29,7 @@ function Modaltaf({
   setcriar,
   idSelected,
   refetchtask,
+  userrole
 }: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
   {
@@ -94,7 +95,6 @@ function Modaltaf({
               >
                 <IoIosClose size={40} />
               </button>
-              <input type="checkbox" name="" className="accent-[#22C55E]" />
               <p className="max-w-[240px] text-2xl font-bold line-clamp-2">
                 {task.Name}
               </p>
@@ -103,7 +103,7 @@ function Modaltaf({
             <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
               <input
-                type="file"
+                type="file" 
                 name=""
                 id=""
                 className="absolute z-50 mt-50 outline-none hidden"
@@ -126,7 +126,7 @@ function Modaltaf({
               />
 
               {/* bara de botões*/}
-              <div className="w-full mx-5 flex justify-around gap-3">
+              {userrole === "3" ? <div></div> : <div className="w-full mx-5 flex justify-around gap-3">
                 <FaUserPlus
                   className="hover:scale-110 cursor-pointer"
                   onClick={() => Setviewusers(!viewusers)}
@@ -157,7 +157,7 @@ function Modaltaf({
                     Delete_task(task.id);
                   }}
                 />
-              </div>
+              </div>}
 
               {/* Descrição e Data */}
               <div className="flex items-start justify-center flex-col gap-3 max-w-[400px]">
