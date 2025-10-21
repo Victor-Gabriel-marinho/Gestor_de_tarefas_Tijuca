@@ -13,14 +13,12 @@ import Tag from "./tags";
 import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../../../api/services/TaskService";
 import { Modal_taskUser } from "./AddTaskUser";
-import { Get_status } from "../../../hooks/get_Status";
-import Criar from "./criartarefa";
 
 type ModalProps = {
   task: Task;
   userrole?: string;
-  id_team: string;
   idSelected: string;
+  setcriar: () => void;
   onClose: () => void;
   refetchtask: (() => Promise<void>) | undefined;
 };
@@ -28,10 +26,10 @@ type ModalProps = {
 function Modaltaf({
   task,
   onClose,
+  setcriar,
   idSelected,
   refetchtask,
-  id_team,
-  userrole,
+  userrole
 }: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
   {
@@ -58,8 +56,7 @@ function Modaltaf({
   const [tag, Settag] = useState<boolean>(false);
   const [tagvalue, Settagvalue] = useState<string>("");
 
-  const [modal, setmodal] = useState<string>("")
-
+  const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
   const [viewusers, Setviewusers] = useState<boolean>(false);
@@ -77,10 +74,8 @@ function Modaltaf({
     } catch (error) {
       console.log("erro ao fazer requisição", error);
     }
-  }
+  };
 
-  const {arraystatus} = Get_status(task.id_status)  
-   
   useEffect(() => {
     Setedittask(idSelected);
   }, [task]);
@@ -91,7 +86,7 @@ function Modaltaf({
       <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed inset-0 backdrop-blur-[20px]">
         {viewusers && <Modal_taskUser id_task={task.id} />}
         {/*caixa do modal*/}
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[400px] w-[600px] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[300px] w-[500px] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
           <div className="flex w-full h-full gap-2 flex-col">
             <div className="flex w-full gap-5 items-center">
               <button
@@ -108,7 +103,7 @@ function Modaltaf({
             <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
               <input
-                type="file"
+                type="file" 
                 name=""
                 id=""
                 className="absolute z-50 mt-50 outline-none hidden"
@@ -131,64 +126,56 @@ function Modaltaf({
               />
 
               {/* bara de botões*/}
-              {userrole === "3" ? (
-                <div></div>
-              ) : (
-                <div className="w-full mx-5 flex justify-around gap-3">
-                  <FaUserPlus
+              {userrole === "3" ? <div></div> : <div className="w-full mx-5 flex justify-around gap-3">
+                <FaUserPlus
+                  className="hover:scale-110 cursor-pointer"
+                  onClick={() => Setviewusers(!viewusers)}
+                  size={30}
+                />
+                {/*botão responsável por ativar o input type file*/}
+                <button onClick={selectfile}>
+                  <GoPaperclip
                     className="hover:scale-110 cursor-pointer"
-                    onClick={() => Setviewusers(!viewusers)}
                     size={30}
                   />
-                  {/*botão responsável por ativar o input type file*/}
-                  <button onClick={selectfile}>
-                    <GoPaperclip
-                      className="hover:scale-110 cursor-pointer"
-                      size={30}
-                    />
-                  </button>
-                  <IoMdPricetag
-                    className="hover:scale-110  cursor-pointer"
-                    size={30}
-                    onClick={() => Settag(!tag)}
-                  />
-                  <MdEdit
-                    className="cursor-pointer hover:scale-110"
-                    size={30}
-                    onClick={() => setmodal("Editar")}
-                  />
-                  <FaTrashCan
-                    className="hover:scale-110 cursor-pointer"
-                    color="red"
-                    size={30}
-                    onClick={() => {
-                      Delete_task(task.id);
-                    }}
-                  />
-                </div>
-              )}
+                </button>
+                <IoMdPricetag
+                  className="hover:scale-110  cursor-pointer"
+                  size={30}
+                  onClick={() => Settag(!tag)}
+                />
+                <MdEdit
+                  className="cursor-pointer hover:scale-110"
+                  size={30}
+                  onClick={setcriar}
+                />
+                <FaTrashCan
+                  className="hover:scale-110 cursor-pointer"
+                  color="red"
+                  size={30}
+                  onClick={() => {
+                    Delete_task(task.id);
+                  }}
+                />
+              </div>}
 
               {/* Descrição e Data */}
               <div className="flex items-start justify-center flex-col gap-3 max-w-[400px]">
                 <p className="text-lg">
-                  <span className="font-semibold text-xl flex">Descrição:</span>
-                  <span className="flex truncate max-w-[350px]">
-                    {task.Content}
-                  </span>
+                  <span className="font-semibold text-xl flex">Descrição: </span>
+                  <span className="flex truncate max-w-[350px]">{task.Content}</span>
                 </p>
                 <p className="flex text-lg gap-2">
                   <span className="font-semibold text-xl">
-                    Data de entrega:
+                    Data de entrega: 
                   </span>
                   {task.EndDate.toString().split("T")[0].replaceAll("-", "/")}
                 </p>
                 <p className="flex text-lg gap-2">
-                  <span className="font-semibold text-xl">Prioridade:</span>
+                  <span className="font-semibold text-xl">
+                    Prioridade:
+                  </span>
                   {task.Priority}
-                </p>
-                <p className="flex text-lg gap-2">
-                  <span className="font-semibold text-xl">Status:</span>
-                  {arraystatus ? arraystatus[0].Name : ""}
                 </p>
               </div>
 
@@ -200,6 +187,17 @@ function Modaltaf({
                 </div>
               )}
 
+              {edit && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={edittask}
+                    onChange={(e) => Setedittask(e.target.value)}
+                    className="bg-white text-black p-1 rounded outline-none w-50 left-10 truncate"
+                  />
+                  <button className="bg-[#4b3f3f]  px-2 rounded">Editar</button>
+                </div>
+              )}
               {/*imprimi o nome do arquivo na tela*/}
               {filename && (
                 <div className="flex flex-col items-start gap-2">
@@ -246,22 +244,10 @@ function Modaltaf({
 
         {tag && (
           <Tag
-            onDefinir={(tag) => {
+              onDefinir={(tag) => {
               Settagvalue(tag);
               Settag(false);
             }}
-          />
-        )}
-
-        {modal && (
-          <Criar
-            title={modal}
-            onClose={() => setmodal("")}
-            closeModal={onClose}
-            Selected={task}
-            refetchTasks={refetchtask}
-            id_team={id_team}
-            StatusName={arraystatus? arraystatus[0].Name : ""}
           />
         )}
       </div>
