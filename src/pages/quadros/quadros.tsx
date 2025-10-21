@@ -110,6 +110,7 @@ function Quadros() {
           </div>
         </main>
       </div>
+      
     </>
   );
 }

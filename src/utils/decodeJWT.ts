@@ -1,6 +1,7 @@
 import * as jwt_decode from "jwt-decode"
 
 export type JwtpayloadCustom = {
+    teamid?:string;
     sub?: string;
     Name?: string;
 }

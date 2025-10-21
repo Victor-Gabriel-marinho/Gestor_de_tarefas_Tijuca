@@ -8,15 +8,18 @@ import Layout from "./pages/times/components/layout/layout";
 import People from "./pages/times/People";
 import { PrivateRoute } from "./components/auth/PrivateRoute";
 import { BlockRouter } from "./components/auth/BlockRoute";
+import Convite from "./pages/convite/convite"
 
 function RoutesApp() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/invite/accept/:token" element={<Convite/>}/>
                 <Route element={<BlockRouter />}>
                     <Route path="/cadastro" element={<Cadastro />} />
                     <Route path="/entrar" element={<Login />} />
                 </Route>
+
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/" element={<Layout />}>

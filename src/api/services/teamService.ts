@@ -39,6 +39,11 @@ export const TeamService = {
 
     return data;
   },
+ 
+  async GetTeamById(idTeam:string): Promise<Team> {
+    const {data} = await api.get<Team>(`/time/find-team/${idTeam}`);
+    return data;
+  },
 
   async Delete_Team(idTeam: string): Promise<void> {
     const { data } = await api.delete<void>(`time/delete-team/${idTeam}`);

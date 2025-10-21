@@ -1,8 +1,18 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuthStore } from "../../store/Auth";
+import { Navigate, Outlet, useLocation } from "react-router-dom"; 
+import { useAuthStore, UseinviteStore } from "../../store/Auth"; 
 
 export function BlockRouter() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());
-
-  return isAuthenticated ? <Navigate to="/quadros" replace /> : <Outlet />;
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated());  
+  const location = useLocation(); 
+  const hasPendingInvite = UseinviteStore((state) => state.token);   
+  
+  if (isAuthenticated) {
+      if (hasPendingInvite && location.pathname === '/Entrar') {
+          return <Navigate to= {hasPendingInvite} replace />;
+      }
+      
+      return <Navigate to="/quadros" replace />;
+  }
+  
+  return <Outlet />;
 }

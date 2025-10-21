@@ -3,12 +3,15 @@ import { useFont } from "../../components/font";
 import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
-import { useAuthStore } from "../../store/Auth";
+import { UseinviteStore, useAuthStore } from "../../store/Auth";
 
 function Login() {
   useFont("'Inter', sans-serif ");
 
   const setToken = useAuthStore((state) => state.setToken);
+  const InviteURL = UseinviteStore((state) => state.token)
+  const clearToken = UseinviteStore((state) => state.clearToken)
+
   const navigate = useNavigate();
 
   async function CreatAuth(event: FormEvent<HTMLFormElement>) {
@@ -23,7 +26,13 @@ function Login() {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
       setToken(new_auth.Token)
-      navigate('/quadros')
+
+      if (InviteURL) {
+        navigate(InviteURL)
+
+      } else {
+        navigate("/quadros")
+      }
 
     } catch (err) {
       console.log(err);

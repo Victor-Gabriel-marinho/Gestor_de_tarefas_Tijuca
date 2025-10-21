@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "../store/Auth";
+import { UseinviteStore } from "../store/Auth";
 
 const api = axios.create({
     baseURL: "http://127.0.0.1:3000"
@@ -21,5 +22,7 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+
 
 export default api
