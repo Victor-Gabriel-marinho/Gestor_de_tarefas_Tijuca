@@ -1,5 +1,5 @@
 import { IoIosClose } from "react-icons/io";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TaskService } from "../../../api/services/TaskService";
 import type { CreateTaskDTO, Task } from "../../../api/types/TaskTypes/TaskDTO";
 
@@ -82,25 +82,36 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
     }
   }
 
-  const handlechange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const estadoInicial = {
+    Name: "",
+    Content: "",
+    Priority: "",
+    endDate: "",
+  };
+
+  const [formData, setFormData] = useState(estadoInicial);
+
+  useEffect(() => {
+    if (title !== "Criar" && TaskSelected) {
+      setFormData({
+        Name: TaskSelected.Name || "",
+        Content: TaskSelected.Content || "",
+        Priority: TaskSelected.Priority || "",
+        endDate: TaskSelected.EndDate
+          ? new Date(TaskSelected.EndDate).toISOString().slice(0, 10)
+          : "",
+      });
+    } else {
+      setFormData(estadoInicial);
+    }
+  }, [title, TaskSelected]);
+
+  const handlechange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
-
-    let updatedValue: string | Date = value;
-
-    if (name === "endDate") {
-      updatedValue = new Date(value);
-    }
-
-    if (TaskSelected) {
-      setTaskSelected((prevTask) => ({
-        ...prevTask!,
-        [name]: updatedValue,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -124,7 +135,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
               name="Name"
               placeholder="Nome"
               className="bg-white text-black rounded-[5px] outline-none p-2"
-              value={title === "Criar" ? "" : TaskSelected?.Name}
+              value={formData.Name}
               onChange={handlechange}
             />
           </div>
@@ -133,7 +144,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
             <p className="text-lg font-semibold">Descrição da tarefa</p>
             <textarea
               name="Content"
-              value={title === "Criar" ? "" : TaskSelected?.Content}
+              value={formData.Content}
               placeholder="Descrição (opcional)"
               className="bg-white text-black resize-none rounded-[5px] outline-none p-2"
               onChange={handlechange}
@@ -144,7 +155,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
             <p className="text-lg font-semibold">Prioridade</p>
             <select
               name="Priority"
-              value={title === "Criar" ? "" : TaskSelected?.Priority}
+              value={formData.Priority}
               className="bg-white text-black rounded-[5px] p-2"
               onChange={handlechange}
             >
@@ -162,6 +173,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
             <input
               type="date"
               name="endDate"
+              value={formData.endDate}
               className="bg-white text-black rounded-[5px] p-2 outline-none"
               onChange={handlechange}
             />
