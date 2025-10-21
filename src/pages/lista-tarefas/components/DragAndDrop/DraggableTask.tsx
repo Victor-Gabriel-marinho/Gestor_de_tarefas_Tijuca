@@ -61,7 +61,7 @@ const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
     {...attributes}
     >
       <p
-        className="bg-white cursor-pointer p-1 flex justify-center items-center hover:scale-110  flex-wrap truncate  text-center rounded-[5px]"
+        className="bg-white cursor-pointer p-1 flex justify-center items-center hover:scale-110 flex-wrap text-center rounded-[5px]"
        onMouseDown={handleMouseDown}
        onMouseUp={handleMouseUp}
        onMouseLeave={handleMouseLeave}

@@ -23,7 +23,7 @@ function DroppableLane({ id, children, ...rest }: DroppableLane) {
 
   return (
     <ListTar {...rest}>
-      <div ref={setNodeRef} style={style} className="flex flex-col gap-2">
+      <div ref={setNodeRef} style={style} className="flex flex-col gap-2 w-full min-h-5">
         {children}
         </div>
     </ListTar>

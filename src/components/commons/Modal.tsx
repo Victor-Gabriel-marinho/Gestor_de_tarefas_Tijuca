@@ -3,10 +3,10 @@ import { IoCloseOutline } from "react-icons/io5";
 import { BiSolidDownArrow } from "react-icons/bi";
 import PopUp from "../../pages/times/components/PopUp.js";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { TeamService } from "../../api/services/teamService.js";
 import { useLocation } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
+import { inviteService } from "../../api/services/inviteService.js";
 
 type ModalProps = {
   refetch: () => void;
@@ -62,8 +62,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       recipients: recipientsArray,
     };
 
-    console.log(CreateInvite)
-     const response = await TeamService.Add_user(users_to_add);
+     const response = await inviteService.SendInvite(CreateInvite);
       if (response) {
         Setloading(false);
         handleModal();
@@ -116,10 +115,10 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       onClick={handleModal}
     >
       <div
-        className="bg-[#524D50] w-[300px] h-[400px] sm:w-[652px] sm:h-[674px] rounded-[20px] sm:rounded-[50px] shadow-2xl shadow-[#524D50]"
+        className="bg-[#524D50] w-[300px] h-[400px] sm:w-[652px] sm:h-[674px] rounded-[20px] sm:rounded-[50px] flex flex-col items-center justify-center shadow-2xl shadow-[#524D50]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex flex-col text-white m-4 sm:m-9 gap-7 items-center">
+        <div className="flex flex-col text-white p-4 w-full h-full sm:p-9 gap-7 items-center">
           <div className="flex flex-row items-center w-full justify-between">
             <h2 className="text-2xl">Adicionar membros</h2>
             <IoCloseOutline
@@ -160,7 +159,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
 
-          <div className="w-full flex flex-col gap-7 max-h-40 sm:max-h-100 sm:min-h-50 px-2 sm:px-5 overflow-y-auto">
+          <div className="w-full flex flex-col gap-7 h-full px-2 sm:px-5 overflow-y-auto">
             {filter_users(Email, users_to_invite).map((user) => {
               const isSelected = selectUsers_id.some((u) => u.id === user.id);
 
