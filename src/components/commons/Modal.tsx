@@ -49,36 +49,42 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   async function send_invitation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    try {
+        try {
       Setloading(true);
 
-      const users_to_add = selectUsers_id.map((user) => ({
-        UserId: user.id,
-        TeamId: team_id,
-        Role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
-      }));
+    const recipientsArray = selectUsers_id.map((user) => ({
+      email: user.Email,
+      role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
+    }));
 
-      const response = await TeamService.Add_user(users_to_add);
+    const CreateInvite = {
+      id_team: team_id,
+      recipients: recipientsArray,
+    };
+
+    console.log(CreateInvite)
+     const response = await TeamService.Add_user(users_to_add);
       if (response) {
         Setloading(false);
         handleModal();
         refetch();
         search_users();
-        console.log(response);
-      }
+        console.log(response); 
+       }
+       
     } catch (error) {
       Setloading(false);
       console.log("erro ao fazer requisição", error);
       seterror("este usuário já está no time");
-    }
+    } 
   }
 
   function selectuser(user: user_for_invite) {
     SetselectUsers_id((prev) => {
-     if (prev.some((u) => u.id === user.id)) {
-      return prev.filter((u) => u.id !== user.id)
-     }
-     return [...prev, user]
+      if (prev.some((u) => u.id === user.id)) {
+        return prev.filter((u) => u.id !== user.id);
+      }
+      return [...prev, user];
     });
   }
 
@@ -102,8 +108,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
   useEffect(() => {
     search_users();
-  }, [team_id, search_users]);  
-
+  }, [team_id, search_users]);
 
   return (
     <div
@@ -157,44 +162,48 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
           <div className="w-full flex flex-col gap-7 max-h-40 sm:max-h-100 sm:min-h-50 px-2 sm:px-5 overflow-y-auto">
             {filter_users(Email, users_to_invite).map((user) => {
-              
-              const isSelected = selectUsers_id.some((u) => u.id === user.id )
+              const isSelected = selectUsers_id.some((u) => u.id === user.id);
 
               return (
-              <div
-                className={`flex items-center justify-between w-full cursor-pointer p-2 rounded-xl ${isSelected ? "bg-zinc-800" : "" } `}
-                key={user.id}
-                onClick={() => selectuser(user)}
-              >
-                <div className="items-center flex flex-row gap-2">
-                  <FaUserCircle className="text-white text-3xl sm:text-5xl" />
-                  <p className="text-xl">{user.Name}</p>
-                </div>
-                <div className="flex flex-row gap-2 items-center">
-                  <p className="text-sm sm:text-lg font-semibold" onClick={HandlePopUp}>
-                    {userroles[user.id] ?? "Colaborador"}
-                  </p>
-                  <div className="relative">
-                    <BiSolidDownArrow
-                      className={`text-xl hidden sm:block ${
-                        popUp === user.id ? "rotate-180" : ""
-                      } cursor-pointer`}
-                      id={user.id}
+                <div
+                  className={`flex items-center justify-between w-full cursor-pointer p-2 rounded-xl ${
+                    isSelected ? "bg-zinc-800" : ""
+                  } `}
+                  key={user.id}
+                  onClick={() => selectuser(user)}
+                >
+                  <div className="items-center flex flex-row gap-2">
+                    <FaUserCircle className="text-white text-3xl sm:text-5xl" />
+                    <p className="text-xl">{user.Name}</p>
+                  </div>
+                  <div className="flex flex-row gap-2 items-center">
+                    <p
+                      className="text-sm sm:text-lg font-semibold"
                       onClick={HandlePopUp}
-                    />
-                    {popUp === user.id && (
-                      <PopUp
-                        ClassName="bg-[#251F1F]"
-                        popUp={popUp}
-                        setpopUp={setpopUp}
-                        SetRoleName={(role) => alterarRole(user.id, role)}
-                        SetRole_id={SetRole_id}
+                    >
+                      {userroles[user.id] ?? "Colaborador"}
+                    </p>
+                    <div className="relative">
+                      <BiSolidDownArrow
+                        className={`text-xl hidden sm:block ${
+                          popUp === user.id ? "rotate-180" : ""
+                        } cursor-pointer`}
+                        id={user.id}
+                        onClick={HandlePopUp}
                       />
-                    )}
+                      {popUp === user.id && (
+                        <PopUp
+                          ClassName="bg-[#251F1F]"
+                          popUp={popUp}
+                          setpopUp={setpopUp}
+                          SetRoleName={(role) => alterarRole(user.id, role)}
+                          SetRole_id={SetRole_id}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              )
+              );
             })}
           </div>
         </div>

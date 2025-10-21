@@ -1,4 +1,3 @@
-import { LiaDeafSolid } from "react-icons/lia";
 import api from "../api";
 import type { Return_Auth } from "../types/AuthTypes/AuthUser";
 import type { Role } from "../types/UserTypes/Role";
@@ -26,6 +25,5 @@ export const UserService = {
     const { data } = await api.get<user_for_invite[] | null>(`/user/get-users-by-id/${ids_param}`);
     return data;
   }
-
   
 };
