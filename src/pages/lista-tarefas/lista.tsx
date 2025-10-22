@@ -181,7 +181,7 @@ function Lista() {
                   }}
                 >
                   {/*{pendingTasks.map((pentask)*/}
-                  {pendingTasksFiltradas.map((pentask) => (
+                  {tasks.map((pentask) => (
                    <DraggableTask
                     key={pentask.id}
                     taskname={pentask.Name}
