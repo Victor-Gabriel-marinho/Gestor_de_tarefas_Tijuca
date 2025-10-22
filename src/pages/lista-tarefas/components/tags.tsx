@@ -39,7 +39,7 @@ function Tag({onDefinir,idSelected} : tagProps) {
 
     return (
       <div className="flex flex-col text-center items-center justify-center bg-[#251F1F] ml-5 p-10 rounded-[10px] shadow-2xl shadow-[#3b3232]">
-        <h2 className="text-white text-lg mb-2 font-semibold">Adicionar Tag</h2>
+        <h2 className="text-white text-lg mb-2 font-semibold">Criar Tag</h2>
         <form
           action=""
           onSubmit={(event)=> Create_tag(event)}
@@ -60,6 +60,11 @@ function Tag({onDefinir,idSelected} : tagProps) {
             value="Definir tag"
             className="bg-green-500 text-white rounded-[5px] cursor-pointer"
           />
+        </form>
+        <form 
+        action=""
+        className="flex flex-col bg-amber-500">
+          <h3>Adicione uma tag</h3>
         </form>
       </div>
     );

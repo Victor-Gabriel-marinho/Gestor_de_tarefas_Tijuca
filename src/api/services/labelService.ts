@@ -12,5 +12,9 @@ export const LabelService = {
     async Get_All_Label_Tasks(id_task: string): Promise<{Name: string, Color: string, id: string}[]> {
         const { data } = await api.get<{Name: string, Color: string, id:string}[]>(`label/getlabeltask/${id_task}`);
         return data;
+    },
+    async Get_All_Label_Team(idteam: string): Promise<{Name: string, Color: string}[]>{
+        const {data} = await api.get<{Name: string, Color: string}[]>(`all-labels-team/${idteam}`)
+        return data;
     }
 }
