@@ -3,13 +3,15 @@ import { LabelService } from "../../../api/services/labelService";
 import { useTags } from "../../../hooks/get_alllabels_in_tasks";
 type tagProps = {
   onDefinir: () => void,
-  idSelected: string
+  idSelected: string,
+  onVerCriadas: () => void;
 }
 
-function Tag({onDefinir,idSelected} : tagProps) {
+function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
     const[input, Setinput] = useState("")
     const[error, setError] = useState<string>("")
 
+    
     async function Create_tag(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -60,12 +62,14 @@ function Tag({onDefinir,idSelected} : tagProps) {
             value="Definir tag"
             className="bg-green-500 text-white rounded-[5px] cursor-pointer"
           />
+          <input 
+            type="button"
+            value="Use Tags existentes"
+            className="text-white cursor-pointer"
+            onClick={onVerCriadas}
+           />
         </form>
-        <form 
-        action=""
-        className="flex flex-col bg-amber-500">
-          <h3>Adicione uma tag</h3>
-        </form>
+        
       </div>
     );
 }

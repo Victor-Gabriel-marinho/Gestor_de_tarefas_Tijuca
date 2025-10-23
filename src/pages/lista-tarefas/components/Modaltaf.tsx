@@ -13,7 +13,10 @@ import Tag from "./tags";
 import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../../../api/services/TaskService";
 import { Modal_taskUser } from "./AddTaskUser";
-
+import Tags from "./tagstaf";
+import { useTags } from "../../../hooks/get_alllabels_in_tasks";
+import TagCreated from "./tagcreated";
+import { useTagsTeam } from "../../../hooks/get_allLabels_in_team";
 type ModalProps = {
   task: Task;
   userrole?: string;
@@ -52,15 +55,16 @@ function Modaltaf({
       inputfile.current.click();
     }
   };
+  const {tags, fetchTags} = useTags(idSelected)
+  const {tagsTeam, fetchTagsTeam} = useTagsTeam(idSelected)
 
-  const [tag, Settag] = useState<boolean>(false);
+  const [tag, Settag] = useState<string>("");
   const [tagvalue, Settagvalue] = useState<string>("");
 
   const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
   const [viewusers, Setviewusers] = useState<boolean>(false);
-
   const Delete_task = async (id: string) => {
     try {
       const response = await TaskService.DeleteTask(id);
@@ -142,7 +146,7 @@ function Modaltaf({
                 <IoMdPricetag
                   className="hover:scale-110  cursor-pointer"
                   size={30}
-                  onClick={() => Settag(!tag)}
+                  onClick={() => Settag("criar")}
                 />
                 <MdEdit
                   className="cursor-pointer hover:scale-110"
@@ -158,7 +162,18 @@ function Modaltaf({
                   }}
                 />
               </div>}
-
+              
+                 <Tags
+                    idSelected={idSelected}
+                    tags={tags}
+                    onDefinir={() => {
+                    Settag("criar");
+                    fetchTags()
+                    
+                    }}
+                  />
+                
+                
               {/* Descrição e Data */}
               <div className="flex items-start justify-center flex-col gap-3 max-w-[400px]">
                 <p className="text-lg">
@@ -241,12 +256,25 @@ function Modaltaf({
             </div>
           </div>
         </div>
-
-        {tag && (
+        {tag === "criar"&& (
           <Tag
-              onDefinir={(tag) => {
-              Settagvalue(tag);
-              Settag(false);
+            idSelected={idSelected}
+            onDefinir={() => {
+              Settag("criar");
+              fetchTags()
+            }}
+            onVerCriadas={() => Settag("lista")}
+          />
+        )}
+        {tag === "lista" && (
+          <TagCreated 
+            idSelected={idSelected}
+            tags={tags}
+            onVoltar={()=> 
+              Settag("criar")
+            }
+            onDefinir={()=>{
+              fetchTagsTeam()
             }}
           />
         )}
