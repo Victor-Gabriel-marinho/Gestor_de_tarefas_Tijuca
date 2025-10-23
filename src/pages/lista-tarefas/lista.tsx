@@ -60,9 +60,21 @@ function Lista() {
   useEffect(() => {
     if (!tasks) return;
 
-    setPendingTasks(tasks.filter((t) => t.Status === "Pendente"));
-    setInProgressTasks(tasks.filter((t) => t.Status === "Progresso"));
-    setDoneTasks(tasks.filter((t) => t.Status === "Concluido"));
+    setPendingTasks(
+      tasks.filter(
+        (t) => t.id_status === "db14c25e-f876-45d2-984f-4b2af2a3af42"
+      )
+    );
+    setInProgressTasks(
+      tasks.filter(
+        (t) => t.id_status === "c1112d8a-20cc-4096-a28e-b222c52a887c"
+      )
+    );
+    setDoneTasks(
+      tasks.filter(
+        (t) => t.id_status === "2129b227-ba22-4188-b05f-11679da6cd1c"
+      )
+    );
   }, [tasks]);
 
   // função que auxilia para filtrar por status
@@ -70,11 +82,11 @@ function Lista() {
     if (!status) return true;
     switch (status) {
       case "concluido":
-        return t.Status === "Concluido";
+        return t.id_status === "2129b227-ba22-4188-b05f-11679da6cd1c";
       case "naoConcluido":
-        return t.Status !== "Concluido";
+        return t.id_status !== "2129b227-ba22-4188-b05f-11679da6cd1c";
       case "pendente":
-        return t.Status === "Pendente";
+        return t.id_status === "db14c25e-f876-45d2-984f-4b2af2a3af42";
       default:
         return true;
     }
@@ -163,13 +175,11 @@ function Lista() {
 
         <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center justify-center">
           <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
-          
             <DndContext onDragEnd={handleDragend}>
-
               {/* Pendentes */}
               {pendingTasksFiltradas.length >= 0 && (
                 <DroppableLane
-                id="Pendente"
+                  id="db14c25e-f876-45d2-984f-4b2af2a3af42"
                   userrole={userRole?.id}
                   title="Pendente"
                   minimizeKey="pendente"
@@ -177,19 +187,20 @@ function Lista() {
                   onToggleMinimize={toggleMinimize}
                   onCreateClick={() => {
                     Setcriar("Criar");
-                    setstatusForCreate("Pendente");
+                    setstatusForCreate("db14c25e-f876-45d2-984f-4b2af2a3af42");
                   }}
                 >
                   {/*{pendingTasks.map((pentask)*/}
-                  {tasks.map((pentask) => (
-                   <DraggableTask
-                    key={pentask.id}
-                    taskname={pentask.Name}
-                    setModal={()=>{
-                    Setselect(pentask);
-                    Setmodaltask(true);}}
-                    id= {pentask.id}
-                   />
+                  {pendingTasks.map((pentask) => (
+                    <DraggableTask
+                      key={pentask.id}
+                      taskname={pentask.Name}
+                      setModal={() => {
+                        Setselect(pentask);
+                        Setmodaltask(true);
+                      }}
+                      id={pentask.id}
+                    />
                   ))}
                 </DroppableLane>
               )}
@@ -197,33 +208,34 @@ function Lista() {
               {inProgressTasksFiltradas.length >= 0 && (
                 <DroppableLane
                   userrole={userRole?.id}
-                  id="Progresso"
+                  id="c1112d8a-20cc-4096-a28e-b222c52a887c"
                   title="Progresso"
                   minimizeKey="progresso"
                   minimized={minimize.progresso}
                   onToggleMinimize={toggleMinimize}
                   onCreateClick={() => {
                     Setcriar("Criar");
-                    setstatusForCreate("Progresso");
+                    setstatusForCreate("c1112d8a-20cc-4096-a28e-b222c52a887c");
                   }}
                 >
                   {/*{inProgressTasks.map((progtask)*/}
                   {inProgressTasksFiltradas.map((progtask) => (
-                   <DraggableTask
-                   key={progtask.id}
-                   id= {progtask.id}
-                    taskname={progtask.Name}
-                    setModal={()=>{
-                    Setselect(progtask);
-                    Setmodaltask(true);}}
-                   />
+                    <DraggableTask
+                      key={progtask.id}
+                      id={progtask.id}
+                      taskname={progtask.Name}
+                      setModal={() => {
+                        Setselect(progtask);
+                        Setmodaltask(true);
+                      }}
+                    />
                   ))}
                 </DroppableLane>
               )}
               {/* Concluídas */}
               {doneTasksFiltradas.length >= 0 && (
                 <DroppableLane
-                id="Concluido"
+                  id="2129b227-ba22-4188-b05f-11679da6cd1c"
                   userrole={userRole?.id}
                   title="Concluidas"
                   minimizeKey="concluido"
@@ -231,19 +243,20 @@ function Lista() {
                   onToggleMinimize={toggleMinimize}
                   onCreateClick={() => {
                     Setcriar("Criar");
-                    setstatusForCreate("Concluido");
+                    setstatusForCreate("2129b227-ba22-4188-b05f-11679da6cd1c");
                   }}
                 >
                   {/* doneTasks.map((taskdone)*/}
                   {doneTasksFiltradas.map((taskdone) => (
-                   <DraggableTask
-                   key={taskdone.id}
-                   id= {taskdone.id}
-                    taskname={taskdone.Name}
-                    setModal={()=>{
-                    Setselect(taskdone);
-                    Setmodaltask(true);}}
-                   />
+                    <DraggableTask
+                      key={taskdone.id}
+                      id={taskdone.id}
+                      taskname={taskdone.Name}
+                      setModal={() => {
+                        Setselect(taskdone);
+                        Setmodaltask(true);
+                      }}
+                    />
                   ))}
                 </DroppableLane>
               )}

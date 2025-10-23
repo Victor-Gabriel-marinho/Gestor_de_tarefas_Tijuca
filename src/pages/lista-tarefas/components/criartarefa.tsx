@@ -42,7 +42,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
       Name: nome,
       Content: desc,
       Priority: prio,
-      Status: statusForCreate,
+      id_status: statusForCreate,
       EndDate: new Date(data),
     };
 

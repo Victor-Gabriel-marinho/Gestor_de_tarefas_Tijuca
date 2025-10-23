@@ -4,7 +4,7 @@ export interface Task {
   Name: string;
   Content?: string;
   Priority: string;
-  Status: string;
+  id_status: string;
   StartDate?: Date;
   EndDate: Date;
 }
