@@ -114,7 +114,7 @@ function InviteTime() {
 
   return (
     <div className="h-screen w-screen bg-[#251F1F] flex items-center justify-center fixed inset-0">
-     {} {loading && <Loading_anim />}
+      {loading && <Loading_anim />}
       
         {!loading && error && (
              <div className="bg-[#1F2937] text-center h-20 p-1 rounded-[5px]">

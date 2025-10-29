@@ -5,6 +5,7 @@ import { useFont } from "../../components/font.tsx";
 import Get_teams from "../../hooks/get_teams.tsx";
 import { TeamService } from "../../api/services/teamService.ts";
 import { Loading_anim } from "../../components/commons/loading.tsx";
+import Grafico from "../lista-tarefas/components/dashboard.tsx"
 
 function Quadros() {
   useFont(" 'Poppins', 'SansSerif' ");
@@ -106,6 +107,8 @@ function Quadros() {
             </div>
           </div>
         </main>
+
+        <Grafico/>
       </div>
       
     </>
