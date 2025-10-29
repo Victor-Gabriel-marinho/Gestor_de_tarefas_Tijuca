@@ -14,6 +14,7 @@ import DroppableLane from "./components/DragAndDrop/DroppableLane";
 import { TaskService } from "../../api/services/TaskService";
 
 function Lista() {
+
   // Hook para trazer a fonte
   useFont(" 'Poppins', 'SansSerif' ");
 
@@ -49,90 +50,14 @@ function Lista() {
 
   // Buscar tasks
   const { id } = useParams();
-  const { tasks, refetchTasks } = id ? Get_Tasks(id) : { tasks: [] };
+  const { tasks, refetchTasks } = id ? Get_Tasks(id) : { };
+
   const team = { id: id ?? "", Name: "" };
   const { userRole } = Get_userRole(team);
-  // States para
-  const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
-  const [inProgressTasks, setInProgressTasks] = useState<Task[]>([]);
-  const [doneTasks, setDoneTasks] = useState<Task[]>([]);
-
-  useEffect(() => {
-    if (!tasks) return;
-
-    setPendingTasks(
-      tasks.filter(
-        (t) => t.id_status === "db14c25e-f876-45d2-984f-4b2af2a3af42"
-      )
-    );
-    setInProgressTasks(
-      tasks.filter(
-        (t) => t.id_status === "c1112d8a-20cc-4096-a28e-b222c52a887c"
-      )
-    );
-    setDoneTasks(
-      tasks.filter(
-        (t) => t.id_status === "2129b227-ba22-4188-b05f-11679da6cd1c"
-      )
-    );
-  }, [tasks]);
-
-  // função que auxilia para filtrar por status
-  const filtrarPorStatus = (t: Task, status?: string) => {
-    if (!status) return true;
-    switch (status) {
-      case "concluido":
-        return t.id_status === "2129b227-ba22-4188-b05f-11679da6cd1c";
-      case "naoConcluido":
-        return t.id_status !== "2129b227-ba22-4188-b05f-11679da6cd1c";
-      case "pendente":
-        return t.id_status === "db14c25e-f876-45d2-984f-4b2af2a3af42";
-      default:
-        return true;
-    }
-  };
-
-  //função que auxilia a filtrar por prazo
-  const filtrarprazo = (t: Task, prazo?: string) => {
-    if (!prazo) return true;
-    const hoje = new Date();
-    const prazoData = new Date(t.EndDate);
-
-    switch (prazo) {
-      case "atrasadas":
-        return prazoData < hoje;
-      case "dia":
-        return prazoData <= new Date(hoje.getTime() + 24 * 60 * 60 * 1000); //24h * 60min * 60s * 1000ms
-
-      case "semana":
-        return prazoData <= new Date(hoje.getTime() + 7 * 60 * 60 * 1000);
-      case "mes":
-        return prazoData <= new Date(hoje.getTime() + 30 * 60 * 60 * 1000);
-      default:
-        return true;
-    }
-  };
-
-  //aplica os filtros ás listas já separadas por status
-  const pendingTasksFiltradas = pendingTasks.filter(
-    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-  );
-  const inProgressTasksFiltradas = inProgressTasks.filter(
-    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-  );
-  const doneTasksFiltradas = doneTasks.filter(
-    (t) => filtrarPorStatus(t, filtro.status) && filtrarprazo(t, filtro.prazo)
-  );
 
   const nenhumFiltroAtivo =
     (filtro.status === "todas" || filtro.status === undefined) &&
     (filtro.prazo === "todas" || filtro.prazo === undefined);
-
-  useEffect(() => {
-    if (!nenhumFiltroAtivo) {
-      Setnovalista(false); // Força o fechamento do textarea/input de criar lista
-    }
-  }, [nenhumFiltroAtivo]);
 
   const setall = () => {
     setFiltro((prevfiltro) => ({
@@ -177,7 +102,7 @@ function Lista() {
           <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
             <DndContext onDragEnd={handleDragend}>
               {/* Pendentes */}
-              {pendingTasksFiltradas.length >= 0 && (
+              {tasks !== null && (
                 <DroppableLane
                   id="db14c25e-f876-45d2-984f-4b2af2a3af42"
                   userrole={userRole?.id}
@@ -191,7 +116,7 @@ function Lista() {
                   }}
                 >
                   {/*{pendingTasks.map((pentask)*/}
-                  {pendingTasks.map((pentask) => (
+                  {tasks?.map((pentask) => (
                     <DraggableTask
                       key={pentask.id}
                       taskname={pentask.Name}
@@ -205,7 +130,7 @@ function Lista() {
                 </DroppableLane>
               )}
               {/* Em progresso */}
-              {inProgressTasksFiltradas.length >= 0 && (
+              {tasks && (
                 <DroppableLane
                   userrole={userRole?.id}
                   id="c1112d8a-20cc-4096-a28e-b222c52a887c"
@@ -219,7 +144,7 @@ function Lista() {
                   }}
                 >
                   {/*{inProgressTasks.map((progtask)*/}
-                  {inProgressTasksFiltradas.map((progtask) => (
+                  {tasks.map((progtask) => (
                     <DraggableTask
                       key={progtask.id}
                       id={progtask.id}
@@ -233,7 +158,7 @@ function Lista() {
                 </DroppableLane>
               )}
               {/* Concluídas */}
-              {doneTasksFiltradas.length >= 0 && (
+              {tasks && (
                 <DroppableLane
                   id="2129b227-ba22-4188-b05f-11679da6cd1c"
                   userrole={userRole?.id}
@@ -247,7 +172,7 @@ function Lista() {
                   }}
                 >
                   {/* doneTasks.map((taskdone)*/}
-                  {doneTasksFiltradas.map((taskdone) => (
+                  {tasks.map((taskdone) => (
                     <DraggableTask
                       key={taskdone.id}
                       id={taskdone.id}
@@ -260,6 +185,39 @@ function Lista() {
                   ))}
                 </DroppableLane>
               )}
+
+              {/* Outros Status */}
+                 { tasks && (
+                    <DroppableLane
+                      id="123"
+                      userrole={userRole?.id}
+                      title="nada"
+                      minimizeKey="concluido"
+                      minimized={minimize.concluido}
+                      onToggleMinimize={toggleMinimize}
+                      onCreateClick={() => {
+                        Setcriar("Criar");
+                        setstatusForCreate("123");
+                      }}
+                    >
+                      {tasks.map((task) =>
+                        task.id_status === "123" ? (
+                          <DraggableTask
+                            key={task.id}
+                            id={task.id}
+                            taskname={task.Name}
+                            setModal={() => {
+                              Setselect(task);
+                              Setmodaltask(true);
+                            }}
+                          />
+                        ) : (
+                          <div></div>
+                        )
+                      )}
+                    </DroppableLane>
+                  )}
+              
             </DndContext>
 
             {/* Nova lista */}
@@ -278,17 +236,6 @@ function Lista() {
                         className="bg-white text-black outline-none placeholder-gray-400 h-[35px] w-full truncate resize-none"
                         value={novaListaInput}
                         onChange={(e) => setNovaListaInput(e.target.value)}
-                        onKeyDown={(event) => {
-                          if (
-                            event.key === "Enter" &&
-                            novaListaInput.trim() !== ""
-                          ) {
-                            event.preventDefault();
-                            Setnomelista(novaListaInput);
-                            setNovaListaInput("");
-                            Setnovalista(false);
-                          }
-                        }}
                       />
                     )}
 

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Task } from "../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../api/services/TaskService";
-
+import type { Task } from "../api/types/TaskTypes/TaskDTO";
 export function Get_Tasks(idTeam: string) {
+
+    const [ tasks, Settasks ] = useState<Task[]>([])
     const [loading, Setloading ] = useState<boolean>(false);
-    const [tasks, SetTasks] = useState<Task[]>([])
+
 
     const fetchTasks = useCallback(async () => {
 
@@ -13,7 +14,8 @@ export function Get_Tasks(idTeam: string) {
         try {
             const response = await TaskService.GetTasksInThisTeam(idTeam)
             if (response) {
-                SetTasks(response)
+                console.log(response)
+                Settasks(response)
             }
         }
         catch(error) {
@@ -29,5 +31,5 @@ export function Get_Tasks(idTeam: string) {
         fetchTasks(); 
     }, [fetchTasks])
     
-    return {tasks, loading, refetchTasks: fetchTasks};
+    return {tasks, refetchTasks: fetchTasks};
 }

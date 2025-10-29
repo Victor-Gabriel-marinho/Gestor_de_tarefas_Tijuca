@@ -25,7 +25,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
     const nome = formdata.get("Name") as string;
 
     if (!nome || (nome.trim() === "" && title === "Criar")) {
-      setError("O nome da Selected é obrigatório.");
+      setError("O nome da tarefa é obrigatório.");
       return;
     }
 
