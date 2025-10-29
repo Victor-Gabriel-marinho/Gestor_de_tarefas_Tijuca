@@ -23,7 +23,8 @@ function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
         const label =  {
           Name: Name,
           Color: Color,
-          idtask: idSelected
+          idtask: idSelected,
+          isActive: true
         }
         console.log("label: ",label)
         try{
@@ -65,7 +66,7 @@ function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
           <input 
             type="button"
             value="Use Tags existentes"
-            className="text-white cursor-pointer"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-2 rounded mt-4"
             onClick={onVerCriadas}
            />
         </form>

@@ -17,6 +17,7 @@ import Tags from "./tagstaf";
 import { useTags } from "../../../hooks/get_alllabels_in_tasks";
 import TagCreated from "./tagcreated";
 import { useTagsTeam } from "../../../hooks/get_allLabels_in_team";
+import { useParams } from "react-router-dom";
 type ModalProps = {
   task: Task;
   userrole?: string;
@@ -55,8 +56,9 @@ function Modaltaf({
       inputfile.current.click();
     }
   };
+  const {id} = useParams()
   const {tags, fetchTags} = useTags(idSelected)
-  const {tagsTeam, fetchTagsTeam} = useTagsTeam(idSelected)
+  const {tagsTeam, fetchTagsTeam} = useTagsTeam(id?id:"")
 
   const [tag, Settag] = useState<string>("");
   const [tagvalue, Settagvalue] = useState<string>("");
@@ -268,13 +270,16 @@ function Modaltaf({
         )}
         {tag === "lista" && (
           <TagCreated 
+            fetchTagsTeam={fetchTags}
             idSelected={idSelected}
-            tags={tags}
+            idTeam={id}
+            tagsteam={tagsTeam}
             onVoltar={()=> 
               Settag("criar")
             }
             onDefinir={()=>{
               fetchTagsTeam()
+              Settag("lista")
             }}
           />
         )}

@@ -3,5 +3,6 @@ export interface LabelDTO {
     Name: string,
     Color: string,
     idtask: string
+    isActive: boolean
 }
 
