@@ -3,17 +3,18 @@ import type { StatusDTO } from "../api/types/StatusTypes/StatusDTO";
 import { StatusService } from "../api/services/StatusService";
 
 
-export function Get_status(id_team: string) {
+export function Get_status(id_status: string) {
+  
   const [loading, Setloading] = useState<boolean>(false);
-  const [status, Setstatus] = useState<StatusDTO[]>();
+  const [arraystatus, Setarraystatus] = useState<StatusDTO[]>();
 
   const fetch_Status = useCallback(async () => {
     Setloading(true)
 
     try{
-        const response = await StatusService.GetStatusThisTeam(id_team)
-        if (response) {
-            Setstatus(response)
+        const response = await StatusService.GetStatusByID(id_status)
+        if (response) {          
+            Setarraystatus(response)
         }
     }   
     catch (error){
@@ -28,5 +29,5 @@ export function Get_status(id_team: string) {
     fetch_Status()
   }, [fetch_Status])
 
-  return {status, loading, refetchstatus: fetch_Status}
+  return {arraystatus, loading, refetchstatus: fetch_Status}
 }

@@ -2,20 +2,22 @@ import { IoIosClose } from "react-icons/io";
 import React, { useEffect, useState } from "react";
 import { TaskService } from "../../../api/services/TaskService";
 import type { CreateTaskDTO, Task } from "../../../api/types/TaskTypes/TaskDTO";
+import { Get_status } from "../../../hooks/get_Status";
+
 
 type CreateProps = {
   title: string;
+  StatusName?: string;
   id_team: string | undefined;
   Selected: Task | undefined;
   onClose: () => void;
   closeModal?: () => void;
   refetchTasks: (() => Promise<void>) | undefined;
-  statusForCreate: string;
 };
 
-function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected, closeModal }: CreateProps) {
+function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, StatusName }: CreateProps) {
   const [error, setError] = useState<string>("");
-  const [TaskSelected, setTaskSelected] = useState<Task | undefined>(Selected);
+  const [TaskSelected, setTaskSelected] = useState<Task | undefined>(Selected);  
 
   async function Criar(e: React.FormEvent<HTMLFormElement>) {
     if (!id_team) return;
@@ -31,6 +33,11 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
 
     const desc = formdata.get("Content") as string;
     const prio = formdata.get("Priority") as string;
+    const status = formdata.get("Status") as string
+    if (!status) {
+      setError("É obrigatório algum status para criar uma task")
+      return
+    }
     const data = formdata.get("endDate") as string;
     if (!data && title === "Criar") {
       setError("A data de entrega é obrigatória.");
@@ -42,12 +49,9 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
       Name: nome,
       Content: desc,
       Priority: prio,
-      id_status: statusForCreate,
+      id_status: status,
       EndDate: new Date(data),
-    };
-
-    console.log(task);
-    
+    };    
 
     if (title === "Criar") {
       Create_task(task);
@@ -85,6 +89,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
   const estadoInicial = {
     Name: "",
     Content: "",
+    Status: "",
     Priority: "",
     endDate: "",
   };
@@ -95,6 +100,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
     if (title !== "Criar" && TaskSelected) {
       setFormData({
         Name: TaskSelected.Name || "",
+        Status: StatusName || "",
         Content: TaskSelected.Content || "",
         Priority: TaskSelected.Priority || "",
         endDate: TaskSelected.EndDate
@@ -106,7 +112,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
     }
   }, [title, TaskSelected]);
 
-  const handlechange = (e: { target: { name: any; value: any; }; }) => {
+  const handlechange = (e: { target: { name: string; value: string; }; }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -116,7 +122,7 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
 
   return (
     <div className="flex items-center justify-center bg-black/50 w-screen h-screen fixed top-0 left-0 right-0 backdrop-blur-[20px]">
-      <div className="bg-[#251F1F] h-[600px] w-[400px] max-w-[90vw] max-h-[90vh] overflow-auto text-white relative p-10 gap-5 flex flex-col rounded-[10px]">
+      <div className="bg-[#251F1F] h-[690px] w-[450px] max-w-[90vw] max-h-[90vh] overflow-auto text-white relative p-10 gap-5 flex flex-col rounded-[10px]">
         <div className="flex items-center justify-between w-full">
           <h2 className="text-sm sm:text-xl font-bold">{title} tarefa</h2>
           <button className="cursor-pointer" onClick={onClose}>
@@ -149,6 +155,25 @@ function Criar({ onClose, statusForCreate, id_team,title, refetchTasks, Selected
               className="bg-white text-black resize-none rounded-[5px] outline-none p-2"
               onChange={handlechange}
             ></textarea>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="test-lg font-semibold">Status da tarefa</p>
+            <select
+              name="Status"
+              value={formData.Status}
+              onChange={handlechange}
+              className="bg-white text-black rounded-[5px] p-2 w-full"
+            >
+              <option value="" disabled>
+                Status
+              </option>
+              <option value="Pendente">Pendente</option>
+              <option value="Progresso">Progresso</option>
+              <option value="Concluido">Concluido</option>
+              <option value="Outros">Outros</option>
+            </select>
+            {formData.Status === "Outros" ? (<input type="text" placeholder="Digite o novo Status" className="bg-white text-black rounded-[5px] p-1" />) : (<div></div>)}
           </div>
 
           <div className="flex flex-col">

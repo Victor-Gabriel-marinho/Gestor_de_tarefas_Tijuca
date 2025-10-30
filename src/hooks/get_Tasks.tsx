@@ -14,7 +14,6 @@ export function Get_Tasks(idTeam: string) {
         try {
             const response = await TaskService.GetTasksInThisTeam(idTeam)
             if (response) {
-                console.log(response)
                 Settasks(response)
             }
         }

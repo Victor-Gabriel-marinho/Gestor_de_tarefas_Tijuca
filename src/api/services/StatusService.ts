@@ -7,8 +7,14 @@ export const StatusService = {
         const {data} = await api.get<StatusDTO[]>(`/status/Getstatus/${id_team}`)
         return data
     },
-    async CreateStatus(Name: string): Promise<StatusDTO> {
-        const {data}= await api.post<StatusDTO>("/status/CreateStatus", {Name})
+
+    async GetStatusByID(id_status: string): Promise<StatusDTO[]> {
+        const {data} = await api.get<StatusDTO[]>(`/status/GetStatusById/${id_status}`)
+        return data
+    },
+ 
+    async CreateStatus(Name: string): Promise<StatusDTO[]> {
+        const {data}= await api.post<StatusDTO[]>("/status/CreateStatus", {Name})
         return data
     }
 }
