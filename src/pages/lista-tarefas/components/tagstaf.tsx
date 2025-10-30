@@ -8,13 +8,12 @@ type tagProps = {
 function Tags({tags}: tagProps){
 
     console.log(tags, "tags");
-    
   
     return (
         <div className="flex flex-wrap items-center justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[480px] sm:w-[480px]">
             {tags.map((tag)=>(
                 <p key={tag.id} style={{background: tag.Color}} className="
-                rounded-[10px] p-1 shadow-xl shadow-black/40
+                rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer
                 ">{tag.Name}</p>
             ))}
         </div>
