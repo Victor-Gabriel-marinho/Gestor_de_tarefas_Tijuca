@@ -31,7 +31,11 @@ ChartJS.register(
   Legend
 );
 
-function GraficoBarras() {
+type graficoProps = {
+  id_team: string
+}
+
+function GraficoBarras({id_team}: graficoProps) {
 
       const {
         metrics,
@@ -41,7 +45,7 @@ function GraficoBarras() {
         totalPaginas,
         loading,
         erro,
-      } = useDashboardPages()
+      } = useDashboardPages(id_team)
 
   /*preciso dos status das tarefas, prioridade ,  e também nome dos responsáveis */
   //integração
@@ -50,14 +54,18 @@ function GraficoBarras() {
   if (erro) return <div>{erro}</div>
   if (!metrics) return <div>Dados não encontrados</div>
 
-  const statusLabel = metrics?.tasksByStatus?.map(item => item.name) || []
-  const statusCount = metrics?.tasksByStatus?.map(item => item.count) || []
+  const statusLabel = metrics?.tarStatus?.map(item => item.name) || []
+  const statusCount = metrics?.tarStatus?.map(item => item.count) || []
 
-  const prioridadeLabel = metrics?.tasksByPriority?.map(item => item.name) || []
-  const prioridadeCount = metrics?.tasksByPriority?.map(item => item.count) || []
+  const prioridadeLabel = metrics?.tarPriority?.map(item => item.name) || []
+  const prioridadeCount = metrics?.tarPriority?.map(item => item.count) || []
 
-  const usersLabel = metrics?.taskByUser?.map(item => item.name)  || []
-  const usersCount = metrics?.taskByUser?.map(item => item.count) || []
+  const usersLabel = metrics?.tarUsers?.map(item => item.name)  || []
+  const usersCount = metrics?.tarUsers?.map(item => item.count) || []
+
+  console.log("Status Labels:", statusLabel);
+    console.log("Status Counts:", statusCount);
+    console.log("Responsáveis da Página:", paginasPorUsuario);
   //status
   const data = {
     labels: statusLabel,
@@ -131,10 +139,7 @@ function GraficoBarras() {
     scales: { y: { beginAtZero: true } },
   };
 
-  //Calcula o total de páginas
-  // Calcula o total de páginas, garantindo que seja no mínimo 1.
-// Se usersCount.length for 0, o resultado será Math.ceil(0/10) = 0.
-// Math.max(0, 1) garante que o mínimo seja 1.
+  
  
 
 

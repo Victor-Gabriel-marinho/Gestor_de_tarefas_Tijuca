@@ -1,7 +1,7 @@
 import type {MetricItem} from "./MetricItem"
 
 export interface dashboardMetricsDTO {
-    tasksByStatus: MetricItem[]
-    tasksByPriority: MetricItem[]
-    taskByUser: MetricItem[]
+    tarStatus: MetricItem[]
+    tarPriority: MetricItem[]
+    tarUsers: MetricItem[]
 }

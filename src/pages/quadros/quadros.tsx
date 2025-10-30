@@ -108,7 +108,7 @@ function Quadros() {
           </div>
         </main>
 
-        <Grafico/>
+        <Grafico id_team="f5afeb97-71d0-4477-9161-761fbab2209b"/>
       </div>
       
     </>

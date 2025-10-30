@@ -4,7 +4,7 @@ import type { dashboardMetricsDTO } from "../api/types/DashboardTypes/DashboardM
 import type { MetricItem } from "../api/types/DashboardTypes/MetricItem";
 import { dashboardService } from "../api/services/dashboardService";
 
-export function useDashboardPages() {
+export function useDashboardPages(id_team: string) {
   const [metrics, setMetrics] = useState<dashboardMetricsDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [erro, setErro] = useState<string | null>(null);
@@ -16,8 +16,10 @@ export function useDashboardPages() {
   // Busca os dados do dashboard ao montar o hook
   useEffect(() => {
     const fetchMetrics = async () => {
+      setLoading(true)
+      setPaginaAtual(1)
       try {
-        const data = await dashboardService.getStatus();
+        const data = await dashboardService.getStatus(id_team);
         setMetrics(data);
       } catch (err) {
         console.error("Erro ao buscar métricas", err);
@@ -32,15 +34,15 @@ export function useDashboardPages() {
 
   // Atualiza a página atual dos usuários
   useEffect(() => {
-    if (!metrics?.taskByUser) return;
+    if (!metrics?.tarUsers) return;
     const start = (paginaAtual - 1) * N;
     const end = start + N;
-    setPaginasPorUsuario(metrics.taskByUser.slice(start, end));
+    setPaginasPorUsuario(metrics.tarUsers.slice(start, end));
   }, [paginaAtual, metrics]);
 
   const totalPaginas = Math.max(
     1,
-    Math.ceil((metrics?.taskByUser?.length || 0) / N)
+    Math.ceil((metrics?.tarUsers?.length || 0) / N)
   );
 
   return {
