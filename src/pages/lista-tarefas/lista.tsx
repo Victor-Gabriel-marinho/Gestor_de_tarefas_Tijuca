@@ -12,17 +12,11 @@ import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import DraggableTask from "./components/DragAndDrop/DraggableTask";
 import DroppableLane from "./components/DragAndDrop/DroppableLane";
 import { TaskService } from "../../api/services/TaskService";
-import { Get_status } from "../../hooks/get_Status";
+import Get_All_Status from "../../hooks/Get_All_Status";
 
 function Lista() {
   // Hook para trazer a fonte
   useFont(" 'Poppins', 'SansSerif' ");
-
-  // Estados para nova lista
-  const [novaListaInput, setNovaListaInput] = useState<string>("");
-  const [novalista, Setnovalista] = useState<boolean>(false);
-  const [tarefaNovaLista, SettarefaNovaLista] = useState<string>("");
-  const [nomelista, Setnomelista] = useState<string>("");
 
   // Modal e seleção
   const [modaltask, Setmodaltask] = useState<boolean>(false);
@@ -60,6 +54,9 @@ function Lista() {
   const team = { id: id ?? "", Name: "" };
   const { userRole } = Get_userRole(team);
 
+  const {status} = Get_All_Status(id!)
+  
+    
   const nenhumFiltroAtivo =
     (filtro.status === "todas" || filtro.status === undefined) &&
     (filtro.prazo === "todas" || filtro.prazo === undefined);
@@ -205,7 +202,6 @@ function Lista() {
                   minimized={minimize.concluido}
                   onToggleMinimize={toggleMinimize}
                 >
-                  {/* doneTasks.map((taskdone)*/}
                   {done?.map((taskdone) => (
                     <DraggableTask
                       key={taskdone.id}
@@ -221,17 +217,17 @@ function Lista() {
               )}
 
               {/* Outros Status */}
-              {tasks && (
+              {status?.map ((status) =>
                 <DroppableLane
-                  id="123"
+                  id={status.id}
                   userrole={userRole?.id}
-                  title="nada"
+                  title={status.Name}
                   minimizeKey="concluido"
                   minimized={minimize.concluido}
                   onToggleMinimize={toggleMinimize}
                 >
-                  {tasks.map((task) =>
-                    task.id_status === "123" ? (
+                  {tasks?.map((task) =>
+                    task.id_status === status.id ? (
                       <DraggableTask
                         key={task.id}
                         id={task.id}
@@ -248,7 +244,7 @@ function Lista() {
                 </DroppableLane>
               )}
             </DndContext>
-            
+
           </div>
         </main>
 
