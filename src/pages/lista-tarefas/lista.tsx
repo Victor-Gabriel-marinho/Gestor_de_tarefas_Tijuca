@@ -145,7 +145,7 @@ function Lista() {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-5 w-full items-start justify-center">
             <DndContext onDragEnd={handleDragend}>
               {/* Pendentes */}
               {tasks !== null && (
