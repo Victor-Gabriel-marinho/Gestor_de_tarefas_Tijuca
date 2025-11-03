@@ -11,25 +11,25 @@ function Perfil() {
     
   return (
     <>
-        <div className="bg-white p-4 rounded-xl shadow-lg absolute top-10 z-10 right-0 ">
+        <div className="bg-[#44383e] max-w-[300px] p-3 rounded-xl shadow-lg absolute top-10 z-10 right-0 ">
             <div className="flex items-stretch gap-2">
-                <FaCircleUser className=" w-[52px] h-[50px] top-0 left-0 
+                <FaCircleUser className=" text-amber-50 w-[60px] h-[50px] top-0 left-0 
                 sm:w-[72px] sm:h-[70px] "/>
-                <div className="flex flex-col">
-                    <h2 className="text-lg font-semibold ml-2">{user?.Name}</h2>
-                    <p className="text-sm text-gray-600 ml-2">{user?.Email}</p>
+                <div className="flex flex-col text-amber-50">
+                    <h2 className="text-[16px] font-semibold ml-2">{user?.Name}</h2>
+                    <p className="text-[12px] text-gray-400 ml-2">{user?.Email}</p>
                 </div>
                 <div
-                className="bg-red-800 rounded-xl text-center p-1 w-[70px] h-[30px] cursor-pointer text-sm text-white
+                className="bg-red-800 rounded-xl text-center p-1 w-[70px] h-[30px] cursor-pointer text-[15px] text-white
                 relative right-0 mt-1.5 sm:mt-2.5"
                 onClick={delete_Token}
                 >
-                logout
+                Sair
                 </div>
             </div>
           
 
-           <div className="mt-4">
+           <div className="mt-4 text-amber-50">
             <p>Seus times:{teamCount} </p>
             <p>Suas Tarefas:{taskCount}</p>
            </div>
