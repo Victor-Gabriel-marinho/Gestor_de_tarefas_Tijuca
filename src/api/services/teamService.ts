@@ -20,6 +20,7 @@ export const TeamService = {
   // Pega todos os times do usuário
   async Get_Teams(): Promise<Team[]> {
     const { data } = await api.get<Team[]>("/time/all-team");
+    
 
     return data;
   },

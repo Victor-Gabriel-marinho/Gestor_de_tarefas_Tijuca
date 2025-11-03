@@ -17,7 +17,6 @@ function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
   const [options, Setoptions] = useState<string | null>(null);
   const [modalconfirm, Setmodalconfirm] = useState<boolean>(false)
-  const [confirmremove, Setconfirmremove] = useState<boolean>(false)
 
   const { id } = useParams();
   const location = useLocation();  
@@ -52,7 +51,7 @@ function Times() {
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
             <h1 className="text-white text-2xl sm:text-6xl font-semibold">
-              Membros do time
+              Membros do time {" "}
               {first_team?.id === id ? first_team?.Name : team?.Name}
             </h1>
 
