@@ -100,12 +100,7 @@ function Lista() {
 
     let filteredtask = tasks
 
-    if (filtro.status && filtro.status !== "todas") {
-      filteredtask = filteredtask.filter(
-        (t) => t.id_status === filtro.status
-      )
-    }
-
+    
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];

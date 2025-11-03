@@ -69,9 +69,7 @@ function Modaltaf({
   const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
-  const [trocarModal, setTrocarModal] = useState<"first" | "second" | null>(
-    "first"
-  );
+  const [trocarModal, setTrocarModal] = useState<"first" | "second" | "users" | null>("first");
   const [viewusers, Setviewusers] = useState<boolean>(false);
 
   const isMobile = window.innerWidth <= 768;
@@ -101,53 +99,57 @@ function Modaltaf({
   return (
     <>
       <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
-        {viewusers && (
+        {viewusers && (isMobile ? trocarModal === "users" : trocarModal === "first") &&(
           <Modal_taskUser
             id_task={task.id}
             refetch_taskuser={refetchTaskuser}
-            closeModal={() => {Setviewusers(false)}}
+            closeModal={() => {
+              Setviewusers(false)
+              if(isMobile) setTrocarModal("first")
+            }}
+            
           />
         )}
         {/*caixa do modal*/}
-        {trocarModal === "first" && (
-          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[400px] sm:w-[600px] sm:p-4">
-            <div className="flex w-full h-full gap-2 flex-col">
-              <div className="flex w-full gap-5 items-center">
-                <button
-                  className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
-                  onClick={onClose}
-                >
-                  <IoIosClose size={40} />
-                </button>
-                <p className="max-w-[400px] text-2xl font-bold line-clamp-2">
-                  {task.Name}
-                </p>
-              </div>
+       {trocarModal === "first" &&( 
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[300px] sm:p-4">
+          <div className="flex w-full h-full gap-2 flex-col">
+            <div className="flex w-full gap-5 items-center">
+              <button
+                className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
+                onClick={onClose}
+              >
+                <IoIosClose size={40} />
+              </button>
+              <p className="max-w-[200px] text-2xl font-bold line-clamp-2">
+                {task.Name}
+              </p>
+            </div>
 
-              <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
-                {/*input escondido que é aberto pelo botão com clip*/}
-                <input
-                  type="file"
-                  name=""
-                  id=""
-                  className="absolute z-50 mt-50 outline-none hidden"
-                  ref={inputfile} //referência ao input type file
-                  accept="image/*,.pdf,.doc,.docx" //tipos de arquivos que são aceitos
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      const f = e.target.files[0];
-                      Setfile(f);
-                      Setfilename(f.name);
+            <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
+              {/*input escondido que é aberto pelo botão com clip*/}
+              <input
+                type="file" 
+                name=""
+                id=""
+                className="absolute z-50 mt-50 outline-none hidden"
+                ref={inputfile} //referência ao input type file
+                accept="image/*,.pdf,.doc,.docx" //tipos de arquivos que são aceitos
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const f = e.target.files[0];
+                    Setfile(f);
+                    Setfilename(f.name);
 
-                      //se for imagem, cria o preview
-                      if (f.type.startsWith("image/")) {
-                        Setpreview(URL.createObjectURL(f));
-                      } else {
-                        Setpreview(null);
-                      }
+                    //se for imagem, cria o preview
+                    if (f.type.startsWith("image/")) {
+                      Setpreview(URL.createObjectURL(f));
+                    } else {
+                      Setpreview(null);
                     }
-                  }}
-                />
+                  }
+                }}
+              />
 
                 {/* bara de botões*/}
                 {userrole === "3" ? (
@@ -156,7 +158,10 @@ function Modaltaf({
                   <div className="w-full mx-5 flex justify-around gap-3">
                     <FaUserPlus
                       className="hover:scale-110 cursor-pointer"
-                      onClick={() => Setviewusers(!viewusers)}
+                      onClick={() => {
+                        Setviewusers(!viewusers)
+                        if(isMobile)setTrocarModal("users")
+                      }}
                       size={30}
                     />
                     {/*botão responsável por ativar o input type file*/}
@@ -198,7 +203,14 @@ function Modaltaf({
                     fetchTags();
                   }}
                 />
-
+                {taskuser &&(
+                  <div>
+                    <p className="text-xl font-semibold">
+                      Usuários responsáveis
+                    </p>
+                    <TaskUser taskusers={taskuser} id_task={idSelected} refetchs={() => {refetchTaskuser(); refetchUsersWithNotInTask();}} />
+                  </div>
+                )}
                 {/* Descrição e Data */}
                 <div className="flex items-start justify-center flex-col gap-3 w-full">
                   <p className="text-sm">
@@ -218,14 +230,7 @@ function Modaltaf({
                 </div>
 
                 {/* Usuários relacionados a task */}
-                {taskuser &&(
-                  <div>
-                    <p className="text-xl font-semibold">
-                      Usuários responsáveis
-                    </p>
-                    <TaskUser taskusers={taskuser} id_task={idSelected} refetchs={() => {refetchTaskuser(); refetchUsersWithNotInTask();}} />
-                  </div>
-                )}
+                
 
                 {tagvalue && (
                   <div className="m-1 ">
