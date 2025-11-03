@@ -101,6 +101,14 @@ function Lista() {
   useEffect(() => {
     if (!tasks) return;
 
+    let filteredtask = tasks
+
+    if (filtro.status && filtro.status !== "todas") {
+      filteredtask = filteredtask.filter(
+        (t) => t.id_status === filtro.status
+      )
+    }
+
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
@@ -128,7 +136,7 @@ function Lista() {
           <Filtrar onFiltroChange={(f) => setFiltro(f)} />
         </Nav>
 
-        <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-start justify-center">
+        <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center sm:items-start justify-center">
           <div className="flex h-full">
             {userRole?.id === "3" ? (
               <div></div>
@@ -145,7 +153,7 @@ function Lista() {
               </div>
             )}
           </div>
-          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-5 w-full items-start justify-center">
+          <div className="flex flex-col sm:flex-row gap-5 w-full items-center sm:items-start justify-center">
             <DndContext onDragEnd={handleDragend}>
               {/* Pendentes */}
               {tasks !== null && (
