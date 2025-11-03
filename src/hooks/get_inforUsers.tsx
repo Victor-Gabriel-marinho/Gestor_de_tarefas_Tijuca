@@ -35,7 +35,6 @@ export function useInforUsers() {
       const response = await UserService.get_users_by_id([sub]);
       const currentUser = response?.[0] || null;
       setUser(currentUser);
-      console.log(currentUser?.id)
       if(currentUser){
         const [task, teams] = await Promise.all([
           TaskService.GetTasksByUser(),

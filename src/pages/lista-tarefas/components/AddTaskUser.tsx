@@ -7,9 +7,11 @@ import { get_UsersWithNotInTask } from "../../../hooks/get_UsersWithNotInTask";
 
 type Modal_taskUserProps = {
     id_task: string;
+    refetch_taskuser: () => void;
+    closeModal: () => void
 }
 
-export function Modal_taskUser({id_task}:Modal_taskUserProps) {
+export function Modal_taskUser({id_task, refetch_taskuser, closeModal}:Modal_taskUserProps) {
     const {id} = useParams()
 
     const [selectedUser, SetselectedUser] = useState<UserWithNotInTask[]>([])
@@ -32,6 +34,8 @@ export function Modal_taskUser({id_task}:Modal_taskUserProps) {
             const response = await TaskService.CreateTaskUser(taskUser)
             if(response) {
                 refetchUsersWithNotInTask()
+                refetch_taskuser()
+                closeModal()
             }
 
             SetselectedUser([])

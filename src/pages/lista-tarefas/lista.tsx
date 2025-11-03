@@ -261,7 +261,7 @@ function Lista() {
             onClose={() => Setmodaltask(false)}
             refetchtask={refetchTasks}
             idSelected={select.id}
-            id_team={id ? id : ""}
+            setcriar={() => {Setcriar("Editar")}}
           />
         )}
         {criar && (

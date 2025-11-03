@@ -1,6 +1,7 @@
 import api from "../api"
 import type { CreateTaskUserDTO } from "../types/TaskTypes/CreateTaskUserDTO"
 import type { CreateTaskDTO, Task } from "../types/TaskTypes/TaskDTO"
+import type { user_for_invite } from "../types/UserTypes/User"
 
 export const TaskService = {
     //Cria uma Task
@@ -28,6 +29,11 @@ export const TaskService = {
         return data 
     },
 
+    async Delettaskuser(id_task: string, id_user: string): Promise<{menssage: string}> {
+        const {data} = await api.patch<{menssage: string}>(`/tasks/InactiveTaskUser/${id_task}/${id_user}`)
+        return data
+    },
+
     async EditTask(idTask: string, taskEdited: CreateTaskDTO): Promise<Task> {
         const {data} = await api.patch<Task>(`tasks/Edit_task/${idTask}`, taskEdited)
 
@@ -47,6 +53,11 @@ export const TaskService = {
     async GetUsersNotInTask(idTask: string, idTeam: string) {
         const {data} = await api.get(`/tasks/GetUsersNotInTask/${idTask}/${idTeam}`)
         return data 
+    },
+
+    async GetTaskUser(id_task: string): Promise<user_for_invite[]> {
+        const {data} = await api.get<user_for_invite[]>(`/tasks/GetUsersTask/${id_task}`)
+        return data
     },
 
     async AlterStatus(idtask: string, NewTaskStatus: string): Promise<Task> {
