@@ -99,11 +99,15 @@ function Modaltaf({
   return (
     <>
       <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
-        {viewusers && (
+        {viewusers && (isMobile ? trocarModal === "users" : trocarModal === "first") &&(
           <Modal_taskUser
             id_task={task.id}
             refetch_taskuser={refetchTaskuser}
-            closeModal={() => {Setviewusers(false)}}
+            closeModal={() => {
+              Setviewusers(false)
+              if(isMobile) setTrocarModal("first")
+            }}
+            
           />
         )}
         {/*caixa do modal*/}
@@ -154,7 +158,10 @@ function Modaltaf({
                   <div className="w-full mx-5 flex justify-around gap-3">
                     <FaUserPlus
                       className="hover:scale-110 cursor-pointer"
-                      onClick={() => Setviewusers(!viewusers)}
+                      onClick={() => {
+                        Setviewusers(!viewusers)
+                        if(isMobile)setTrocarModal("users")
+                      }}
                       size={30}
                     />
                     {/*botão responsável por ativar o input type file*/}
@@ -196,7 +203,14 @@ function Modaltaf({
                     fetchTags();
                   }}
                 />
-
+                {taskuser &&(
+                  <div>
+                    <p className="text-xl font-semibold">
+                      Usuários responsáveis
+                    </p>
+                    <TaskUser taskusers={taskuser} id_task={idSelected} refetchs={() => {refetchTaskuser(); refetchUsersWithNotInTask();}} />
+                  </div>
+                )}
                 {/* Descrição e Data */}
                 <div className="flex items-start justify-center flex-col gap-3 w-full">
                   <p className="text-sm">
@@ -216,14 +230,7 @@ function Modaltaf({
                 </div>
 
                 {/* Usuários relacionados a task */}
-                {taskuser &&(
-                  <div>
-                    <p className="text-xl font-semibold">
-                      Usuários responsáveis
-                    </p>
-                    <TaskUser taskusers={taskuser} id_task={idSelected} refetchs={() => {refetchTaskuser(); refetchUsersWithNotInTask();}} />
-                  </div>
-                )}
+                
 
                 {tagvalue && (
                   <div className="m-1 ">
