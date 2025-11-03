@@ -14,6 +14,7 @@ import DroppableLane from "./components/DragAndDrop/DroppableLane";
 import { TaskService } from "../../api/services/TaskService";
 import Get_All_Status from "../../hooks/Get_All_Status";
 import Dashboard from "./components/dashboard"
+import Get_Status_Default from "../../hooks/Get_StatusDefaul";
 
 function Lista() {
   // Hook para trazer a fonte
@@ -39,28 +40,24 @@ function Lista() {
     setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  enum Status {
-    Pen = "5832cb1c-d7b2-40f3-8d01-6ee8fbcbb59c",
-    Prog = "8fe799c7-0765-4bf0-82b7-f3d39678d260",
-    Conc = "979fdfdf-0485-4cce-a8b8-05fd78c33928",
-  }
+  const {GetStatusDefault} = Get_Status_Default()  
+  
+  const Status = {
+    Pen: GetStatusDefault?.filter((Status) => Status.Name === "Pendente")[0].id,
+    Prog: GetStatusDefault?.filter((Status) => Status.Name === "Progresso")[0].id,
+    Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0].id,
+  };
 
   //filtro  de status e prazo
-  const [filtro, setFiltro] = useState<{ status?: string; prazo?: string }>({});
+  const [, setFiltro] = useState<{ status?: string; prazo?: string }>({});
 
   // Buscar tasks
   const { id } = useParams();
   const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
 
-  const team = { id: id ?? "", Name: "" };
   const { userRole } = Get_userRole(id ?? "");
 
   const {status, refetch_Status} = Get_All_Status(id!)  
-  
-    
-  const nenhumFiltroAtivo =
-    (filtro.status === "todas" || filtro.status === undefined) &&
-    (filtro.prazo === "todas" || filtro.prazo === undefined);
 
   const setall = () => {
     setFiltro((prevfiltro) => ({
@@ -158,7 +155,7 @@ function Lista() {
               {/* Pendentes */}
               {tasks !== null && (
                 <DroppableLane
-                  id={Status.Pen}
+                  id={Status.Pen ?? ""}
                   userrole={userRole?.id}
                   title="Pendente"
                   minimizeKey="pendente"
@@ -183,7 +180,7 @@ function Lista() {
               {tasks && (
                 <DroppableLane
                   userrole={userRole?.id}
-                  id={Status.Prog}
+                  id={Status.Prog ?? ""}
                   title="Progresso"
                   minimizeKey="progresso"
                   minimized={minimize.progresso}
@@ -206,7 +203,7 @@ function Lista() {
               {/* Concluídas */}
               {tasks && (
                 <DroppableLane
-                  id={Status.Conc}
+                  id={Status.Conc ?? ""}
                   userrole={userRole?.id}
                   title="Concluidas"
                   minimizeKey="concluido"
@@ -228,7 +225,7 @@ function Lista() {
               )}
 
               {/* Outros Status */}
-              {status?.map ((status) =>
+              {status?.map((status) => (
                 <DroppableLane
                   id={status.id}
                   userrole={userRole?.id}
@@ -248,14 +245,11 @@ function Lista() {
                           Setmodaltask(true);
                         }}
                       />
-                    ) : (
-                     null
-                    )
+                    ) : null
                   )}
                 </DroppableLane>
-              )}
+              ))}
             </DndContext>
-
           </div>
         </main>
 
@@ -278,7 +272,7 @@ function Lista() {
             Selected={select}
             refetchTasks={refetchTasks}
             id_team={id}
-            refetch_Status = {refetch_Status}
+            refetch_Status={refetch_Status}
           />
         )}
       </div>
