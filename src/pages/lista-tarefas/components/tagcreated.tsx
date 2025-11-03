@@ -8,18 +8,18 @@ type TagCreatedProps = {
   fetchTagsTeam: () => void
   idSelected: string
   idTeam: string | undefined
-  tagsteam: { id: string; Name: string; Color: string}[];
+  tagsteam: { id: string; Name: string; Color: string, isActive: boolean}[];
   onVoltar: () => void;
   onDefinir: () => void;
-  onClose: () => void;
+  onFechar: () => void;
 };
 
-function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, onClose} : TagCreatedProps){
+function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, onFechar} : TagCreatedProps){
     const[error, setError] = useState<string>("")
     const [activeTags, setActiveTags] = useState<string[]>([]);
     const {checkIfExist} = useCheckTaskLabel()
     const [isDeleteMode, setIsDeleteMode] = useState(false)
-
+    
     
     useEffect(() => {
     async function loadActiveTags() {
@@ -39,10 +39,8 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
   }, [idSelected, tagsteam]);
     async function handleTagClick(event: React.MouseEvent<HTMLParagraphElement>, tagId: string) {
       if (isDeleteMode) {
-          // deletar a tag
           await DeleteTag(tagId);
         } else {
-          // alternar seleção/atribuição da tag
           await AddTag(event,tagId);
         }
       console.log("isDeleteMode:", isDeleteMode, "tagId:", tagId);
@@ -59,7 +57,6 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
         try {
           const add_tag = await LabelService.Add_New_Label(label)
           setActiveTags((prev) => [...prev, tagId]);
-          console.log('tag criada')
           if(!add_tag){
             setError("Erro ao adicionar tag")
           }
@@ -69,13 +66,10 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
       }else if (exists){
         await LabelService.Remove_LabelTask(label)
         setActiveTags((prev)=> prev.filter((id)=> id !== tagId))
-        console.log(tagId)
         console.log("tag excluida")
       }else{
         await LabelService.Activate_LabelTask(label)
         setActiveTags((prev) => [...prev, tagId]);
-        console.log(tagId)
-        console.log("tag adicionada")
       }
       onDefinir()
       fetchTagsTeam()
@@ -90,6 +84,7 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
         setActiveTags((prev) => prev.filter((id) => id !== tagId));
 
         // Atualiza lista de tags do backend, se necessário
+        onDefinir()
         fetchTagsTeam();
       } catch (error) {
         console.log("Erro ao deletar tag:", error);
@@ -101,18 +96,17 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
             <h2 className="text-[22px] font-semibold pt-1 ">Tags do Time</h2>
               <button
                 className=" cursor-pointer hover:scale-110"
-                onClick={onClose}
+                onClick={onFechar}
                 >
                 <IoIosClose size={40} />
               </button>
           </div>
-          <h3 className="text-[15px] font-semibold pb-4 text-gray-400">Selecione uma tag</h3>
+          <h3 className= {`text-[15px] font-semibold pb-4 ${isDeleteMode ? "text-red-700": "text-gray-400"}`}>{isDeleteMode ? "Selecione uma tag para deletar": "Selecione uma tag para adicionar"}</h3>
             <div className="flex flex-wrap items-center justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[480px] sm:w-[480px]">
             {tagsteam
-            .filter(tag => activeTags.includes(tag.id))
+            .filter(tag => tag.isActive)
             .map((tag)=>{
               const isActive = activeTags.includes(tag.id)
-              console.log("isActive: ",isActive)
               return(
                 <p 
                 key={tag.id} 

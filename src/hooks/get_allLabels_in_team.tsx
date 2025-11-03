@@ -6,6 +6,7 @@ type Tag = {
     id: string,
     Name: string,
     Color: string,
+    isActive: boolean
 }
 
 export function useTagsTeam(idTeam:string){

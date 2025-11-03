@@ -6,10 +6,10 @@ type tagProps = {
   onDefinir: () => void,
   idSelected: string,
   onVerCriadas: () => void;
-  onClose: () => void;
+  onFechar: ()=> void;
 }
 
-function Tag({onDefinir,idSelected, onVerCriadas, onClose} : tagProps) {
+function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
     const[input, Setinput] = useState("")
     const[error, setError] = useState<string>("")
 
@@ -46,8 +46,8 @@ function Tag({onDefinir,idSelected, onVerCriadas, onClose} : tagProps) {
           <h2 className="text-white text-lg mb-2 font-semibold pt-1">Criar Tag</h2>
           <button
             className=" text-amber-50 cursor-pointer hover:scale-110"
-            onClick={onClose}
-            >
+            onClick={onFechar}
+          >
             <IoIosClose size={40} />
           </button>
         </div>

@@ -266,15 +266,18 @@ function Modaltaf({
             </div>
           </div>
         </div> )}     
-          {tag === "criar" && trocarModal!== "first" &&(
+          {tag === "criar" && (isMobile ? trocarModal === "second" : trocarModal === "first") &&(
             <Tag
               idSelected={idSelected}
+              onFechar= {()=>{
+                Settag("")
+                if(isMobile)setTrocarModal("first")
+              }}
               onDefinir={() => {
                 Settag("criar");
                 fetchTags()
                 if(isMobile)setTrocarModal("first")
               }}
-              onClose={onClose}
               onVerCriadas={() => Settag("lista")}
             />
           )}
@@ -284,7 +287,10 @@ function Modaltaf({
               idSelected={idSelected} 
               idTeam={id}
               tagsteam={tagsTeam}
-              onClose={onClose}
+              onFechar= {()=>{
+                Settag("")
+                if(isMobile)setTrocarModal("first")
+              }}
               onVoltar={()=>
                 Settag("criar")
               }
