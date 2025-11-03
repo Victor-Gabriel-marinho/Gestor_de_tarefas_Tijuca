@@ -13,6 +13,7 @@ import DraggableTask from "./components/DragAndDrop/DraggableTask";
 import DroppableLane from "./components/DragAndDrop/DroppableLane";
 import { TaskService } from "../../api/services/TaskService";
 import Get_All_Status from "../../hooks/Get_All_Status";
+import Dashboard from "./components/dashboard"
 
 function Lista() {
   // Hook para trazer a fonte
@@ -100,6 +101,14 @@ function Lista() {
   useEffect(() => {
     if (!tasks) return;
 
+    let filteredtask = tasks
+
+    if (filtro.status && filtro.status !== "todas") {
+      filteredtask = filteredtask.filter(
+        (t) => t.id_status === filtro.status
+      )
+    }
+
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
@@ -120,29 +129,31 @@ function Lista() {
   }, [tasks]);
   return (
     <>
-      <div className="bg-[#1F2937] h-screen w-screen overflow-hidden">
+      <div className="bg-[#1F2937] min-h-screen w-screen overflow-auto">
         {/* Navbar */}
         <Nav SetAll={setall}>
           {/*o filtro envia suas mudanças de status /prazo via prop*/}
           <Filtrar onFiltroChange={(f) => setFiltro(f)} />
         </Nav>
 
-        <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-start justify-center">
+        <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center sm:items-start justify-center">
           <div className="flex h-full">
             {userRole?.id === "3" ? (
               <div></div>
             ) : (
-              <button
-                className="bg-[#251F1F] text-white p-3 rounded-[10px] text-center hover:bg-[#3d3434] cursor-pointer"
-                onClick={() => {
-                  Setcriar("Criar");
-                }}
-              >
-                + Criar Tarefa
-              </button>
+              <div className="flex justify-center sm:justify-start">
+                <button
+                  className="bg-[#251F1F] text-white p-3 rounded-[10px]  text-center hover:bg-[#3d3434] cursor-pointer"
+                  onClick={() => {
+                    Setcriar("Criar");
+                  }}
+                >
+                  + Criar Tarefa
+                </button>
+              </div>
             )}
           </div>
-          <div className="flex items-center justify-center flex-col gap-5 w-10/12 h-100 sm:flex-row">
+          <div className="flex flex-col sm:flex-row gap-5 w-full items-center sm:items-start justify-center">
             <DndContext onDragEnd={handleDragend}>
               {/* Pendentes */}
               {tasks !== null && (
@@ -271,6 +282,9 @@ function Lista() {
           />
         )}
       </div>
+
+        <Dashboard id_team={id?id:""}/>
+
     </>
   );
 }

@@ -30,48 +30,48 @@ function Filtrar({ onFiltroChange }: { onFiltroChange: (filtro: any) => void }) 
 
   
   return (
-    <div className="flex flex-col bg-[#251F1F] text-white w-[300px] rounded-[10px] absolute right-[-50px] sm:right-0">
-      <p className="p-1">Filtro</p>
-
-      {/* FILTRO DE STATUS */}
-      <h3 className="p-2">Status da tarefa</h3>
-      <ul className="p-3 space-y-2 flex flex-col gap-2">
-        {["todas", "concluido", "naoConcluido", "pendente"].map((id) => (
-          <li key={id} className="flex flex-row items-center">
-            <input
-              type="checkbox"
-              id={id}
-              name="filtroStatus"
-              className="rounded w-4 h-4 border border-white"
-              checked={status === id}
-              onChange={handleStatusChange}
-            />
-            <p className="pl-2">
-              {id}
-            </p>
-          </li>
-        ))}
-      </ul>
-
-      {/* FILTRO DE PRAZO */}
-      <p className="p-2">Prazo</p>
-      <ul className="p-3 space-y-2">
-        {["todas", "atraso", "dia", "semana", "mes"].map((id) => (
-          <li key={id} className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="filtroPrazo"
-              id={id}
-              className="rounded w-4 h-4 border border-white"
-              checked={prazo === id}
-              onChange={handlePrazoChange}
-            />
-            <p className="pl-2">
-              {id}
-            </p>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col bg-[#251F1F] text-white w-[200px] rounded-[10px] absolute right-[-100px]">
+      <div className="flex flex-col justify-center items-center">
+        <p className="p-1">Filtro</p>
+        {/* FILTRO DE STATUS */}
+        <h3 className="p-2">Status da tarefa</h3>
+        <ul className="p-3 space-y-2 flex flex-col gap-2">
+          {["todas", "concluido", "naoConcluido", "pendente"].map((id) => (
+            <li key={id} className="flex flex-row items-center">
+              <input
+                type="checkbox"
+                id={id}
+                name="filtroStatus"
+                className="rounded w-4 h-4 border border-white"
+                checked={status === id}
+                onChange={handleStatusChange}
+              />
+              <p className="pl-2">
+                {id}
+              </p>
+            </li>
+          ))}
+        </ul>
+        {/* FILTRO DE PRAZO */}
+        <p className="p-2">Prazo</p>
+        <ul className="p-3 space-y-2">
+          {["todas", "atraso", "dia", "semana", "mes"].map((id) => (
+            <li key={id} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="filtroPrazo"
+                id={id}
+                className="rounded w-4 h-4 border border-white"
+                checked={prazo === id}
+                onChange={handlePrazoChange}
+              />
+              <p className="pl-2">
+                {id}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -24,7 +24,7 @@ function ListTar({
   children,
 }: ListProps) {
   return (
-    <div className="bg-[#251F1F] text-center p-4 pb-5 rounded-[5px] flex flex-col w-[240px] gap-y-2 max-w-60">
+    <div className="bg-[#251F1F] text-center p-4 pb-5 rounded-[5px] flex flex-col w-[240px]  max-w-60">
       <div className="flex items-center justify-between">
         <p className="text-white font-semibold flex-1 text-center">{title}</p>
         <div className="flex justify-end p-1 rounded-[15px]">
