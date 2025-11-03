@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { TaskService } from "../../../api/services/TaskService";
 import type { CreateTaskDTO, Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { Get_status } from "../../../hooks/get_Status";
+import { StatusService } from "../../../api/services/StatusService";
+import type { StatusDTO } from "../../../api/types/StatusTypes/StatusDTO";
 
 
 type CreateProps = {
@@ -13,11 +15,53 @@ type CreateProps = {
   onClose: () => void;
   closeModal?: () => void;
   refetchTasks: (() => Promise<void>) | undefined;
+  refetch_Status: (() => Promise<void>) | undefined
 };
 
-function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, StatusName }: CreateProps) {
+function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, StatusName, refetch_Status }: CreateProps) {
   const [error, setError] = useState<string>("");
   const [TaskSelected, setTaskSelected] = useState<Task | undefined>(Selected);  
+
+  async function CreateNewStatus (Name: string): Promise<StatusDTO | undefined> {
+    try {
+      const response = await StatusService.CreateStatus(Name)
+      if (response) {        
+        return response
+      }
+    }
+    catch (error){
+      console.log("erro ao criar um status", error)
+    }
+  }
+
+  async function Create_task(task: CreateTaskDTO) {
+    try {
+      const response = await TaskService.CreateTask(task);
+      if (response) {
+        console.log(response);
+        
+        refetchTasks?.();
+        refetch_Status?.()
+        onClose();
+      }
+    } catch (error) {
+      console.log("erro ao fazer requisição", error);
+    }
+  }
+
+  async function Edit_task(task: CreateTaskDTO) {
+    try {
+      if (!Selected?.id) return;
+      const response = await TaskService.EditTask(Selected.id, task);
+      if (response) {
+        refetchTasks?.();
+        closeModal?.();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function Criar(e: React.FormEvent<HTMLFormElement>) {
     if (!id_team) return;
@@ -52,37 +96,23 @@ function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, Sta
       id_status: status,
       EndDate: new Date(data),
     };    
-
+    
     if (title === "Criar") {
+      if (status === "Outros"){
+        const newStatus = formdata.get("NewStatus") as string
+        if (!newStatus) {
+          setError("É obrigatório algum status para criar uma task");
+          return;
+        }
+        const Nstatus = await CreateNewStatus(newStatus)
+        task.id_status = Nstatus!.Name
+        
+        Create_task(task)
+        return
+      }
       Create_task(task);
     } else {
       Edit_task(task);
-    }
-  }
-
-  async function Create_task(task: CreateTaskDTO) {
-    try {
-      const response = await TaskService.CreateTask(task);
-      if (response) {
-        refetchTasks?.();
-        onClose();
-      }
-    } catch (error) {
-      console.log("erro ao fazer requisição", error);
-    }
-  }
-
-  async function Edit_task(task: CreateTaskDTO) {
-    try {
-      if (!Selected?.id) return;
-      const response = await TaskService.EditTask(Selected.id, task);
-      if (response) {
-        refetchTasks?.();
-        closeModal?.();
-        onClose();
-      }
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -173,7 +203,7 @@ function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, Sta
               <option value="Concluido">Concluido</option>
               <option value="Outros">Outros</option>
             </select>
-            {formData.Status === "Outros" ? (<input type="text" placeholder="Digite o novo Status" className="bg-white text-black rounded-[5px] p-1" />) : (<div></div>)}
+            {formData.Status === "Outros" ? (<input type="text" name= "NewStatus" placeholder="Digite o novo Status" className="bg-white text-black rounded-[5px] p-1" />) : (<div></div>)}
           </div>
 
           <div className="flex flex-col">

@@ -26,6 +26,7 @@ function Options({refetch, id, children }: OptionsProps) {
       console.log('erro ao fazer requisição', error)
     }
   } 
+  
   return (
     <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col">
       {children}

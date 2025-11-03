@@ -42,7 +42,7 @@ function Side_bar() {
         </span>
 
         {!hiddenteams && (
-          <div className="flex max-h-80 overflow-y-auto w-55 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl sm:rounded-none left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
+          <div className="flex max-h-80 sm:h-10/12 overflow-y-auto w-55 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl sm:rounded-none left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
             {loading ? (
               <Loading_anim />
             ) : (

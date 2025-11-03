@@ -1,6 +1,6 @@
 import Nav from "../../components/layouts/nav.tsx";
 import { Link } from "react-router-dom";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useFont } from "../../components/font.tsx";
 import Get_teams from "../../hooks/get_teams.tsx";
 import { TeamService } from "../../api/services/teamService.ts";
@@ -11,7 +11,6 @@ function Quadros() {
 
   const [criar, Setcriar] = useState(false);
   const { Teams, loading, refetch_teams } = Get_teams();
-  const [image, setimage] = useState<string>("")
 
   const create_team = async (
     event: FormEvent<HTMLFormElement>
@@ -34,14 +33,13 @@ function Quadros() {
     }
   };
 
-    
   return (
     <>
       <div className="bg-[#1F2937] w-screen h-screen flex flex-col">
         <Nav />
 
         <main className="flex flex-1 justify-center">
-          <div className="w-full max-h-110 lg:h-50 overflow-y-auto relative flex flex-wrap justify-center sm:justify-start m-5 sm:flex-row gap-6">
+          <div className="w-full max-h-110 lg:h-50 overflow-y-auto relative grid grid-cols-2 sm:flex m-5 sm:flex-row sm:gap-6">
             <div
               onClick={() => Setcriar(!criar)}
               className="w-30 h-30 sm:w-40 sm:h-40 bg-[#131733] rounded-2xl flex items-center justify-center  hover:bg-[#2d304b] hover:scale-100 cursor-pointer"
@@ -55,12 +53,11 @@ function Quadros() {
               Teams.map((team) => (
                 <Link
                   to={`/lista/${team.id}`}
-                  className="w-30 h-30 sm:w-40 sm:h-40 bg-white rounded-2xl hover:scale-110 flex items-baseline-last"
+                  className="w-30 h-30 sm:w-40 sm:h-40 bg-white rounded-2xl hover:scale-110 flex items-end"
                   key={team.id}
                 >
                   <div
-                    className="w-30 h-30 sm:w-40 sm:h-40 bg-cover bg-center rounded-2xl flex items-baseline-last"
-                    style={{ backgroundImage: `url(${image})` }}
+                    className="w-30 h-30 sm:w-40 sm:h-40 bg-cover bg-center rounded-2xl flex items-end"
                   >
                     <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex-wrap sm:p-3">
                       <p className="text-white font-semibold">{team.Name}</p>

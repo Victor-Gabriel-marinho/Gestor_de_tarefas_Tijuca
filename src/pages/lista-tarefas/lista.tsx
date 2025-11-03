@@ -52,9 +52,9 @@ function Lista() {
   const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
 
   const team = { id: id ?? "", Name: "" };
-  const { userRole } = Get_userRole(team);
+  const { userRole } = Get_userRole(id ?? "");
 
-  const {status} = Get_All_Status(id!)
+  const {status, refetch_Status} = Get_All_Status(id!)  
   
     
   const nenhumFiltroAtivo =
@@ -238,7 +238,7 @@ function Lista() {
                         }}
                       />
                     ) : (
-                      <div></div>
+                     null
                     )
                   )}
                 </DroppableLane>
@@ -267,6 +267,7 @@ function Lista() {
             Selected={select}
             refetchTasks={refetchTasks}
             id_team={id}
+            refetch_Status = {refetch_Status}
           />
         )}
       </div>

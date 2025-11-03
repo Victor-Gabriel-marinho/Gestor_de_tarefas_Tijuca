@@ -2,7 +2,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/commons/Modal.js";
 import Options from "./components/Options.js";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { Get_usersInTeams } from "../../hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
@@ -16,26 +16,27 @@ import { Loading_anim } from "../../components/commons/loading.js";
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
   const [options, Setoptions] = useState<string | null>(null);
-  const [confirm, Setconfirm] = useState<boolean>(false)
+  const [modalconfirm, Setmodalconfirm] = useState<boolean>(false)
+  const [confirmremove, Setconfirmremove] = useState<boolean>(false)
 
   const { id } = useParams();
-  const location = useLocation();
-  const team = location.state?.team;
-
+  const location = useLocation();  
+  const team = location.state?.team;  
+    
   const token = useAuthStore((state) => state.token);
   const payload = decodeJWT(token);
 
   const { users, loading, refetch } = Get_usersInTeams(id ?? "");
-  const { userRole, loadingRole } = Get_userRole(team);
+  const { userRole, loadingRole } = Get_userRole(id ?? "");
+  
   const {first_team} = Get_teams()
-
 
   function Handlemodal() {
     SetopenModal((prev) => !prev);
   }
 
   function handleComfirm() { 
-    Setconfirm(!confirm)
+    Setmodalconfirm(!modalconfirm)
   }
 
   function handleOptions(event: MouseEvent<SVGElement, globalThis.MouseEvent>) {
@@ -46,29 +47,27 @@ function Times() {
   return (
     <div className={`relative flex h-full w-full min-w-[50px]`}>
       {loadingRole ? (
-        <div className="bg-[#20282F] w-full h-full text-white flex items-center justify-center">
-          Carregando...
-        </div>
+        <Loading_anim />
       ) : (
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
             <h1 className="text-white text-2xl sm:text-6xl font-semibold">
-              Membros do time{" "}
+              Membros do time
               {first_team?.id === id ? first_team?.Name : team?.Name}
             </h1>
 
             {userRole?.id === "1" && (
-              <div className="flex flex-row gap-3 items-center">
+              <div className="flex flex-row gap-2 sm:gap-3 items-center">
                 <div
                   onClick={Handlemodal}
-                  className="h-9 w-9 mr-2 sm:mr-0 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70 hover:scale-110"
+                  className="h-7 w-7 sm:w-9 sm:h-9 bg-[#3E5C76] flex items-center justify-center rounded-full cursor-pointer hover:opacity-70 hover:scale-110"
                 >
-                  <span className="text-white text-xl sm:text-2xl font-semibold">
+                  <span className="text-white text-lg sm:text-2xl font-semibold">
                     +
                   </span>
                 </div>
                 <div className="" onClick={handleComfirm}>
-                  <FaTrashCan className="hover:scale-110 cursor-pointer text-red-600 text-2xl" />
+                  <FaTrashCan className="hover:scale-110 cursor-pointer text-red-600 text-xl sm:text-2xl" />
                 </div>
               </div>
             )}
@@ -146,7 +145,7 @@ function Times() {
         />
       )}
 
-      {confirm && <Confirm_delete id={id} Setconfirm={Setconfirm} />}
+      {modalconfirm && <Confirm_delete id={id} Setconfirm={Setmodalconfirm} />}
     </div>
   );
 }

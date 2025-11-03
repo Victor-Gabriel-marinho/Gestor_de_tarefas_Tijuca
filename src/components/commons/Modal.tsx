@@ -118,14 +118,17 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
         className="bg-[#524D50] w-[300px] h-[400px] sm:w-[652px] sm:h-[674px] rounded-[20px] sm:rounded-[50px] flex flex-col items-center justify-center shadow-2xl shadow-[#524D50]"
         onClick={(event) => event.stopPropagation()}
       >
+        {/* Header do modal */}
         <div className="flex flex-col text-white p-4 w-full h-full sm:p-9 gap-7 items-center">
           <div className="flex flex-row items-center w-full justify-between">
-            <h2 className="text-2xl">Adicionar membros</h2>
+            <h2 className="text-xl sm:text-2xl">Adicionar membros</h2>
             <IoCloseOutline
-              className="text-4xl cursor-pointer"
+              className="text-2xl sm:text-4xl cursor-pointer"
               onClick={handleModal}
             />
           </div>
+
+          {/* Buscar usuário por Email */}
 
           <form
             className="w-full flex flex-row justify-between gap-4 items-center"
@@ -138,12 +141,12 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               value={Email}
-              className="border w-10/12 outline-0 border-[#746E72] p-2 font-semibold truncate text-xl rounded-[10px]"
+              className="border w-10/12 outline-0 border-[#746E72] p-1 sm:p-2 font-semibold truncate text-xl rounded-[10px]"
             />
             <input
               type="submit"
               value={`${loading ? "Carregando..." : "Convidar"}`}
-              className="bg-[#251F1F] cursor-pointer text-sm  p-3.5 text-center w-4/12 sm:w-2/12 font-semibold rounded-2xl"
+              className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-4/12 sm:w-2/12 font-semibold rounded-[10px]"
             />
           </form>
           {error ? (
@@ -158,8 +161,9 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
           )}
 
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
-
-          <div className="w-full flex flex-col gap-7 h-full px-2 sm:px-5 overflow-y-auto">
+          
+          {/* Usuário que são possíveis de convidar */}
+          <div className="w-full flex flex-col gap-7 h-full sm:px-5 overflow-y-auto overflow-x-hidden">
             {filter_users(Email, users_to_invite).map((user) => {
               const isSelected = selectUsers_id.some((u) => u.id === user.id);
 
@@ -171,28 +175,28 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                   key={user.id}
                   onClick={() => selectuser(user)}
                 >
-                  <div className="items-center flex flex-row gap-2">
-                    <FaUserCircle className="text-white text-3xl sm:text-5xl" />
-                    <p className="text-xl">{user.Name}</p>
+                  {/* Nome e perfil do usuário */}
+                  <div className="items-center flex flex-row gap-1 sm:gap2">
+                    <FaUserCircle className="text-white text-2xl sm:text-5xl" />
+                    <p className="text-lg sm:text-xl max-w-[100px]">{user.Name}</p>
                   </div>
                   <div className="flex flex-row gap-2 items-center">
                     <p
-                      className="text-sm sm:text-lg font-semibold"
-                      onClick={HandlePopUp}
+                      className="text-sm sm:text-lg font-semibold hidden sm:block"
                     >
                       {userroles[user.id] ?? "Colaborador"}
                     </p>
                     <div className="relative">
                       <BiSolidDownArrow
-                        className={`text-xl hidden sm:block ${
+                        className={`text-sm sm:text-xl ${
                           popUp === user.id ? "rotate-180" : ""
                         } cursor-pointer`}
                         id={user.id}
                         onClick={HandlePopUp}
                       />
+                      {/* PopUp para selecionar cargo */}
                       {popUp === user.id && (
                         <PopUp
-                          ClassName="bg-[#251F1F]"
                           popUp={popUp}
                           setpopUp={setpopUp}
                           SetRoleName={(role) => alterarRole(user.id, role)}

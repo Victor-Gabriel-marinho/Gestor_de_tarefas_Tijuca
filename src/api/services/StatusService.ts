@@ -13,8 +13,8 @@ export const StatusService = {
         return data
     },
  
-    async CreateStatus(Name: string): Promise<StatusDTO[]> {
-        const {data}= await api.post<StatusDTO[]>("/status/CreateStatus", {Name})
+    async CreateStatus(Name: string): Promise<StatusDTO> {
+        const {data}= await api.post<StatusDTO>("/status/CreateStatus", {Name})
         return data
     }
 }

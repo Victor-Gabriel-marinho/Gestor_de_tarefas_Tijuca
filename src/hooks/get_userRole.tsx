@@ -1,17 +1,16 @@
-import type { Team } from "../api/types/TeamTypes/Team";
 import { useEffect, useState } from "react";
 import { UserService } from "../api/services/userService";
 import type { Role } from "../api/types/UserTypes/Role";
 
-export function Get_userRole(team: Team) {
+export function Get_userRole(id_team: string) {
   const [loadingRole, SetloadingRole] = useState<boolean>(false);
-  const [userRole, setuserRole] = useState<Role>();
+  const [userRole, setuserRole] = useState<Role>();    
 
   useEffect(() => {
     const fetch_userRole = async () => {
       SetloadingRole(true);
       try {
-        const response = await UserService.get_userRole(team.id);
+        const response = await UserService.get_userRole(id_team);
         SetloadingRole(false);
         if (response) {
           setuserRole(response);
