@@ -1,13 +1,15 @@
 import { useState, type FormEvent } from "react"
 import { LabelService } from "../../../api/services/labelService";
 import { useTags } from "../../../hooks/get_alllabels_in_tasks";
+import { IoIosClose } from "react-icons/io";
 type tagProps = {
   onDefinir: () => void,
   idSelected: string,
   onVerCriadas: () => void;
+  onClose: () => void;
 }
 
-function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
+function Tag({onDefinir,idSelected, onVerCriadas, onClose} : tagProps) {
     const[input, Setinput] = useState("")
     const[error, setError] = useState<string>("")
 
@@ -26,12 +28,10 @@ function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
           idtask: idSelected,
           isActive: true
         }
-        console.log("label: ",label)
         try{
           const new_tag = await LabelService.Create_Label(label)
           onDefinir();
           useTags(idSelected);
-          console.log("label")
           if (!new_tag){
             setError("Não foi possível criar a tag")
           }
@@ -41,8 +41,16 @@ function Tag({onDefinir,idSelected, onVerCriadas} : tagProps) {
     }
 
     return (
-      <div className="flex flex-col text-center items-center justify-center bg-[#251F1F] ml-5 p-10 rounded-[10px] shadow-2xl shadow-[#3b3232]">
-        <h2 className="text-white text-lg mb-2 font-semibold">Criar Tag</h2>
+      <div className="flex flex-col text-center items-center justify-center bg-[#251F1F] p-3 w-[250px] h-[260px] rounded-[10px] shadow-2xl shadow-[#3b3232]">
+        <div className=" w-[240px] flex flex-row justify-between p-2">
+          <h2 className="text-white text-lg mb-2 font-semibold pt-1">Criar Tag</h2>
+          <button
+            className=" text-amber-50 cursor-pointer hover:scale-110"
+            onClick={onClose}
+            >
+            <IoIosClose size={40} />
+          </button>
+        </div>
         <form
           action=""
           onSubmit={(event)=> Create_tag(event)}

@@ -5,12 +5,9 @@ type tagProps = {
     onDefinir:() => void
 }
 
-function Tags({tags}: tagProps){
-
-    console.log(tags, "tags");
-  
+function Tags({tags}: tagProps){  
     return (
-        <div className="flex flex-wrap items-center justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[480px] sm:w-[480px]">
+        <div className=" rounded-2xl flex flex-wrap justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[480px] sm:w-[480px]">
             {tags.map((tag)=>(
                 <p key={tag.id} style={{background: tag.Color}} className="
                 rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer

@@ -66,7 +66,12 @@ function Modaltaf({
   const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
+  const [trocarModal, setTrocarModal] = useState<"first" | "second" | null>("first");
   const [viewusers, Setviewusers] = useState<boolean>(false);
+
+  const isMobile = window.innerWidth <= 768;
+
+
   const Delete_task = async (id: string) => {
     try {
       const response = await TaskService.DeleteTask(id);
@@ -86,13 +91,13 @@ function Modaltaf({
     Setedittask(idSelected);
   }, [task]);
 
-
   return (
     <>
-      <div className="w-screen h-screen bg-black/50 flex items-center justify-center  fixed inset-0 backdrop-blur-[20px]">
+      <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
         {viewusers && <Modal_taskUser id_task={task.id} />}
         {/*caixa do modal*/}
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[300px] w-[500px] overflow-auto rounded-[10px] text-white relative p-6 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232]">
+       {trocarModal === "first" &&( 
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[300px] sm:p-4">
           <div className="flex w-full h-full gap-2 flex-col">
             <div className="flex w-full gap-5 items-center">
               <button
@@ -101,7 +106,7 @@ function Modaltaf({
               >
                 <IoIosClose size={40} />
               </button>
-              <p className="max-w-[240px] text-2xl font-bold line-clamp-2">
+              <p className="max-w-[200px] text-2xl font-bold line-clamp-2">
                 {task.Name}
               </p>
             </div>
@@ -148,7 +153,11 @@ function Modaltaf({
                 <IoMdPricetag
                   className="hover:scale-110  cursor-pointer"
                   size={30}
-                  onClick={() => Settag("criar")}
+                  onClick={() => {
+                    Settag("criar")
+                    if(isMobile)setTrocarModal("second")
+                  }
+                  }
                 />
                 <MdEdit
                   className="cursor-pointer hover:scale-110"
@@ -165,22 +174,21 @@ function Modaltaf({
                 />
               </div>}
               
-                 <Tags
-                    idSelected={idSelected}
-                    tags={tags}
-                    onDefinir={() => {
-                    Settag("criar");
-                    fetchTags()
-                    
-                    }}
-                  />
+              <Tags
+                idSelected={idSelected}
+                tags={tags}
+                onDefinir={() => {
+                Settag("criar");
+                fetchTags()
+                }}
+              />
                 
                 
               {/* Descrição e Data */}
-              <div className="flex items-start justify-center flex-col gap-3 max-w-[400px]">
-                <p className="text-lg">
+              <div className="flex items-start justify-center flex-col gap-3 max-w-[260px]">
+                <p className="text-[15px]">
                   <span className="font-semibold text-xl flex">Descrição: </span>
-                  <span className="flex truncate max-w-[350px]">{task.Content}</span>
+                  <span className="flex max-w-[350px]">{task.Content}</span>
                 </p>
                 <p className="flex text-lg gap-2">
                   <span className="font-semibold text-xl">
@@ -257,32 +265,35 @@ function Modaltaf({
               )}
             </div>
           </div>
-        </div>
-        {tag === "criar"&& (
-          <Tag
-            idSelected={idSelected}
-            onDefinir={() => {
-              Settag("criar");
-              fetchTags()
-            }}
-            onVerCriadas={() => Settag("lista")}
-          />
-        )}
-        {tag === "lista" && (
-          <TagCreated 
-            fetchTagsTeam={fetchTags}
-            idSelected={idSelected}
-            idTeam={id}
-            tagsteam={tagsTeam}
-            onVoltar={()=> 
-              Settag("criar")
-            }
-            onDefinir={()=>{
-              fetchTagsTeam()
-              Settag("lista")
-            }}
-          />
-        )}
+        </div> )}     
+          {tag === "criar" && trocarModal!== "first" &&(
+            <Tag
+              idSelected={idSelected}
+              onDefinir={() => {
+                Settag("criar");
+                fetchTags()
+                if(isMobile)setTrocarModal("first")
+              }}
+              onClose={onClose}
+              onVerCriadas={() => Settag("lista")}
+            />
+          )}
+          {tag === "lista" && (
+            <TagCreated
+              fetchTagsTeam={fetchTags}
+              idSelected={idSelected} 
+              idTeam={id}
+              tagsteam={tagsTeam}
+              onClose={onClose}
+              onVoltar={()=>
+                Settag("criar")
+              }
+              onDefinir={()=>{
+                fetchTagsTeam()
+                Settag("lista")
+              }}
+            />
+          )}
       </div>
     </>
   );
