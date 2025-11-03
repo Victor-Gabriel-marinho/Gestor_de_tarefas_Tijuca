@@ -3,11 +3,12 @@ import type { dashboardMetricsDTO } from '../types/DashboardTypes/DashboardMetri
 
 export const dashboardService = {
     async getStatus(id_team: string): Promise<dashboardMetricsDTO> {
-        let url = "lista"
+        let url = `lista/${id_team}`
 
-        if (id_team) {
-            url = `${url}/${id_team}`
+        if (!id_team) {
+          console.error("ID do time não fornecido para o dashboard.");
         }
+        
         const {data} = await api.get<dashboardMetricsDTO>(url)
         return data
     }

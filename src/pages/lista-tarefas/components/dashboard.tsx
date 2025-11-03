@@ -123,7 +123,7 @@ function GraficoBarras({id_team}: graficoProps) {
         data: pagCount,
         backgroundColor: "#3b82f6aa",
         borderColor: "#3b82f6",
-        borderWidth: 1,
+        barThickness: 30,
       },
     ],
   };

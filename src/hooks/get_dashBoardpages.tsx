@@ -21,6 +21,7 @@ export function useDashboardPages(id_team: string) {
       try {
         const data = await dashboardService.getStatus(id_team);
         setMetrics(data);
+        console.log(data)
       } catch (err) {
         console.error("Erro ao buscar métricas", err);
         setErro("Não foi possível encontrar as métricas");
@@ -29,8 +30,11 @@ export function useDashboardPages(id_team: string) {
       }
     };
 
-    fetchMetrics();
-  }, []);
+    if (id_team) {
+      fetchMetrics();
+    }
+
+  }, [id_team]);
 
   // Atualiza a página atual dos usuários
   useEffect(() => {
