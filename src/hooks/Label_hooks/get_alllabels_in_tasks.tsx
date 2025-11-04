@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useState } from "react";
-import { LabelService } from "../api/services/labelService";
+import { LabelService } from "../../api/services/labelService";
 
 type Tag = {
     id: string,

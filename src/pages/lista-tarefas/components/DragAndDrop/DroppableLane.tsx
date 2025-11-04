@@ -19,13 +19,17 @@ function DroppableLane({ id, children, ...rest }: DroppableLane) {
         borderRadius: "8px",
         transition: "background-color 0.2s ease",
       }
-    : undefined; 
+    : undefined;
 
   return (
     <ListTar {...rest}>
-      <div ref={setNodeRef} style={style} className="flex flex-col gap-2 w-full min-h-1">
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="flex flex-col gap-2 w-full min-h-1 h-full"
+      >
         {children}
-        </div>
+      </div>
     </ListTar>
   );
 }

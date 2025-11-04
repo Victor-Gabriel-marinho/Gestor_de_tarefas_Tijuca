@@ -14,13 +14,15 @@ import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../../../api/services/TaskService";
 import { Modal_taskUser } from "./AddTaskUser";
 import Tags from "./tagstaf";
-import { useTags } from "../../../hooks/get_alllabels_in_tasks";
+import { useTags } from "../../../hooks/Label_hooks/get_alllabels_in_tasks";
 import TagCreated from "./tagcreated";
-import { useTagsTeam } from "../../../hooks/get_allLabels_in_team";
+import { useTagsTeam } from "../../../hooks/Label_hooks/get_allLabels_in_team";
 import { useParams } from "react-router-dom";
-import { Get_Taskuser } from "../../../hooks/Get_TaskUser";
-import { get_UsersWithNotInTask } from "../../../hooks/get_UsersWithNotInTask";
+import { Get_Taskuser } from "../../../hooks/Tasks_hooks/Get_TaskUser";
+import { get_UsersWithNotInTask } from "../../../hooks/User_hooks/get_UsersWithNotInTask";
 import { TaskUser } from "./TaskUser";
+import Confirm_delete from "../../../components/commons/confirmDelete";
+
 type ModalProps = {
   task: Task;
   userrole?: string;
@@ -28,6 +30,7 @@ type ModalProps = {
   setcriar: () => void;
   onClose: () => void;
   refetchtask: (() => Promise<void>) | undefined;
+  refetchStatus?: (()=> Promise<void>) | undefined
 };
 
 function Modaltaf({
@@ -37,8 +40,10 @@ function Modaltaf({
   idSelected,
   refetchtask,
   userrole,
+  refetchStatus
 }: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
+
   {
     /*upload de arquivos*/
   }
@@ -66,24 +71,35 @@ function Modaltaf({
   const [tag, Settag] = useState<string>("");
   const [tagvalue, Settagvalue] = useState<string>("");
 
-  const [edit, Setedit] = useState<boolean>(false);
   const [edittask, Setedittask] = useState<string>(task.Name);
 
+<<<<<<< HEAD
   const [trocarModal, setTrocarModal] = useState<"first" | "second" | "users" | null>("first");
+=======
+  const [confirmModal, setconfimModal] = useState<boolean>(false)
+
+  const [trocarModal, setTrocarModal] = useState<"first" | "second" | null>(
+    "first"
+  );
+>>>>>>> eec5112 (retirando mods da develop)
   const [viewusers, Setviewusers] = useState<boolean>(false);
 
   const isMobile = window.innerWidth <= 768;
 
-  const { taskuser, refetchTaskuser } = Get_Taskuser(idSelected);  
-  const {refetchUsersWithNotInTask} = get_UsersWithNotInTask(idSelected, id ?? "")  
+  const { taskuser, refetchTaskuser } = Get_Taskuser(idSelected);
+  const { refetchUsersWithNotInTask } = get_UsersWithNotInTask(
+    idSelected,
+    id ?? ""
+  );
 
-  const Delete_task = async (id: string) => {
+  const Delete_task = async () => {
     try {
-      const response = await TaskService.DeleteTask(id);
+      
+      const response = await TaskService.DeleteTask(idSelected ?? "");
       if (response) {
-        console.log(response);
         if (refetchtask) {
           refetchtask();
+          refetchStatus?.()
         }
         onClose();
       }
@@ -104,6 +120,7 @@ function Modaltaf({
             id_task={task.id}
             refetch_taskuser={refetchTaskuser}
             closeModal={() => {
+<<<<<<< HEAD
               Setviewusers(false)
               if(isMobile) setTrocarModal("first")
             }}
@@ -125,6 +142,27 @@ function Modaltaf({
                 {task.Name}
               </p>
             </div>
+=======
+              Setviewusers(false);
+            }}
+          />
+        )}
+        {/*caixa do modal*/}
+        {trocarModal === "first" && (
+          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#070606] sm:h-[450px] sm:w-[600px] sm:p-6">
+            <div className="flex w-full h-full gap-2 flex-col">
+              <div className="flex w-full gap-5 items-center">
+                <button
+                  className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
+                  onClick={onClose}
+                >
+                  <IoIosClose size={40} />
+                </button>
+                <p className="max-w-[400px] text-2xl font-bold line-clamp-2">
+                  {task.Name}
+                </p>
+              </div>
+>>>>>>> eec5112 (retirando mods da develop)
 
             <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
@@ -189,7 +227,7 @@ function Modaltaf({
                       color="red"
                       size={30}
                       onClick={() => {
-                        Delete_task(task.id);
+                        setconfimModal(true);
                       }}
                     />
                   </div>
@@ -235,28 +273,39 @@ function Modaltaf({
                   </p>
                 </div>
 
+                {confirmModal && 
+                (<Confirm_delete 
+                  SetconfirmModal={setconfimModal} 
+                  SetconfirmAction={Delete_task}
+                />
+                )}
+
                 {/* Usuários relacionados a task */}
+<<<<<<< HEAD
                 
+=======
+                {taskuser && (
+                  <div>
+                    <p className="text-xl font-semibold">
+                      Usuários responsáveis
+                    </p>
+                    <TaskUser
+                      taskusers={taskuser}
+                      id_task={idSelected}
+                      refetchs={() => {
+                        refetchTaskuser();
+                        refetchUsersWithNotInTask();
+                      }}
+                    />
+                  </div>
+                )}
+>>>>>>> eec5112 (retirando mods da develop)
 
                 {tagvalue && (
                   <div className="m-1 ">
                     <span className="text-white bg-blue-500 p-1 rounded-[5px]">
                       {tagvalue}
                     </span>
-                  </div>
-                )}
-
-                {edit && (
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={edittask}
-                      onChange={(e) => Setedittask(e.target.value)}
-                      className="bg-white text-black p-1 rounded outline-none w-50 left-10 truncate"
-                    />
-                    <button className="bg-[#4b3f3f]  px-2 rounded">
-                      Editar
-                    </button>
                   </div>
                 )}
 
@@ -303,41 +352,40 @@ function Modaltaf({
               </div>
             </div>
           </div>
-        )}     
-          {tag === "criar" && (isMobile ? trocarModal === "second" : trocarModal === "first") &&(
+        )}
+        {tag === "criar" &&
+          (isMobile ? trocarModal === "second" : trocarModal === "first") && (
             <Tag
               idSelected={idSelected}
-              onFechar= {()=>{
-                Settag("")
-                if(isMobile)setTrocarModal("first")
+              onFechar={() => {
+                Settag("");
+                if (isMobile) setTrocarModal("first");
               }}
               onDefinir={() => {
                 Settag("criar");
-                fetchTags()
-                if(isMobile)setTrocarModal("first")
+                fetchTags();
+                if (isMobile) setTrocarModal("first");
               }}
               onVerCriadas={() => Settag("lista")}
             />
           )}
-          {tag === "lista" && (
-            <TagCreated
-              fetchTagsTeam={fetchTags}
-              idSelected={idSelected} 
-              idTeam={id}
-              tagsteam={tagsTeam}
-              onFechar= {()=>{
-                Settag("")
-                if(isMobile)setTrocarModal("first")
-              }}
-              onVoltar={()=>
-                Settag("criar")
-              }
-              onDefinir={()=>{
-                fetchTagsTeam()
-                Settag("lista")
-              }}
-            />
-          )}
+        {tag === "lista" && (
+          <TagCreated
+            fetchTagsTeam={fetchTags}
+            idSelected={idSelected}
+            idTeam={id}
+            tagsteam={tagsTeam}
+            onFechar={() => {
+              Settag("");
+              if (isMobile) setTrocarModal("first");
+            }}
+            onVoltar={() => Settag("criar")}
+            onDefinir={() => {
+              fetchTagsTeam();
+              Settag("lista");
+            }}
+          />
+        )}
       </div>
     </>
   );

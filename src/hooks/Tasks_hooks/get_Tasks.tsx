@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { TaskService } from "../api/services/TaskService";
-import type { Task } from "../api/types/TaskTypes/TaskDTO";
+import { TaskService } from "../../api/services/TaskService";
+import type { Task } from "../../api/types/TaskTypes/TaskDTO";
 export function Get_Tasks(idTeam: string) {
 
     const [ tasks, Settasks ] = useState<Task[]>([])

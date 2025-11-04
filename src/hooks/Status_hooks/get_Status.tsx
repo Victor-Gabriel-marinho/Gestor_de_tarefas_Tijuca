@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
-import type { StatusDTO } from "../api/types/StatusTypes/StatusDTO";
-import { StatusService } from "../api/services/StatusService";
+import type { StatusDTO } from "../../api/types/StatusTypes/StatusDTO";
+import { StatusService } from "../../api/services/StatusService";
 
 
 export function Get_status(id_status: string) {

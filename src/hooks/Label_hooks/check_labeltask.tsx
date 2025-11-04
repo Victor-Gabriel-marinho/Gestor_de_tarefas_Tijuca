@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LabelService } from "../api/services/labelService";
+import { LabelService } from "../../api/services/labelService";
 
 
 

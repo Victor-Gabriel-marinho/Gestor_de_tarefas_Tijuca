@@ -2,10 +2,9 @@ import Nav from "../../components/layouts/nav.tsx";
 import { Link } from "react-router-dom";
 import { useState, type FormEvent } from "react";
 import { useFont } from "../../components/font.tsx";
-import Get_teams from "../../hooks/get_teams.tsx";
+import Get_teams from "../../hooks/Team_hooks/get_teams";
 import { TeamService } from "../../api/services/teamService.ts";
 import { Loading_anim } from "../../components/commons/loading.tsx";
-import Grafico from "../lista-tarefas/components/dashboard.tsx"
 
 function Quadros() {
   useFont(" 'Poppins', 'SansSerif' ");

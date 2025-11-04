@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import type { user_in_team } from "../api/types/UserTypes/User";
-import { TeamService } from "../api/services/teamService";
+import type { user_in_team } from "../../api/types/UserTypes/User";
+import { TeamService } from "../../api/services/teamService";
 
 export function Get_usersInTeams(id: string) {
 

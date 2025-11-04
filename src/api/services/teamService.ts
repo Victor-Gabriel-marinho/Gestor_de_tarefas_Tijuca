@@ -46,8 +46,8 @@ export const TeamService = {
     return data;
   },
 
-  async Delete_Team(idTeam: string): Promise<void> {
-    const { data } = await api.delete<void>(`time/delete-team/${idTeam}`);
+  async Delete_Team(idTeam: string): Promise<{menssage: string}> {
+    const { data } = await api.delete<{menssage: string}>(`time/delete-team/${idTeam}`);
 
     return data;
   },

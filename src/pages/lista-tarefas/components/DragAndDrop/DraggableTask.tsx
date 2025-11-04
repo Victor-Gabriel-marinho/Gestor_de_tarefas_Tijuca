@@ -12,11 +12,19 @@ interface DraggableTaskProps {
 
 const CLICK_THRESHOLD_MS = 250;
 
+<<<<<<< HEAD
 const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id,
   });
   const { tags, fetchTags } = useTags(idSelected);
+=======
+const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: id,
+    });
+>>>>>>> eec5112 (retirando mods da develop)
 
   const clickStartTime = useRef<number>(0);
 

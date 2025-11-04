@@ -3,44 +3,60 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/commons/Modal.js";
 import Options from "./components/Options.js";
 import { useState, type MouseEvent } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { Get_usersInTeams } from "../../hooks/get_usersInTeams.js";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { Get_usersInTeams } from "../../hooks/User_hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
 import { useAuthStore } from "../../store/Auth.js";
-import { Get_userRole } from "../../hooks/get_userRole.js";
+import { Get_userRole } from "../../hooks/User_hooks/get_userRole.js";
 import { FaTrashCan } from "react-icons/fa6";
-import Get_teams from "../../hooks/get_teams.js";
+import Get_teams from "../../hooks/Team_hooks/get_teams.js";
 import Confirm_delete from "../../components/commons/confirmDelete.js";
 import { Loading_anim } from "../../components/commons/loading.js";
+import { TeamService } from "../../api/services/teamService.js";
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
   const [options, Setoptions] = useState<string | null>(null);
-  const [modalconfirm, Setmodalconfirm] = useState<boolean>(false)
+  const [modalconfirm, Setmodalconfirm] = useState<boolean>(false);
+
+  const Navigate = useNavigate();
 
   const { id } = useParams();
-  const location = useLocation();  
-  const team = location.state?.team;  
-    
+  const location = useLocation();
+  const team = location.state?.team;
+
   const token = useAuthStore((state) => state.token);
   const payload = decodeJWT(token);
 
   const { users, loading, refetch } = Get_usersInTeams(id ?? "");
   const { userRole, loadingRole } = Get_userRole(id ?? "");
-  
-  const {first_team} = Get_teams()
+
+  const { first_team } = Get_teams();
 
   function Handlemodal() {
     SetopenModal((prev) => !prev);
   }
 
-  function handleComfirm() { 
-    Setmodalconfirm(!modalconfirm)
+  function handleComfirm() {
+    Setmodalconfirm(!modalconfirm);
   }
 
   function handleOptions(event: MouseEvent<SVGElement, globalThis.MouseEvent>) {
     const id = event.currentTarget.id;
     Setoptions((prev) => (prev === id ? null : id));
+  }
+
+  async function confirm_delete() {
+    try{
+      const response = await TeamService.Delete_Team(id ?? '')
+      if (response){
+        refetch();
+        Navigate('/quadros')
+      }      
+    }
+    catch (error){
+      console.error("erro ao deletar time",error)
+    }
   }
 
   return (
@@ -51,7 +67,7 @@ function Times() {
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
             <h1 className="text-white text-2xl sm:text-6xl font-semibold">
-              Membros do time {" "}
+              Membros do time{" "}
               {first_team?.id === id ? first_team?.Name : team?.Name}
             </h1>
 
@@ -144,7 +160,7 @@ function Times() {
         />
       )}
 
-      {modalconfirm && <Confirm_delete id={id} Setconfirm={Setmodalconfirm} />}
+      {modalconfirm && <Confirm_delete SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
     </div>
   );
 }

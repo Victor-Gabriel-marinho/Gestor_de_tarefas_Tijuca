@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { LabelService } from "../../../api/services/labelService";
-import { useTagsTeam } from "../../../hooks/get_allLabels_in_team";
-import { useCheckTaskLabel } from "../../../hooks/check_labeltask";
+import { useCheckTaskLabel } from "../../../hooks//Label_hooks/check_labeltask";
 import { IoIosClose } from "react-icons/io";
 
 type TagCreatedProps = {

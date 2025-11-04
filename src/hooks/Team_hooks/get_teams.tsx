@@ -1,6 +1,6 @@
-import { TeamService } from "../api/services/teamService";
+import { TeamService } from "../../api/services/teamService";
 import { useCallback, useEffect, useState } from "react";
-import type { Team } from "../api/types/TeamTypes/Team";
+import type { Team } from "../../api/types/TeamTypes/Team";
 
 export default function Get_teams() {
 

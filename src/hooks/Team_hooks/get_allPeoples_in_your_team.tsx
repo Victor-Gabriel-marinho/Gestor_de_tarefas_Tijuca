@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { TeamService } from "../api/services/teamService";
-import type { user_in_team } from "../api/types/UserTypes/User";
+import { TeamService } from "../../api/services/teamService";
+import type { user_in_team } from "../../api/types/UserTypes/User";
 
 export default function Get_allPeoples_in_your_teams() {
   const [loading, Setloading] = useState<boolean>(false);

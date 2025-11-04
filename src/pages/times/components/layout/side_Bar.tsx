@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import type { Team } from "../../../../api/types/TeamTypes/Team";
-import Get_teams from "../../../../hooks/get_teams";
+import Get_teams from "../../../../hooks/Team_hooks/get_teams";
 import { Loading_anim } from "../../../../components/commons/loading";
 
 function Side_bar() {

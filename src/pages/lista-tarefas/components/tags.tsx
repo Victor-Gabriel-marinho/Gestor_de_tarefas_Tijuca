@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { LabelService } from "../../../api/services/labelService";
-import { useTags } from "../../../hooks/get_alllabels_in_tasks";
+import { useTags } from "../../../hooks//Label_hooks/get_alllabels_in_tasks";
 import { IoIosClose } from "react-icons/io";
 type tagProps = {
   onDefinir: () => void,

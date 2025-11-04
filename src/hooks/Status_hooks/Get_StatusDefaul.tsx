@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { StatusService } from "../api/services/StatusService";
-import type { StatusDTO } from "../api/types/StatusTypes/StatusDTO";
+import { StatusService } from "../../api/services/StatusService";
+import type { StatusDTO } from "../../api/types/StatusTypes/StatusDTO";
 
 export default function Get_Status_Default() {
 

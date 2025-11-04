@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useEffect, useState } from "react";
-import type{ UserWithNotInTask as User} from "../api/types/UserTypes/User"
-import { TaskService } from "../api/services/TaskService";
+import type{ UserWithNotInTask as User} from "../../api/types/UserTypes/User"
+import { TaskService } from "../../api/services/TaskService";
 
 export function get_UsersWithNotInTask(idTask: string, idTeam: string) {
     const [loading, Setloading ] = useState<boolean>(false);

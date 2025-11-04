@@ -3,18 +3,18 @@ import Modaltaf from "./components/Modaltaf";
 import { useEffect, useState } from "react";
 import { useFont } from "../../components/font";
 import Filtrar from "./components/filtertask";
-import { Get_Tasks } from "../../hooks/get_Tasks";
+import { Get_Tasks } from "../../hooks//Tasks_hooks/get_Tasks";
 import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
 import Criar from "./components/criartarefa";
-import { Get_userRole } from "../../hooks/get_userRole";
+import { Get_userRole } from "../../hooks/User_hooks/get_userRole";
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import DraggableTask from "./components/DragAndDrop/DraggableTask";
 import DroppableLane from "./components/DragAndDrop/DroppableLane";
 import { TaskService } from "../../api/services/TaskService";
-import Get_All_Status from "../../hooks/Get_All_Status";
-import Dashboard from "./components/dashboard"
-import Get_Status_Default from "../../hooks/Get_StatusDefaul";
+import Get_All_Status from "../../hooks//Status_hooks/Get_All_Status";
+import Dashboard from "./components/dashboard";
+import Get_Status_Default from "../../hooks/Status_hooks/Get_StatusDefaul";
 
 function Lista() {
   // Hook para trazer a fonte
@@ -33,20 +33,40 @@ function Lista() {
     progresso: false,
     concluido: false,
     atrasadas: false,
-    nova: false,
+    cancelada: false,
+    revisao: false,
   });
 
   const toggleMinimize = (key: keyof typeof minimize) => {
     setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const {GetStatusDefault} = Get_Status_Default()  
-  
+  type MinimizeKey = keyof typeof minimize;
+
+  const normalizeKey = (name: string): MinimizeKey => {
+    const lowerCase = name.toLowerCase();
+
+    const normalized = lowerCase
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    return normalized as MinimizeKey;
+  };
+
+  const { GetStatusDefault } = Get_Status_Default();  
+
   const Status = {
     Pen: GetStatusDefault?.filter((Status) => Status.Name === "Pendente")[0].id,
-    Prog: GetStatusDefault?.filter((Status) => Status.Name === "Progresso")[0].id,
-    Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0].id,
-  };
+    Prog: GetStatusDefault?.filter((Status) => Status.Name === "Progresso")[0]
+      .id,
+    Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0]
+      .id,
+    Atra: GetStatusDefault?.filter((Status) => Status.Name === "Atrasadas")[0]
+      .id,
+    Canc: GetStatusDefault?.filter((Status) => Status.Name === "Cancelada")[0]
+      .id,
+    Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0].id,
+   };
 
   //filtro  de status e prazo
   const [, setFiltro] = useState<{ status?: string; prazo?: string }>({});
@@ -57,7 +77,7 @@ function Lista() {
 
   const { userRole } = Get_userRole(id ?? "");
 
-  const {status, refetch_Status} = Get_All_Status(id!)  
+  const { status, refetch_Status } = Get_All_Status(id ?? "");
 
   const setall = () => {
     setFiltro((prevfiltro) => ({
@@ -89,7 +109,8 @@ function Lista() {
       const response = await TaskService.AlterStatus(draggedTaskId, newStatus);
       if (response) {
         if (refetchTasks) {
-          await refetchTasks();
+          refetchTasks();
+          refetch_Status();
         }
       }
     } catch (error) {
@@ -97,13 +118,15 @@ function Lista() {
     }
   };
 
-
   useEffect(() => {
     if (!tasks) return;
 
+<<<<<<< HEAD
     let filteredtask = tasks
 
     
+=======
+>>>>>>> eec5112 (retirando mods da develop)
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
@@ -124,15 +147,15 @@ function Lista() {
   }, [tasks]);
   return (
     <>
-      <div className="bg-[#1F2937] min-h-screen w-screen overflow-auto">
+      <div className="bg-[#1F2937] h-screen w-screen overflow-auto">
         {/* Navbar */}
         <Nav SetAll={setall}>
           {/*o filtro envia suas mudanças de status /prazo via prop*/}
           <Filtrar onFiltroChange={(f) => setFiltro(f)} />
         </Nav>
 
-        <main className="flex flex-col md:flex-row gap-5 md:gap-10 m-5 items-center sm:items-start justify-center">
-          <div className="flex h-full">
+        <main className="flex flex-col min-h-1/2 md:flex-row gap-5 sm:gap-0 m-5 items-center sm:items-start justify-center overflow-hidden">
+          <div className="flex w-35 sm:w-1/12">
             {userRole?.id === "3" ? (
               <div></div>
             ) : (
@@ -148,6 +171,7 @@ function Lista() {
               </div>
             )}
           </div>
+<<<<<<< HEAD
           <div className="flex flex-col sm:flex-row gap-5 w-full items-center sm:items-start justify-center">
             <DndContext onDragEnd={handleDragend}>
               {/* Pendentes */}
@@ -242,16 +266,115 @@ function Lista() {
                         key={task.id}
                         id={task.id}
                         taskname={task.Name}
+=======
+          <div className="flex flex-col w-full items-center justify-center gap-5">
+            <h2 className="text-white font-semibold text-3xl">
+              Tarefas do time 📒
+            </h2>
+            <p className="text-white font-semibold text-xl">Arraste para mudar o status e clique para expandir</p>
+            <div className="flex flex-wrap flex-row gap-5 w-full h-10/12 items-center sm:items-start justify-center">
+              <DndContext onDragEnd={handleDragend}>
+                {/* Pendentes */}
+                {tasks !== null && (
+                  <DroppableLane
+                    id={Status.Pen ?? ""}
+                    userrole={userRole?.id}
+                    title="Pendente"
+                    minimizeKey="pendente"
+                    minimized={minimize.pendente}
+                    onToggleMinimize={toggleMinimize}
+                  >
+                    {pen?.slice(0, 5).map((pentask) => (
+                      <DraggableTask
+                        key={pentask.id}
+                        taskname={pentask.Name}
+>>>>>>> eec5112 (retirando mods da develop)
                         setModal={() => {
-                          Setselect(task);
+                          Setselect(pentask);
+                          Setmodaltask(true);
+                        }}
+                        id={pentask.id}
+                      />
+                    ))}
+                  </DroppableLane>
+                )}
+                {/* Em progresso */}
+                {tasks && (
+                  <DroppableLane
+                    userrole={userRole?.id}
+                    id={Status.Prog ?? ""}
+                    title="Progresso"
+                    minimizeKey="progresso"
+                    minimized={minimize.progresso}
+                    onToggleMinimize={toggleMinimize}
+                  >
+                    {/*{inProgressTasks.map((progtask)*/}
+                    {prog?.slice(0, 5).map((progtask) => (
+                      <DraggableTask
+                        key={progtask.id}
+                        id={progtask.id}
+                        taskname={progtask.Name}
+                        setModal={() => {
+                          Setselect(progtask);
                           Setmodaltask(true);
                         }}
                       />
-                    ) : null
-                  )}
-                </DroppableLane>
-              ))}
-            </DndContext>
+                    ))}
+                  </DroppableLane>
+                )}
+                {/* Concluídas */}
+                {tasks && (
+                  <DroppableLane
+                    id={Status.Conc ?? ""}
+                    userrole={userRole?.id}
+                    title="Concluidas"
+                    minimizeKey="concluido"
+                    minimized={minimize.concluido}
+                    onToggleMinimize={toggleMinimize}
+                  >
+                    {done?.slice(0, 5).map((taskdone) => (
+                      <DraggableTask
+                        key={taskdone.id}
+                        id={taskdone.id}
+                        taskname={taskdone.Name}
+                        setModal={() => {
+                          Setselect(taskdone);
+                          Setmodaltask(true);
+                        }}
+                      />
+                    ))}
+                  </DroppableLane>
+                )}
+                {/* Outros Status */}
+                {status?.map((status) => {
+                  const key = normalizeKey(status.Name);
+                  return (
+                    <DroppableLane
+                      id={status.id}
+                      userrole={userRole?.id}
+                      title={status.Name}
+                      minimizeKey={key}
+                      minimized={minimize[key]}
+                      onToggleMinimize={toggleMinimize}
+                    >
+                      {tasks?.map((task) =>
+                        task.id_status === status.id ? (
+                          <DraggableTask
+                            key={task.id}
+                            id={task.id}
+                            taskname={task.Name}
+                            setModal={() => {
+                              Setselect(task);
+                              Setmodaltask(true);
+                            }}
+                          />
+                        ) : null
+                      )}
+                    </DroppableLane>
+                  );
+                })}
+              </DndContext>
+            </div>
           </div>
         </main>
 
@@ -262,8 +385,11 @@ function Lista() {
             task={select}
             onClose={() => Setmodaltask(false)}
             refetchtask={refetchTasks}
+            refetchStatus={refetch_Status}
             idSelected={select.id}
-            setcriar={() => {Setcriar("Editar")}}
+            setcriar={() => {
+              Setcriar("Editar");
+            }}
           />
         )}
         {criar && (
@@ -275,12 +401,12 @@ function Lista() {
             refetchTasks={refetchTasks}
             id_team={id}
             refetch_Status={refetch_Status}
+            Status={Status}
           />
         )}
+
+        <Dashboard id_team={id ? id : ""} />
       </div>
-
-        <Dashboard id_team={id?id:""}/>
-
     </>
   );
 }

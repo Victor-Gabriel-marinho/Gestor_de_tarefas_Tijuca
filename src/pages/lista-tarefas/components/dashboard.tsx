@@ -1,7 +1,7 @@
 import { Bar, Doughnut } from "react-chartjs-2";
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
-import { useDashboardPages } from "../../../hooks/get_dashBoardpages";
+import { useDashboardPages } from "../../../hooks/Dashboard_hooks/get_dashBoardpages";
 
 import {
   Chart as ChartJS,
@@ -63,9 +63,7 @@ function GraficoBarras({id_team}: graficoProps) {
   const usersLabel = metrics?.tarUsers?.map(item => item.name)  || []
   const usersCount = metrics?.tarUsers?.map(item => item.count) || []
 
-  console.log("Status Labels:", statusLabel);
-    console.log("Status Counts:", statusCount);
-    console.log("Responsáveis da Página:", paginasPorUsuario);
+
   //status
   const data = {
     labels: statusLabel,
@@ -145,38 +143,45 @@ function GraficoBarras({id_team}: graficoProps) {
 
   // === RENDER ===
   return (
-    <div className="flex flex-col items-center gap-6 p-6 bg-gray-900 min-h-screen">
-
+    <div className="flex flex-col min-h-1/2 w-full items-center gap-6 p-6 bg-gray-900">
+      <h2 className="font-semibold text-3xl text-white">Dashboards 📊</h2>
+      <p className="text-white text-xl font-semibold">
+        Clique nos gráficos para filtrar as tarefas acima
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
-        <div className="bg-white p-4 rounded-2xl shadow-md">
+        <div className="bg-white p-4 rounded-2xl shadow-xl shadow-[#797272]">
           <Bar data={data} options={options} />
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow-md">
+        <div className="bg-white p-4 rounded-2xl shadow-xl shadow-[#797272]">
           <Doughnut data={prioridade} options={prioridadeoptions} />
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow-md flex flex-col items-center justify-center overflow-x-auto">
-          <Bar data={responsaveisdata} options={responsaveisop}/>
+        <div className="bg-white p-4 rounded-2xl shadow-xl shadow-[#797272] flex flex-col items-center justify-center overflow-x-auto">
+          <Bar data={responsaveisdata} options={responsaveisop} />
           <div className="">
             <button
-              onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))}// Volta uma página (mínimo = 1) 
-              disabled={paginaAtual === 1}// Desativa se estiver na primeira página
-              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${paginaAtual === 1
-
-                }`}
+              onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))} // Volta uma página (mínimo = 1)
+              disabled={paginaAtual === 1} // Desativa se estiver na primeira página
+              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${
+                paginaAtual === 1
+              }`}
             >
               <FaArrowLeft color="black" />
             </button>
-            <span className="p-1">Página {paginaAtual} de {totalPaginas}</span>
+            <span className="p-1">
+              Página {paginaAtual} de {totalPaginas}
+            </span>
 
             <button
-              onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))} // Avança uma página (máximo = totalPaginas)
-              disabled={paginaAtual === totalPaginas}// Desativa se estiver na última página
-              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${paginaAtual === totalPaginas
-
-                }`}
+              onClick={() =>
+                setPaginaAtual((p) => Math.min(p + 1, totalPaginas))
+              } // Avança uma página (máximo = totalPaginas)
+              disabled={paginaAtual === totalPaginas} // Desativa se estiver na última página
+              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${
+                paginaAtual === totalPaginas
+              }`}
             >
               <FaArrowRight color="black" />
             </button>

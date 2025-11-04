@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
-import type { user_for_invite } from "../api/types/UserTypes/User";
-import { useAuthStore } from "../store/Auth";
-import { decodeJWT } from "../utils/decodeJWT";
-import { UserService } from "../api/services/userService";
-import { TeamService } from "../api/services/teamService";
-import { TaskService } from "../api/services/TaskService";
+import type { user_for_invite } from "../../api/types/UserTypes/User";
+import { useAuthStore } from "../../store/Auth";
+import { decodeJWT } from "../../utils/decodeJWT";
+import { UserService } from "../../api/services/userService";
+import { TeamService } from "../../api/services/teamService";
+import { TaskService } from "../../api/services/TaskService";
 
 export function useInforUsers() {
   const [user, setUser] = useState<user_for_invite | null>(null);
@@ -35,15 +35,15 @@ export function useInforUsers() {
       const response = await UserService.get_users_by_id([sub]);
       const currentUser = response?.[0] || null;
       setUser(currentUser);
-      if(currentUser){
+      if (currentUser) {
         const [task, teams] = await Promise.all([
           TaskService.GetTasksByUser(),
-          TeamService.Get_Teams()
+          TeamService.Get_Teams(),
         ]);
 
         setTaskCount(task.length);
         setTeamCount(teams.length);
-      }else{
+      } else {
         setTaskCount(0);
         setTeamCount(0);
       }

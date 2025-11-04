@@ -1,8 +1,8 @@
 // src/hooks/useDashboardPages.ts
 import { useEffect, useState } from "react";
-import type { dashboardMetricsDTO } from "../api/types/DashboardTypes/DashboardMetric";
-import type { MetricItem } from "../api/types/DashboardTypes/MetricItem";
-import { dashboardService } from "../api/services/dashboardService";
+import type { dashboardMetricsDTO } from "../../api/types/DashboardTypes/DashboardMetric";
+import type { MetricItem } from "../../api/types/DashboardTypes/MetricItem";
+import { dashboardService } from "../../api/services/dashboardService";
 
 export function useDashboardPages(id_team: string) {
   const [metrics, setMetrics] = useState<dashboardMetricsDTO | null>(null);
@@ -21,7 +21,6 @@ export function useDashboardPages(id_team: string) {
       try {
         const data = await dashboardService.getStatus(id_team);
         setMetrics(data);
-        console.log(data)
       } catch (err) {
         console.error("Erro ao buscar métricas", err);
         setErro("Não foi possível encontrar as métricas");

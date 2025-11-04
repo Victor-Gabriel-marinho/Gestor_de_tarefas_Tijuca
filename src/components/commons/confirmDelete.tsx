@@ -1,30 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { TeamService } from "../../api/services/teamService";
-
  type confirmProps = {
-   Setconfirm: React.Dispatch<React.SetStateAction<boolean>>;
-   id: string | undefined;
+   SetconfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
+   SetconfirmAction: () => void;
  };
  
- function Confirm_delete({Setconfirm, id}: confirmProps) {
- 
-  const navigate = useNavigate()
-     
-    function handleComfirm() { 
-       Setconfirm(false)
+ function Confirm_delete({SetconfirmModal,SetconfirmAction}: confirmProps) {
+          
+   function confirm_false() { 
+       SetconfirmModal(false)
      }
 
-    async function delete_Team() {
-      try {
-        if (!id) return
-        await TeamService.Delete_Team(id)
-        navigate(`/`)
-        window.location.reload()
-        handleComfirm()
-      } 
-      catch (error) {
-        console.log("erro ao fazer requisição", error)
-      }
+     async function confirm_true() {  
+      SetconfirmAction()
+      SetconfirmModal(false)
      }
     
     return (
@@ -34,20 +21,20 @@ import { TeamService } from "../../api/services/teamService";
             <h2 className="text-white font-bold text-sm sm:text-2xl">
               Você deseja deletar esse time?
             </h2>
-            <div className="text-white text-sm sm:text-xl font-bold cursor-pointer" onClick={handleComfirm}>
+            <div className="text-white text-sm sm:text-xl font-bold cursor-pointer" onClick={confirm_false}>
               X
             </div>
           </div>
           <div className="h-full w-full flex flex-row gap-3 items-center justify-center">
             <div
               className="bg-red-700 text-white text-sm sm:text-xl h-10 w-40 rounded-[10px] flex items-center justify-center font-semibold cursor-pointer"
-              onClick={delete_Team}
+              onClick={confirm_true}
             >
               Deletar
             </div>
             <div
-              className="bg-[#251F1F] text-white text-sm sm:text-xl  h-10 w-40 rounded-[10px] flex justify-center items-center font-semibold cursor-pointer"
-              onClick={handleComfirm}
+              className="bg-[#251F1F] text-white text-sm sm:text-xl h-10 w-40 rounded-[10px] flex justify-center items-center font-semibold cursor-pointer"
+              onClick={confirm_false}
             >
               Cancelar
             </div>

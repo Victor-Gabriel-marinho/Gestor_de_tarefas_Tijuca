@@ -3,7 +3,7 @@ import type { UserWithNotInTask } from "../../../api/types/UserTypes/User";
 import { Loading_anim } from "../../../components/commons/loading";
 import { useParams } from "react-router-dom";
 import { TaskService } from "../../../api/services/TaskService";
-import { get_UsersWithNotInTask } from "../../../hooks/get_UsersWithNotInTask";
+import { get_UsersWithNotInTask } from "../../../hooks/User_hooks/get_UsersWithNotInTask";
 
 type Modal_taskUserProps = {
     id_task: string;
