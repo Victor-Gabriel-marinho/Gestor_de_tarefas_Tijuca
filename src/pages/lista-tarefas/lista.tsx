@@ -72,6 +72,9 @@ function Lista() {
   const [prog, setprog] = useState<Task[]>();
   const [done, setdone] = useState<Task[]>();
 
+  //States de tags do team
+
+
   const handleDragend = async (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -160,6 +163,7 @@ function Lista() {
                   {/*{pendingTasks.map((pentask)*/}
                   {pen?.map((pentask) => (
                     <DraggableTask
+                      idSelected={pentask.id}
                       key={pentask.id}
                       taskname={pentask.Name}
                       setModal={() => {
@@ -184,6 +188,7 @@ function Lista() {
                   {/*{inProgressTasks.map((progtask)*/}
                   {prog?.map((progtask) => (
                     <DraggableTask
+                    idSelected={progtask.id}
                       key={progtask.id}
                       id={progtask.id}
                       taskname={progtask.Name}
@@ -207,6 +212,7 @@ function Lista() {
                 >
                   {done?.map((taskdone) => (
                     <DraggableTask
+                    idSelected={taskdone.id}
                       key={taskdone.id}
                       id={taskdone.id}
                       taskname={taskdone.Name}
@@ -232,6 +238,7 @@ function Lista() {
                   {tasks?.map((task) =>
                     task.id_status === status.id ? (
                       <DraggableTask
+                        idSelected={task.id}
                         key={task.id}
                         id={task.id}
                         taskname={task.Name}

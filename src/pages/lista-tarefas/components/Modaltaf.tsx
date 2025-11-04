@@ -208,7 +208,13 @@ function Modaltaf({
                     <p className="text-xl font-semibold">
                       Usuários responsáveis
                     </p>
-                    <TaskUser taskusers={taskuser} id_task={idSelected} refetchs={() => {refetchTaskuser(); refetchUsersWithNotInTask();}} />
+                    <TaskUser 
+                    taskusers={taskuser} 
+                    id_task={idSelected} 
+                    refetchs={() => {
+                      refetchTaskuser(); 
+                      refetchUsersWithNotInTask();
+                    }} />
                   </div>
                 )}
                 {/* Descrição e Data */}
