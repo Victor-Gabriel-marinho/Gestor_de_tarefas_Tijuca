@@ -16,6 +16,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Loading_anim } from "../../../components/commons/loading";
+import {useState } from "react";
 
 // Registrar módulos obrigatórios
 ChartJS.register(
@@ -33,11 +35,13 @@ ChartJS.register(
 
 type graficoProps = {
   id_team: string
+  prazo: string
+  onFiltroChange?: (filtro: { prioridade?: string; prazo?: string; status?: string }) => void;
 }
 
-function GraficoBarras({id_team}: graficoProps) {
+function GraficoBarras({id_team, onFiltroChange}: graficoProps) {
 
-      const {
+    const {
         metrics,
         paginasPorUsuario,
         paginaAtual,
@@ -45,14 +49,21 @@ function GraficoBarras({id_team}: graficoProps) {
         totalPaginas,
         loading,
         erro,
-      } = useDashboardPages(id_team)
+      } = useDashboardPages(id_team)    
 
   /*preciso dos status das tarefas, prioridade ,  e também nome dos responsáveis */
   //integração
   
-  if (loading) return <div> carregando...</div>
+const [prioridadeSelecionada, setPrioridadeSelecionada] = useState<string | null>(null)
+const [statusSelecionada, setStattusSelecionada] = useState<string | null>(null)
+const [prazoSelecionado, setPrazoSelecionado] = useState<string | null>(null)
+
+  if (loading) return <Loading_anim/>
   if (erro) return <div>{erro}</div>
   if (!metrics) return <div>Dados não encontrados</div>
+
+  const prazoLabel = metrics?.tarByTerm?.map(item => item.name) || []
+  const prazoCount = metrics?.tarByTerm?.map(item => item.count) || []
 
   const statusLabel = metrics?.tarStatus?.map(item => item.name) || []
   const statusCount = metrics?.tarStatus?.map(item => item.count) || []
@@ -63,6 +74,41 @@ function GraficoBarras({id_team}: graficoProps) {
   const usersLabel = metrics?.tarUsers?.map(item => item.name)  || []
   const usersCount = metrics?.tarUsers?.map(item => item.count) || []
 
+
+
+const prazo = {
+  labels: prazoLabel,
+  datasets: [
+    {
+      label: "Tarefas",
+      data: prazoCount,
+      backgroundColor: "rgba(75, 192, 192, 0.6)",
+      borderRadius: 6,
+      barThickness: 30,
+    }
+  ]
+};
+
+ const termClick = (_event: any, elements: any[]) => {
+    if (!elements.length) return
+    const index = elements[0].index
+    const prazoClicada = prazoLabel[index]
+    setPrazoSelecionado(prazoClicada)
+    onFiltroChange?.({prazo: prazoClicada})
+    console.log("prazo clicado:", prazoClicada)
+  }
+
+const optionsPrazo = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" as const },
+      title: { display: true, text: "Tarefas por prazo" },
+    },
+    scales: {
+      y: { beginAtZero: true },
+    },
+      onClick: termClick,
+  };
 
   //status
   const data = {
@@ -78,6 +124,16 @@ function GraficoBarras({id_team}: graficoProps) {
     ],
   };
 
+
+  const statusClick = (_event: any, elements: any[]) => {
+    if (!elements.length) return
+    const index = elements[0].index
+    const statusClicada = statusLabel[index]
+    setStattusSelecionada(statusClicada)
+    onFiltroChange?.({status: statusClicada})
+    console.log("status clicada:", statusClicada)
+  }
+
   const options = {
     responsive: true,
     plugins: {
@@ -87,6 +143,7 @@ function GraficoBarras({id_team}: graficoProps) {
     scales: {
       y: { beginAtZero: true },
     },
+      onClick: statusClick
   };
 
   //prioridade
@@ -101,12 +158,22 @@ function GraficoBarras({id_team}: graficoProps) {
     ],
   };
 
+  const prioridadeClick = (_event: any, elements: any[]) => {
+    if (!elements.length) return;
+    const index = elements[0].index;
+    const prioridadeClicada = prioridadeLabel[index]
+    setPrioridadeSelecionada(prioridadeClicada);
+     onFiltroChange?.({prioridade: prioridadeClicada});
+     console.log("Prioridade clicada:", prioridadeClicada);
+  }
+  
   const prioridadeoptions = {
     responsive: true,
     plugins: {
       legend: { display: true },
       title: { display: true, text: "Tarefas por Prioridade" },
     },
+     onClick: prioridadeClick
   };
 
   //responsaveis
@@ -137,10 +204,6 @@ function GraficoBarras({id_team}: graficoProps) {
     scales: { y: { beginAtZero: true } },
   };
 
-  
- 
-
-
   // === RENDER ===
   return (
     <div className="flex flex-col min-h-1/2 w-full items-center gap-6 p-6 bg-gray-900">
@@ -149,8 +212,14 @@ function GraficoBarras({id_team}: graficoProps) {
         Clique nos gráficos para filtrar as tarefas acima
       </p>
 
+    <div className="flex flex-col items-center gap-1 p-3 bg-gray-900">
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl">
-        <div className="bg-white p-4 rounded-2xl shadow-xl shadow-[#797272]">
+        <div className="bg-white p-4 rounded-2xl shadow-md">
+          <Bar data={prazo} options={optionsPrazo} />
+        </div>
+
+        <div className="bg-white p-4 rounded-2xl shadow-md">
           <Bar data={data} options={options} />
         </div>
 
@@ -175,19 +244,33 @@ function GraficoBarras({id_team}: graficoProps) {
             </span>
 
             <button
-              onClick={() =>
-                setPaginaAtual((p) => Math.min(p + 1, totalPaginas))
-              } // Avança uma página (máximo = totalPaginas)
-              disabled={paginaAtual === totalPaginas} // Desativa se estiver na última página
-              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${
-                paginaAtual === totalPaginas
-              }`}
+              onClick={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas))} // Avança uma página (máximo = totalPaginas)
+              disabled={paginaAtual === totalPaginas}// Desativa se estiver na última página
+              className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${paginaAtual === totalPaginas}`}
             >
               <FaArrowRight color="black" />
             </button>
           </div>
         </div>
+
+        {(prioridadeSelecionada || prazoSelecionado || statusSelecionada) && (
+  <div className="flex justify-center">
+    <button
+      className="bg-green-500 text-white rounded hover:bg-green-300 h-10 p-1"
+      onClick={() => {
+        setPrioridadeSelecionada(null)
+        setPrazoSelecionado(null)
+        setStattusSelecionada(null)
+        onFiltroChange?.({prioridade: "todas", prazo: "todas", status: "todas"})
+      }}
+    >
+      Limpar filtros
+    </button>
+  </div>
+ )}
       </div>
+    </div>
+
     </div>
   );
 }

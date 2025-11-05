@@ -72,16 +72,12 @@ function Lista() {
     Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0]?.id,
   };
 
-  const [, setFiltro] = useState<{ status?: string; prazo?: string }>({});
 
   const { id } = useParams();
   const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
   const { userRole } = Get_userRole(id ?? "");
-  const { status, refetch_Status } = Get_All_Status(id ?? "");
 
-  const setall = () => {
-    setFiltro((prevfiltro) => ({ ...prevfiltro, status: "todas", prazo: "" }));
-  };
+  const { status, refetch_Status } = Get_All_Status(id!)
 
   const [pen, setpen] = useState<Task[]>();
   const [prog, setprog] = useState<Task[]>();
@@ -132,34 +128,92 @@ function Lista() {
 
   const activeTask = findTaskById(activeId);
 
+  const [filtro, setFiltro] = useState<{ status?: string; prazo?: string; prioridade?:string}>({});
   useEffect(() => {
+    if (!tasks || !Status?.Pen || !Status?.Prog || !Status?.Conc) return;
     if (!tasks) return;
+
+    let filteredtask = tasks
+
+    if (filtro.status && filtro.status !== "todas") {
+      let statusId = ""
+
+
+      if (filtro.status === "pendente") statusId = Status.Pen ?? "";
+      else if (filtro.status === "progresso") statusId = Status.Prog ?? "";
+      else if (filtro.status === "concluido") statusId = Status.Conc ?? "";
+
+      filteredtask = filteredtask.filter((t) => t.id_status === statusId);
+    }
+    if (filtro.prazo && filtro.prazo !== "todas") {
+
+      const now = new Date();
+
+      const isSameDay = (date1: Date, date2: Date) =>
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate();
+
+      filteredtask = filteredtask.filter((t) => {
+        const end = new Date(t.EndDate)
+
+        switch (filtro.prazo) {
+
+          case "dia":
+            return isSameDay(end, now);
+
+          case "atraso":
+            return end < now;
+
+          case "semana":
+            const oneWeek = new Date(now);
+            oneWeek.setDate(now.getDate() + 7);
+            return end >= now && end <= oneWeek;
+
+          case "mes":
+            const oneMonth = new Date(now);
+            oneMonth.setMonth(now.getMonth() + 1);
+            return end >= now && end <= oneMonth;
+          default:
+            return true;
+        }
+      })
+    }
+
+      console.log("Filtro prioridade:", filtro.prioridade);
+console.log("Prioridades das tasks:", tasks.map(t => t.Priority));
+
+   
+    
+      if (filtro.prioridade && filtro.prioridade != "todas") {
+        filteredtask = filteredtask.filter( 
+          (t) => t.Priority === filtro.prioridade
+        )
+  }
+
 
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
 
-    tasks.forEach((task) => {
-      if (task.id_status === Status.Pen) {
-        pending.push(task);
-      } else if (task.id_status === Status.Prog) {
-        inProgress.push(task);
-      } else if (task.id_status === Status.Conc) {
-        completed.push(task);
-      }
+    filteredtask.forEach((task) => {
+      if (task.id_status === Status.Pen) pending.push(task);
+      else if (task.id_status === Status.Prog) inProgress.push(task);
+      else if (task.id_status === Status.Conc) completed.push(task);
     });
+
 
     setpen(pending);
     setprog(inProgress);
     setdone(completed);
-  }, [tasks, Status.Pen, Status.Prog, Status.Conc]);
+
+  }, [tasks, filtro]);
 
   return (
     <>
-      <div className="bg-[#1F2937] h-screen w-screen overflow-auto">
-        <Nav SetAll={setall}>
-          <Filtrar onFiltroChange={(f) => setFiltro(f)} />
-        </Nav>
+      <div className="bg-[#1F2937] min-h-screen w-screen overflow-auto">
+        {/* Navbar */}
+        <Nav/>
 
         <main className="flex flex-col min-h-1/2 md:flex-row gap-5 sm:gap-0 m-5 sm:mb-10 items-center sm:items-start justify-center overflow-hidden">
           <div className="flex w-35 sm:w-1/12">
@@ -344,8 +398,17 @@ function Lista() {
           />
         )}
 
-        <Dashboard id_team={id ? id : ""} />
       </div>
+
+      <Dashboard
+        id_team={id ? id : ""}
+        prazo={id ? id : ""}
+        onFiltroChange={() =>
+          setFiltro((prev) => ({ ...prev }))
+        }
+      />
+
+
     </>
   );
 }

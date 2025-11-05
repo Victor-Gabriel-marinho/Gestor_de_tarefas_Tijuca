@@ -4,4 +4,5 @@ export interface dashboardMetricsDTO {
     tarStatus: MetricItem[]
     tarPriority: MetricItem[]
     tarUsers: MetricItem[]
+    tarByTerm?: MetricItem[]
 }

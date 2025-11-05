@@ -36,7 +36,7 @@ function Filtrar({ onFiltroChange }: { onFiltroChange: (filtro: any) => void }) 
         {/* FILTRO DE STATUS */}
         <h3 className="p-2">Status da tarefa</h3>
         <ul className="p-3 space-y-2 flex flex-col gap-2">
-          {["todas", "concluido", "naoConcluido", "pendente"].map((id) => (
+          {["todas", "concluido", "progresso", "pendente"].map((id) => (
             <li key={id} className="flex flex-row items-center">
               <input
                 type="checkbox"

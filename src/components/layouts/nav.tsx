@@ -1,6 +1,5 @@
 import { MdPeople } from "react-icons/md";
 import { BsFillHouseFill } from "react-icons/bs";
-import { IoFilter } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ReactNode } from "react";
@@ -8,15 +7,11 @@ import Perfil from "../commons/Perfil";
 import { FaCircleUser } from "react-icons/fa6";
 
 
-type Navprops = {
-  children?: ReactNode
-  SetAll?: () => void
-}
 
-function Nav({ children, SetAll }: Navprops) {
 
-  const [filtrartask, Setfiltrartask] = useState<boolean>(false)
-  const [aberto, setAberto] = useState(false);
+function Nav() {
+
+    const [aberto, setAberto] = useState(false);
 
   const AbrirPerfil = () => {
     setAberto(!aberto)
@@ -46,13 +41,7 @@ function Nav({ children, SetAll }: Navprops) {
         </Link>
         <div className="flex gap-8 items-center">
           <div className="relative">
-            <IoFilter
-              className="cursor-pointer text-xl sm:text-3xl"
-              color="white"
-              onClick={() => Setfiltrartask(!filtrartask)}
-            />
-
-            {filtrartask && <div className="relative">{children}</div>}
+        
           </div>
           <Link to="/" className="relative group flex flex-col items-center justify-center">
             <div className="relative flex flex-col items-center justify-center">
