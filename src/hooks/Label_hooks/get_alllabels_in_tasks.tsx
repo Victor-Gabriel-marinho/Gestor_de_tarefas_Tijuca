@@ -16,7 +16,7 @@ export function useTags(idSelected: string){
     const fetchTags = useCallback(async()=> {
         try {
             const response = await LabelService.Get_All_Label_Tasks(idSelected)
-            setTags(response)
+            setTags([...response])
         } catch (err) {
             setError("erro ao buscar as tags")        
         }

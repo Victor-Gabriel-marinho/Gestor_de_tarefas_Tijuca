@@ -1,7 +1,12 @@
 import { useDraggable } from "@dnd-kit/core";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Tags from "../tagstaf";
 import { useTags } from "../../../../hooks/get_alllabels_in_tasks";
+import { Modal_taskUser } from "../AddTaskUser";
+import { Get_Taskuser } from "../../../../hooks/Get_TaskUser";
+import { decodeJWT } from "../../../../utils/decodeJWT";
+import { useAuthStore } from "../../../../store/Auth";
+import { FaUserCircle } from "react-icons/fa";
 
 interface DraggableTaskProps {
   taskname: string;
@@ -17,6 +22,7 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id,
   });
+<<<<<<< HEAD
   const { tags, fetchTags } = useTags(idSelected);
 =======
 const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
@@ -25,6 +31,13 @@ const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
       id: id,
     });
 >>>>>>> eec5112 (retirando mods da develop)
+=======
+  const {tags, fetchTags} = useTags(idSelected);
+  const {taskuser } = Get_Taskuser(idSelected);  
+ 
+  const token = useAuthStore((state) => state.token);
+  const payload = decodeJWT(token);
+>>>>>>> f526500 (atualização de tags na tarefa)
 
   const clickStartTime = useRef<number>(0);
 
@@ -43,7 +56,6 @@ const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
 
     if (isQuickClick && isNotDragging) {
       e.stopPropagation();
-
       setModal();
     }
 
@@ -64,33 +76,46 @@ const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
       boxShadow: isDragging ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
     }
     : undefined;
+    
+    useEffect(()=>{
+      fetchTags()
+    },[tags])
 
-  return (
+    return (
     <div
       ref={setNodeRef}
       style={style}
       {...listeners}
       {...attributes}
     >
-      <p
-        className="bg-white cursor-pointer p-1 flex justify-center items-center hover:scale-110 flex-wrap text-center rounded-[5px]"
+      <div
+        className="bg-white cursor-pointer p-3 flex gap-1.5 justify-center items-center hover:scale-110 flex-wrap text-center rounded-[5px]"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        <div
-          className="flex justify-center max-w-[205px]"
-        >
-          <Tags
-            idSelected={idSelected}
-            tags={tags}
-            OculteName={true}
-          />
-        </div>
+      {/* Revela a div caso houver tags ou a task for atribuida ao usuário */}
+       {(tags.length > 0 || taskuser.some((user)=> user.id === payload?.sub))  && ( 
+        <div className="flex flex-row justify-between items-center max-w-[205px] max-h-[50p]">
+            {tags?.length > 0 && (
+              <Tags
+              containerClassName={"rounded-2xl flex flex-wrap justify-center items-center gap-2 w-[290px] max-w-[300px] sm:max-w-[200px] sm:w-[190px]"}
+              tagclassName="text-[9px] text-amber-100 rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer"
+              idSelected={idSelected}
+              tags={tags}
+              fetchTagsTask={fetchTags}
+            />
+            )}
+            
+            <div className="pr-3">
+              {taskuser.some((user)=> user.id === payload?.sub) &&(
+                <FaUserCircle className="text-[20px]"/>
+              )}  
+            </div>
+
+        </div>)}
         {taskname}
-
-
-      </p>
+      </div>
 
     </div>
   );

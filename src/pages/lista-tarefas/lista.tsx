@@ -53,7 +53,7 @@ function Lista() {
     return normalized as MinimizeKey;
   };
 
-  const { GetStatusDefault } = Get_Status_Default();  
+  const { GetStatusDefault } = Get_Status_Default();
 
   const Status = {
     Pen: GetStatusDefault?.filter((Status) => Status.Name === "Pendente")[0].id,
@@ -66,7 +66,7 @@ function Lista() {
     Canc: GetStatusDefault?.filter((Status) => Status.Name === "Cancelada")[0]
       .id,
     Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0].id,
-   };
+  };
 
   //filtro  de status e prazo
   const [, setFiltro] = useState<{ status?: string; prazo?: string }>({});
@@ -91,9 +91,6 @@ function Lista() {
   const [pen, setpen] = useState<Task[]>();
   const [prog, setprog] = useState<Task[]>();
   const [done, setdone] = useState<Task[]>();
-
-  //States de tags do team
-
 
   const handleDragend = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -121,12 +118,6 @@ function Lista() {
   useEffect(() => {
     if (!tasks) return;
 
-<<<<<<< HEAD
-    let filteredtask = tasks
-
-    
-=======
->>>>>>> eec5112 (retirando mods da develop)
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
@@ -171,102 +162,6 @@ function Lista() {
               </div>
             )}
           </div>
-<<<<<<< HEAD
-          <div className="flex flex-col sm:flex-row gap-5 w-full items-center sm:items-start justify-center">
-            <DndContext onDragEnd={handleDragend}>
-              {/* Pendentes */}
-              {tasks !== null && (
-                <DroppableLane
-                  id={Status.Pen ?? ""}
-                  userrole={userRole?.id}
-                  title="Pendente"
-                  minimizeKey="pendente"
-                  minimized={minimize.pendente}
-                  onToggleMinimize={toggleMinimize}
-                >
-                  {/*{pendingTasks.map((pentask)*/}
-                  {pen?.map((pentask) => (
-                    <DraggableTask
-                      idSelected={pentask.id}
-                      key={pentask.id}
-                      taskname={pentask.Name}
-                      setModal={() => {
-                        Setselect(pentask);
-                        Setmodaltask(true);
-                      }}
-                      id={pentask.id}
-                    />
-                  ))}
-                </DroppableLane>
-              )}
-              {/* Em progresso */}
-              {tasks && (
-                <DroppableLane
-                  userrole={userRole?.id}
-                  id={Status.Prog ?? ""}
-                  title="Progresso"
-                  minimizeKey="progresso"
-                  minimized={minimize.progresso}
-                  onToggleMinimize={toggleMinimize}
-                >
-                  {/*{inProgressTasks.map((progtask)*/}
-                  {prog?.map((progtask) => (
-                    <DraggableTask
-                    idSelected={progtask.id}
-                      key={progtask.id}
-                      id={progtask.id}
-                      taskname={progtask.Name}
-                      setModal={() => {
-                        Setselect(progtask);
-                        Setmodaltask(true);
-                      }}
-                    />
-                  ))}
-                </DroppableLane>
-              )}
-              {/* Concluídas */}
-              {tasks && (
-                <DroppableLane
-                  id={Status.Conc ?? ""}
-                  userrole={userRole?.id}
-                  title="Concluidas"
-                  minimizeKey="concluido"
-                  minimized={minimize.concluido}
-                  onToggleMinimize={toggleMinimize}
-                >
-                  {done?.map((taskdone) => (
-                    <DraggableTask
-                    idSelected={taskdone.id}
-                      key={taskdone.id}
-                      id={taskdone.id}
-                      taskname={taskdone.Name}
-                      setModal={() => {
-                        Setselect(taskdone);
-                        Setmodaltask(true);
-                      }}
-                    />
-                  ))}
-                </DroppableLane>
-              )}
-
-              {/* Outros Status */}
-              {status?.map((status) => (
-                <DroppableLane
-                  id={status.id}
-                  userrole={userRole?.id}
-                  title={status.Name}
-                  minimizeKey="concluido"
-                  minimized={minimize.concluido}
-                  onToggleMinimize={toggleMinimize}
-                >
-                  {tasks?.map((task) =>
-                    task.id_status === status.id ? (
-                      <DraggableTask
-                        idSelected={task.id}
-                        key={task.id}
-                        id={task.id}
-                        taskname={task.Name}
-=======
           <div className="flex flex-col w-full items-center justify-center gap-5">
             <h2 className="text-white font-semibold text-3xl">
               Tarefas do time 📒
@@ -287,8 +182,8 @@ function Lista() {
                     {pen?.slice(0, 5).map((pentask) => (
                       <DraggableTask
                         key={pentask.id}
+                        idSelected={pentask.id}
                         taskname={pentask.Name}
->>>>>>> eec5112 (retirando mods da develop)
                         setModal={() => {
                           Setselect(pentask);
                           Setmodaltask(true);
@@ -311,6 +206,7 @@ function Lista() {
                     {/*{inProgressTasks.map((progtask)*/}
                     {prog?.slice(0, 5).map((progtask) => (
                       <DraggableTask
+                        idSelected={progtask.id}
                         key={progtask.id}
                         id={progtask.id}
                         taskname={progtask.Name}
@@ -334,6 +230,7 @@ function Lista() {
                   >
                     {done?.slice(0, 5).map((taskdone) => (
                       <DraggableTask
+                        idSelected={taskdone.id}
                         key={taskdone.id}
                         id={taskdone.id}
                         taskname={taskdone.Name}
@@ -360,6 +257,7 @@ function Lista() {
                       {tasks?.map((task) =>
                         task.id_status === status.id ? (
                           <DraggableTask
+                            idSelected={task.id}
                             key={task.id}
                             id={task.id}
                             taskname={task.Name}

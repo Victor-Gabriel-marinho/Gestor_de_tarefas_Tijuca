@@ -73,15 +73,7 @@ function Modaltaf({
 
   const [edittask, Setedittask] = useState<string>(task.Name);
 
-<<<<<<< HEAD
   const [trocarModal, setTrocarModal] = useState<"first" | "second" | "users" | null>("first");
-=======
-  const [confirmModal, setconfimModal] = useState<boolean>(false)
-
-  const [trocarModal, setTrocarModal] = useState<"first" | "second" | null>(
-    "first"
-  );
->>>>>>> eec5112 (retirando mods da develop)
   const [viewusers, Setviewusers] = useState<boolean>(false);
 
   const isMobile = window.innerWidth <= 768;
@@ -91,7 +83,7 @@ function Modaltaf({
     idSelected,
     id ?? ""
   );
-
+  const[confirmModal,setconfimModal]= useState<boolean>(false)
   const Delete_task = async () => {
     try {
       
@@ -120,7 +112,6 @@ function Modaltaf({
             id_task={task.id}
             refetch_taskuser={refetchTaskuser}
             closeModal={() => {
-<<<<<<< HEAD
               Setviewusers(false)
               if(isMobile) setTrocarModal("first")
             }}
@@ -142,27 +133,6 @@ function Modaltaf({
                 {task.Name}
               </p>
             </div>
-=======
-              Setviewusers(false);
-            }}
-          />
-        )}
-        {/*caixa do modal*/}
-        {trocarModal === "first" && (
-          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#070606] sm:h-[450px] sm:w-[600px] sm:p-6">
-            <div className="flex w-full h-full gap-2 flex-col">
-              <div className="flex w-full gap-5 items-center">
-                <button
-                  className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
-                  onClick={onClose}
-                >
-                  <IoIosClose size={40} />
-                </button>
-                <p className="max-w-[400px] text-2xl font-bold line-clamp-2">
-                  {task.Name}
-                </p>
-              </div>
->>>>>>> eec5112 (retirando mods da develop)
 
             <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
               {/*input escondido que é aberto pelo botão com clip*/}
@@ -234,7 +204,9 @@ function Modaltaf({
                 )}
 
                 <Tags
+                  tagclassName="rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer"
                   idSelected={idSelected}
+                  fetchTagsTask={fetchTags}
                   tags={tags}
                   onDefinir={() => {
                     Settag("criar");
@@ -281,9 +253,6 @@ function Modaltaf({
                 )}
 
                 {/* Usuários relacionados a task */}
-<<<<<<< HEAD
-                
-=======
                 {taskuser && (
                   <div>
                     <p className="text-xl font-semibold">
@@ -299,7 +268,6 @@ function Modaltaf({
                     />
                   </div>
                 )}
->>>>>>> eec5112 (retirando mods da develop)
 
                 {tagvalue && (
                   <div className="m-1 ">

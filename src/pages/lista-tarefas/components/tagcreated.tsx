@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LabelService } from "../../../api/services/labelService";
 import { useCheckTaskLabel } from "../../../hooks//Label_hooks/check_labeltask";
 import { IoIosClose } from "react-icons/io";
+import { useTags } from "../../../hooks/Label_hooks/get_alllabels_in_tasks";
 
 type TagCreatedProps = {
   fetchTagsTeam: () => void
@@ -18,7 +19,6 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
     const [activeTags, setActiveTags] = useState<string[]>([]);
     const {checkIfExist} = useCheckTaskLabel()
     const [isDeleteMode, setIsDeleteMode] = useState(false)
-    
     
     useEffect(() => {
     async function loadActiveTags() {
