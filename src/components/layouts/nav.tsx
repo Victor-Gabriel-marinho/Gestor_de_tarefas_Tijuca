@@ -28,12 +28,12 @@ function Nav({ children, SetAll }: Navprops) {
     <nav className="bg-[#44383e] w-screen h-10 sm:h-15 p-1 sm:p-3">
 
 
-      <div className="flex gap-4 p-1 justify-between items-center relative">
+      <div className="flex w-full gap-4 p-1 justify-between items-center relative">
         <Link
           to="/quadros"
           className="relative group flex flex-col items-center justify-center">
 
-          <div className="relative flex flex-col items-center justify-center ml-8">
+          <div className="relative flex flex-col items-center justify-center">
 
             <BsFillHouseFill className="cursor-pointer text-white text-xl sm:text-3xl "/>
 
@@ -44,7 +44,7 @@ function Nav({ children, SetAll }: Navprops) {
             >Página Inicial</span>
           </div>
         </Link>
-        <div className="flex gap-8 items-center mr-7">
+        <div className="flex gap-8 items-center">
           <div className="relative">
             <IoFilter
               className="cursor-pointer text-xl sm:text-3xl"
@@ -67,14 +67,14 @@ function Nav({ children, SetAll }: Navprops) {
           <div className="relative">
             <button
               onClick={AbrirPerfil}
-              className=" text-white  text-xl cursor-pointer relative group flex flex-col items-center justify-center"
+              className=" text-white text-xl cursor-pointer relative group flex items-center justify-center"
             >
-              {aberto ? <FaCircleUser className="w-6 h-6" /> : <FaCircleUser className="w-6 h-6" />}
-              <span className=" w-[60px] absolute top-full mt-1
+              <FaCircleUser className="w-6 h-6" />
+        {/*       <span className=" w-[60px] absolute top-7
               text-[15px] text-gray-400
               opacity-0 group-hover:opacity-100 transition-opacity duration-300
               pointer-events-none bg-[#1f1a1a] p-0.5 rounded-[5px] text-center z-50"
-              >Perfil</span>
+              >Perfil</span> */}
             </button>
             {aberto && <Perfil />}
           </div>

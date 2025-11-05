@@ -122,7 +122,7 @@ function Modaltaf({
         )}
         {/*caixa do modal*/}
         {trocarModal === "first" && (
-          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[300px] sm:p-4">
+          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[550px] sm:w-[600px] sm:p-4">
             <div className="flex w-full h-full gap-2 flex-col">
               <div className="flex w-full gap-5 items-center">
                 <button
