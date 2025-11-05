@@ -1,12 +1,11 @@
 import { useDraggable } from "@dnd-kit/core";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Tags from "../tagstaf";
-import { useTags } from "../../../../hooks/get_alllabels_in_tasks";
-import { Modal_taskUser } from "../AddTaskUser";
-import { Get_Taskuser } from "../../../../hooks/Get_TaskUser";
+import { Get_Taskuser } from "../../../../hooks/Tasks_hooks/Get_TaskUser";
 import { decodeJWT } from "../../../../utils/decodeJWT";
 import { useAuthStore } from "../../../../store/Auth";
 import { FaUserCircle } from "react-icons/fa";
+import { useTags } from "../../../../hooks/Label_hooks/get_alllabels_in_tasks";
 
 interface DraggableTaskProps {
   taskname: string;
@@ -17,27 +16,15 @@ interface DraggableTaskProps {
 
 const CLICK_THRESHOLD_MS = 250;
 
-<<<<<<< HEAD
 const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id,
   });
-<<<<<<< HEAD
-  const { tags, fetchTags } = useTags(idSelected);
-=======
-const DraggableTask = ({ taskname, setModal, id }: DraggableTaskProps) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: id,
-    });
->>>>>>> eec5112 (retirando mods da develop)
-=======
   const {tags, fetchTags} = useTags(idSelected);
   const {taskuser } = Get_Taskuser(idSelected);  
  
   const token = useAuthStore((state) => state.token);
   const payload = decodeJWT(token);
->>>>>>> f526500 (atualização de tags na tarefa)
 
   const clickStartTime = useRef<number>(0);
 
