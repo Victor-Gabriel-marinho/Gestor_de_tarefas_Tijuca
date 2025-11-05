@@ -118,9 +118,6 @@ function Lista() {
   useEffect(() => {
     if (!tasks) return;
 
-    let filteredtask = tasks
-
-    
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];

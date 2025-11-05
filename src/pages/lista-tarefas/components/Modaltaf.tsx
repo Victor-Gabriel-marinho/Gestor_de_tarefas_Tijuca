@@ -83,7 +83,11 @@ function Modaltaf({
     idSelected,
     id ?? ""
   );
+<<<<<<< HEAD
   const[confirmModal,setconfimModal]= useState<boolean>(false)
+=======
+  const [confirmModal, setconfimModal] = useState<boolean>(false);
+>>>>>>> e5f59e3 (retirando modificações da dev)
   const Delete_task = async () => {
     try {
       
@@ -252,6 +256,7 @@ function Modaltaf({
                 />
                 )}
 
+<<<<<<< HEAD
                 {/* Usuários relacionados a task */}
                 {taskuser && (
                   <div>
@@ -268,6 +273,8 @@ function Modaltaf({
                     />
                   </div>
                 )}
+=======
+>>>>>>> e5f59e3 (retirando modificações da dev)
 
                 {tagvalue && (
                   <div className="m-1 ">
