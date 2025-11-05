@@ -30,7 +30,7 @@ type ModalProps = {
   setcriar: () => void;
   onClose: () => void;
   refetchtask: (() => Promise<void>) | undefined;
-  refetchStatus?: (()=> Promise<void>) | undefined
+  refetchStatus?: (() => Promise<void>) | undefined
 };
 
 function Modaltaf({
@@ -83,10 +83,10 @@ function Modaltaf({
     idSelected,
     id ?? ""
   );
-  const [confirmModal, setconfimModal] = useState<boolean>(false);
+  const [confirmModal, setconfimModal] = useState<boolean>(false)
   const Delete_task = async () => {
     try {
-      
+
       const response = await TaskService.DeleteTask(idSelected ?? "");
       if (response) {
         if (refetchtask) {
@@ -99,6 +99,8 @@ function Modaltaf({
       console.log("erro ao fazer requisição", error);
     }
   };
+  /* Estilo do hover */
+  const hoverOptions = /* tw */"absolute top-full mt-1 text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-black p-1 rounded-[5px] text-center"
 
   useEffect(() => {
     Setedittask(idSelected);
@@ -107,99 +109,121 @@ function Modaltaf({
   return (
     <>
       <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
-        {viewusers && (isMobile ? trocarModal === "users" : trocarModal === "first") &&(
+        {viewusers && (isMobile ? trocarModal === "users" : trocarModal === "first") && (
           <Modal_taskUser
             id_task={task.id}
             refetch_taskuser={refetchTaskuser}
             closeModal={() => {
               Setviewusers(false)
-              if(isMobile) setTrocarModal("first")
+              if (isMobile) setTrocarModal("first")
             }}
-            
+
           />
         )}
         {/*caixa do modal*/}
-       {trocarModal === "first" &&( 
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[500px] sm:w-[600px] sm:p-4">
-          <div className="flex w-full h-full gap-2 flex-col">
-            <div className="flex w-full gap-5 items-center">
-              <button
-                className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
-                onClick={onClose}
-              >
-                <IoIosClose size={40} />
-              </button>
-              <p className="max-w-[200px] text-2xl font-bold line-clamp-2">
-                {task.Name}
-              </p>
-            </div>
+        {trocarModal === "first" && (
+          <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[300px] sm:p-4">
+            <div className="flex w-full h-full gap-2 flex-col">
+              <div className="flex w-full gap-5 items-center">
+                <button
+                  className=" cursor-pointer hover:scale-110 absolute top-3 right-3"
+                  onClick={onClose}
+                >
+                  <IoIosClose size={40} />
+                </button>
+                <p className="max-w-[200px] text-2xl font-bold line-clamp-2">
+                  {task.Name}
+                </p>
+              </div>
 
-            <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
-              {/*input escondido que é aberto pelo botão com clip*/}
-              <input
-                type="file" 
-                name=""
-                id=""
-                className="absolute z-50 mt-50 outline-none hidden"
-                ref={inputfile} //referência ao input type file
-                accept="image/*,.pdf,.doc,.docx" //tipos de arquivos que são aceitos
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    const f = e.target.files[0];
-                    Setfile(f);
-                    Setfilename(f.name);
+              <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
+                {/*input escondido que é aberto pelo botão com clip*/}
+                <input
+                  type="file"
+                  name=""
+                  id=""
+                  className="absolute z-50 mt-50 outline-none hidden"
+                  ref={inputfile} //referência ao input type file
+                  accept="image/*,.pdf,.doc,.docx" //tipos de arquivos que são aceitos
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const f = e.target.files[0];
+                      Setfile(f);
+                      Setfilename(f.name);
 
-                    //se for imagem, cria o preview
-                    if (f.type.startsWith("image/")) {
-                      Setpreview(URL.createObjectURL(f));
-                    } else {
-                      Setpreview(null);
+                      //se for imagem, cria o preview
+                      if (f.type.startsWith("image/")) {
+                        Setpreview(URL.createObjectURL(f));
+                      } else {
+                        Setpreview(null);
+                      }
                     }
-                  }
-                }}
-              />
+                  }}
+                />
 
                 {/* bara de botões*/}
                 {userrole === "3" ? (
                   <div></div>
                 ) : (
                   <div className="w-full mx-5 flex justify-around gap-3">
-                    <FaUserPlus
-                      className="hover:scale-110 cursor-pointer"
-                      onClick={() => {
-                        Setviewusers(!viewusers)
-                        if(isMobile)setTrocarModal("users")
-                      }}
-                      size={30}
-                    />
-                    {/*botão responsável por ativar o input type file*/}
-                    <button onClick={selectfile}>
-                      <GoPaperclip
+                    <div className="relative group flex flex-col items-center ">
+                      <FaUserPlus
                         className="hover:scale-110 cursor-pointer"
+                        onClick={() => {
+                          Setviewusers(!viewusers)
+                          if (isMobile) setTrocarModal("users")
+                        }}
                         size={30}
                       />
+                      <span
+                        className={hoverOptions}
+                      >Atribuita usuários</span>
+                    </div>
+                    {/*botão responsável por ativar o input type file*/}
+                    <button onClick={selectfile} className="relative group flex flex-col items-center">
+                      <GoPaperclip
+                        className="hover:scale-110 cursor-pointer transition-transform"
+                        size={30}
+                      />
+                      <span
+                        className={hoverOptions}
+                      >
+                        Coloque um arquivo
+                      </span>
                     </button>
-                    <IoMdPricetag
-                      className="hover:scale-110  cursor-pointer"
-                      size={30}
-                      onClick={() => {
-                        Settag("criar");
-                        if (isMobile) setTrocarModal("second");
-                      }}
-                    />
-                    <MdEdit
-                      className="cursor-pointer hover:scale-110"
-                      size={30}
-                      onClick={setcriar}
-                    />
-                    <FaTrashCan
-                      className="hover:scale-110 cursor-pointer"
-                      color="red"
-                      size={30}
-                      onClick={() => {
-                        setconfimModal(true);
-                      }}
-                    />
+                    <div className="relative group flex flex-col items-center">
+                      <IoMdPricetag
+                        className="hover:scale-110  cursor-pointer"
+                        size={30}
+                        onClick={() => {
+                          Settag("criar");
+                          if (isMobile) setTrocarModal("second");
+                        }}
+                      />
+                      <span
+                        className={hoverOptions}>Adicone uma Tag</span>
+                    </div>
+                    <div className="relative group flex flex-col items-center">
+                      <MdEdit
+                        className="cursor-pointer hover:scale-110"
+                        size={30}
+                        onClick={setcriar}
+                      />
+                      <span
+                        className={hoverOptions}>Edite sua tarefa</span>
+                    </div>
+                    <div className="relative group flex flex-col items-center">
+                      <FaTrashCan
+                        className="hover:scale-110 cursor-pointer"
+                        color="red"
+                        size={30}
+                        onClick={() => {
+                          setconfimModal(true);
+                        }}
+                      />
+                      <span
+                        className={hoverOptions}>Apague sua Tarefa</span>
+                    </div>
                   </div>
                 )}
 
@@ -218,13 +242,13 @@ function Modaltaf({
                     <p className="text-xl font-semibold">
                       Usuários responsáveis
                     </p>
-                    <TaskUser 
-                    taskusers={taskuser} 
-                    id_task={idSelected} 
-                    refetchs={() => {
-                      refetchTaskuser(); 
-                      refetchUsersWithNotInTask();
-                    }} />
+                    <TaskUser
+                      taskusers={taskuser}
+                      id_task={idSelected}
+                      refetchs={() => {
+                        refetchTaskuser();
+                        refetchUsersWithNotInTask();
+                      }} />
                   </div>
                 )}
                 {/* Descrição e Data */}
@@ -245,12 +269,12 @@ function Modaltaf({
                   </p>
                 </div>
 
-                {confirmModal && 
-                (<Confirm_delete 
-                  SetconfirmModal={setconfimModal} 
-                  SetconfirmAction={Delete_task}
-                />
-                )}
+                {confirmModal &&
+                  (<Confirm_delete
+                    SetconfirmModal={setconfimModal}
+                    SetconfirmAction={Delete_task}
+                  />
+                  )}
 
 
                 {tagvalue && (
