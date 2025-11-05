@@ -11,7 +11,7 @@ export function BlockRouter() {
           return <Navigate to= {hasPendingInvite} replace />;
       }
       
-      return <Navigate to="/quadros" replace />;
+      return <Navigate to="/" replace />;
   }
   
   return <Outlet />;

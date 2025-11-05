@@ -31,7 +31,7 @@ function Login() {
         navigate(InviteURL)
 
       } else {
-        navigate("/quadros")
+        navigate("/")
       }
 
     } catch (err) {

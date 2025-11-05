@@ -25,7 +25,7 @@ function Nav() {
 
       <div className="flex w-full gap-4 p-1 justify-between items-center relative">
         <Link
-          to="/quadros"
+          to="/"
           className="relative group flex flex-col items-center justify-center">
 
           <div className="relative flex flex-col items-center justify-center">
@@ -43,7 +43,7 @@ function Nav() {
           <div className="relative">
         
           </div>
-          <Link to="/" className="relative group flex flex-col items-center justify-center">
+          <Link to="/membros" className="relative group flex flex-col items-center justify-center">
             <div className="relative flex flex-col items-center justify-center">
               <MdPeople className="cursor-pointer text-white text-2xl sm:text-3xl" />
               <span className=" w-[90px] absolute top-full mt-1

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, replace } from "react-router-dom";
 import Cadastro from "./pages/cadastro/cadastro";
 import Login from "./pages/login/entrar";
 import Quadros from "./pages/quadros/quadros";
@@ -23,11 +23,12 @@ function RoutesApp() {
 
                 <Route element={<PrivateRoute />}>
                     <Route path="/" element={<Layout />}>
-                        <Route index element={<People />} />
+                        <Route path="/membros" element={<People />} />
                         <Route path="/times/:id" element={<Times />} />
                     </Route>
                         <Route path="/lista/:id" element={<Lista />} />
-                        <Route path="/quadros" element={<Quadros />} />
+                        <Route index element={<Quadros />} />
+
                 </Route>
             </Routes>
         </BrowserRouter>

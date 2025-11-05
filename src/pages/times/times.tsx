@@ -51,7 +51,7 @@ function Times() {
       const response = await TeamService.Delete_Team(id ?? '')
       if (response){
         refetch();
-        Navigate('/quadros')
+        Navigate('/')
       }      
     }
     catch (error){

@@ -72,7 +72,7 @@ function Side_bar() {
       </div>
 
       <Link
-        to={"/"}
+        to={"/membros"}
         className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-center ${
           !id ? "bg-[#7E7878] " : ""
         }`}
