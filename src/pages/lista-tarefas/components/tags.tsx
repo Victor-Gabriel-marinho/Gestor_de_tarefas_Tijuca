@@ -20,6 +20,10 @@ function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
         const formdata = new FormData(event.currentTarget)
 
         const Name = formdata.get("Name") as string
+        if (Name.trim().length === 0) {
+          setError("A tag precisa de um nome");
+          return;
+        }
         const Color = formdata.get("Color") as string
 
         const label =  {
@@ -41,9 +45,11 @@ function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
     }
 
     return (
-      <div className="flex flex-col text-center items-center justify-center bg-[#251F1F] p-3 w-[250px] h-[260px] rounded-[10px] shadow-2xl shadow-[#3b3232]">
+      <div className="flex flex-col text-center items-center justify-center bg-[#251F1F] ml-0 sm:ml-6 p-3 min-w-[250px] min-h-[260px] rounded-[10px] shadow-2xl shadow-[#3b3232]">
         <div className=" w-[240px] flex flex-row justify-between p-2">
-          <h2 className="text-white text-lg mb-2 font-semibold pt-1">Criar Tag</h2>
+          <h2 className="text-white text-lg mb-2 font-semibold pt-1">
+            Criar Tag
+          </h2>
           <button
             className=" text-amber-50 cursor-pointer hover:scale-110"
             onClick={onFechar}
@@ -53,7 +59,7 @@ function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
         </div>
         <form
           action=""
-          onSubmit={(event)=> Create_tag(event)}
+          onSubmit={(event) => Create_tag(event)}
           className="flex flex-col gap-3 space-y-1"
         >
           <input
@@ -65,20 +71,30 @@ function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
             onChange={(e) => Setinput(e.target.value)}
             placeholder="Nome da tag"
           />
-          <input type="color" name="Color" className="w-50 h-10 truncate text-white bg-blue-500"  />
+          <input
+            type="color"
+            name="Color"
+            className="w-50 h-10 cursor-pointer rounded-[10px] "
+          />
           <input
             type="submit"
             value="Definir tag"
             className="bg-green-500 text-white rounded-[5px] cursor-pointer"
           />
-          <input 
+
+          {error && (
+            <div className="w-full h-10 flex items-center justify-center bg-red-500 rounded-[5px] cursor-pointer" onClick={() => {setError("")}}>
+              <p className="text-white text-sm">{error}</p>
+            </div>
+          )}
+
+          <input
             type="button"
             value="Use Tags existentes"
-            className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-2 rounded mt-4"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-2 rounded-[10px] cursor-pointer"
             onClick={onVerCriadas}
-           />
+          />
         </form>
-        
       </div>
     );
 }

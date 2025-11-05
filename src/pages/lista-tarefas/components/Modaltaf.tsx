@@ -83,11 +83,7 @@ function Modaltaf({
     idSelected,
     id ?? ""
   );
-<<<<<<< HEAD
-  const[confirmModal,setconfimModal]= useState<boolean>(false)
-=======
   const [confirmModal, setconfimModal] = useState<boolean>(false);
->>>>>>> e5f59e3 (retirando modificações da dev)
   const Delete_task = async () => {
     try {
       
@@ -106,7 +102,7 @@ function Modaltaf({
 
   useEffect(() => {
     Setedittask(idSelected);
-  }, [task]);
+  }, [task, idSelected]);
 
   return (
     <>
@@ -124,7 +120,7 @@ function Modaltaf({
         )}
         {/*caixa do modal*/}
        {trocarModal === "first" &&( 
-        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[300px] sm:p-4">
+        <div className="bg-[#251F1F] max-w-[90vw] max-h-[90vh] h-[250px] w-[500px] overflow-auto rounded-[10px] text-white relative p-3 flex items-center justify-center flex-col shadow-2xl shadow-[#3b3232] sm:h-[500px] sm:w-[600px] sm:p-4">
           <div className="flex w-full h-full gap-2 flex-col">
             <div className="flex w-full gap-5 items-center">
               <button
@@ -217,7 +213,7 @@ function Modaltaf({
                     fetchTags();
                   }}
                 />
-                {taskuser &&(
+                {taskuser.length > 0 &&(
                   <div>
                     <p className="text-xl font-semibold">
                       Usuários responsáveis
@@ -256,25 +252,6 @@ function Modaltaf({
                 />
                 )}
 
-<<<<<<< HEAD
-                {/* Usuários relacionados a task */}
-                {taskuser && (
-                  <div>
-                    <p className="text-xl font-semibold">
-                      Usuários responsáveis
-                    </p>
-                    <TaskUser
-                      taskusers={taskuser}
-                      id_task={idSelected}
-                      refetchs={() => {
-                        refetchTaskuser();
-                        refetchUsersWithNotInTask();
-                      }}
-                    />
-                  </div>
-                )}
-=======
->>>>>>> e5f59e3 (retirando modificações da dev)
 
                 {tagvalue && (
                   <div className="m-1 ">

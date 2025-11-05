@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { LabelService } from "../../../api/services/labelService";
 import { useCheckTaskLabel } from "../../../hooks//Label_hooks/check_labeltask";
 import { IoIosClose } from "react-icons/io";
-import { useTags } from "../../../hooks/Label_hooks/get_alllabels_in_tasks";
 
 type TagCreatedProps = {
   fetchTagsTeam: () => void
@@ -42,8 +41,6 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
         } else {
           await AddTag(event,tagId);
         }
-      console.log("isDeleteMode:", isDeleteMode, "tagId:", tagId);
-
     }
     async function AddTag(event: React.MouseEvent<HTMLParagraphElement>, tagId:string){
       event.preventDefault()
@@ -65,7 +62,6 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
       }else if (exists){
         await LabelService.Remove_LabelTask(label)
         setActiveTags((prev)=> prev.filter((id)=> id !== tagId))
-        console.log("tag excluida")
       }else{
         await LabelService.Activate_LabelTask(label)
         setActiveTags((prev) => [...prev, tagId]);
@@ -90,7 +86,7 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
       }
     }
     return (
-        <div className="bg-[#251F1F] p-2 rounded-lg  text-white text-center sm:p-4">
+        <div className="bg-[#251F1F] p-2 rounded-lg  text-white text-center sm:ml-6 sm:p-4">
           <div className=" flex flex-row justify-between p-2">
             <h2 className="text-[22px] font-semibold pt-1 ">Tags do Time</h2>
               <button
@@ -101,7 +97,7 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
               </button>
           </div>
           <h3 className= {`text-[15px] font-semibold pb-4 ${isDeleteMode ? "text-red-700": "text-gray-400"}`}>{isDeleteMode ? "Selecione uma tag para deletar": "Selecione uma tag para adicionar"}</h3>
-            <div className="flex flex-wrap items-center justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[480px] sm:w-[480px]">
+            <div className="flex flex-wrap items-center justify-center gap-2 w-[270px] max-w-[270px] sm:max-w-[300px] sm:w-[480px]">
             {tagsteam
             .filter(tag => tag.isActive)
             .map((tag)=>{
