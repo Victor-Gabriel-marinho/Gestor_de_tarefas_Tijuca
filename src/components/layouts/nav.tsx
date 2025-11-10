@@ -27,39 +27,39 @@ function Nav() {
           to="/"
           className="relative group flex flex-col items-center justify-center">
 
-          <div className="relative flex flex-col items-center justify-center">
+          <div className="relative flex flex-col items-center justify-center pl-5">
 
-            <BsFillHouseFill className="cursor-pointer text-white text-xl sm:text-3xl "/>
+            <BsFillHouseFill className="cursor-pointer text-white text-2xl sm:text-3xl "/>
 
-            <span className=" w-[110px] absolute top-full mt-1
-            text-[15px] text-gray-400
+            <span className=" w-[75px] sm:w-[100px] absolute top-7 text-[10px]
+            sm:text-[15px] text-gray-400 ml-1
             opacity-0 group-hover:opacity-100 transition-opacity duration-300
             pointer-events-none bg-[#1f1a1a] p-1 rounded-[5px] text-center z-50"
             >Página Inicial</span>
           </div>
         </Link>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-5 items-center">
           <div className="relative">
         
           </div>
           <Link to="/membros" className="relative group flex flex-col items-center justify-center">
             <div className="relative flex flex-col items-center justify-center">
               <MdPeople className="cursor-pointer text-white text-2xl sm:text-3xl" />
-              <span className=" w-[90px] absolute top-full mt-1
-              text-[15px] text-gray-400
+              <span className=" w-[60px] sm:w-[90px] absolute top-full mt-1 text-[10px]
+              sm:text-[15px] text-gray-400
               opacity-0 group-hover:opacity-100 transition-opacity duration-300
               pointer-events-none bg-[#1f1a1a] p-0.5 rounded-[5px] text-center z-50"
               >Membros</span>
             </div>
           </Link>
-          <div className="relative">
+          <div className="relative pr-3">
             <button
               onClick={AbrirPerfil}
               className=" text-white text-xl cursor-pointer relative group flex items-center justify-center"
             >
-              <FaCircleUser className="w-6 h-6" />
-               <span className=" w-[60px] absolute top-7
-              text-[15px] text-gray-400
+              <FaCircleUser className="text-2xl" />
+               <span className=" w-[45px] sm:w-[60px] absolute top-7 text-[10px]
+              sm:text-[15px] text-gray-400
               opacity-0 group-hover:opacity-100 transition-opacity duration-300
               pointer-events-none bg-[#1f1a1a] p-0.5 rounded-[5px] text-center z-50"
               >Perfil</span>

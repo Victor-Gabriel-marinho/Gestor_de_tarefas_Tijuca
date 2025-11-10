@@ -53,7 +53,7 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
       style={style}
     >
       <div
-        className={`bg-white cursor-grab p-3 flex gap-1.5 justify-center items-center hover:opacity-90 hover:animate-pulse flex-wrap text-center rounded-[5px] ${isDragging ? "cursor-grabbing": ""}`}
+        className={`bg-white cursor-grab p-3 w-[150px] flex gap-1.5 justify-center items-center hover:opacity-90 hover:animate-pulse flex-wrap text-center rounded-[5px] sm:w-full ${isDragging ? "cursor-grabbing": ""}`}
        onClick={handleclick}
       >
       {/* Revela a div caso houver tags ou a task for atribuida ao usuário */}
@@ -72,7 +72,7 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
               {taskuser.some((user)=> user.id === payload?.sub) &&(
             <div className="relative flex flex-col items-center ">
                 <FaUserCircle className="text-[20px]"/>
-              <span className="absolute l-0 text-[10px] text-gray-400 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[#1f1a1a]  rounded-[5px] text-center"
+              <span className="absolute l-0 text-[10px] text-gray-400 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[#1f1a1a] rounded-[5px] text-center"
               >Responsável pela tarefa
               </span>  
             </div>

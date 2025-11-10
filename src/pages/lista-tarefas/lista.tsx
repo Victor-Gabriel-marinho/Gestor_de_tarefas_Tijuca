@@ -230,7 +230,7 @@ function Lista() {
             )}
           </div>
           <div className="flex flex-col w-full items-center justify-center gap-5">
-            <h2 className="text-white font-semibold text-3xl">
+            <h2 className="text-white font-semibold text-[29.5px] sm:text-3xl">
               Tarefas do time 📒
             </h2>
             <p className="text-white font-semibold text-xl">
