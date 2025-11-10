@@ -2,7 +2,6 @@ import { MdPeople } from "react-icons/md";
 import { BsFillHouseFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import type { ReactNode } from "react";
 import Perfil from "../commons/Perfil";
 import { FaCircleUser } from "react-icons/fa6";
 

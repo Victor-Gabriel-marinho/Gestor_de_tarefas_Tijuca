@@ -2,7 +2,6 @@ import Nav from "../../components/layouts/nav";
 import Modaltaf from "./components/Modaltaf";
 import { useEffect, useState } from "react";
 import { useFont } from "../../components/font";
-import Filtrar from "./components/filtertask";
 import { Get_Tasks } from "../../hooks//Tasks_hooks/get_Tasks";
 import { useParams } from "react-router-dom";
 import type { Task } from "../../api/types/TaskTypes/TaskDTO";
@@ -24,6 +23,7 @@ import { TaskService } from "../../api/services/TaskService";
 import Get_All_Status from "../../hooks//Status_hooks/Get_All_Status";
 import Dashboard from "./components/dashboard";
 import Get_Status_Default from "../../hooks/Status_hooks/Get_StatusDefaul";
+import type { FiltroDashboard } from "../../api/types/DashboardTypes/filtro";
 
 function Lista() {
   useFont(" 'Poppins', 'SansSerif' ");
@@ -137,11 +137,12 @@ function Lista() {
 
     if (filtro.status && filtro.status !== "todas") {
       let statusId = ""
+      console.log(filtro.status);
+      
 
-
-      if (filtro.status === "pendente") statusId = Status.Pen ?? "";
-      else if (filtro.status === "progresso") statusId = Status.Prog ?? "";
-      else if (filtro.status === "concluido") statusId = Status.Conc ?? "";
+      if (filtro.status === "Pendente") statusId = Status.Pen ?? "";
+      else if (filtro.status === "Progresso") statusId = Status.Prog ?? "";
+      else if (filtro.status === "Concluidas") statusId = Status.Conc ?? "";
 
       filteredtask = filteredtask.filter((t) => t.id_status === statusId);
     }
@@ -179,10 +180,6 @@ function Lista() {
         }
       })
     }
-
-      console.log("Filtro prioridade:", filtro.prioridade);
-console.log("Prioridades das tasks:", tasks.map(t => t.Priority));
-
    
     
       if (filtro.prioridade && filtro.prioridade != "todas") {
@@ -202,12 +199,12 @@ console.log("Prioridades das tasks:", tasks.map(t => t.Priority));
       else if (task.id_status === Status.Conc) completed.push(task);
     });
 
-
     setpen(pending);
     setprog(inProgress);
     setdone(completed);
 
   }, [tasks, filtro]);
+  
 
   return (
     <>
@@ -402,9 +399,9 @@ console.log("Prioridades das tasks:", tasks.map(t => t.Priority));
 
       <Dashboard
         id_team={id ? id : ""}
-        prazo={id ? id : ""}
-        onFiltroChange={() =>
-          setFiltro((prev) => ({ ...prev }))
+        prazo={id ? id : ""}  
+        onFiltroChange={(filtros: FiltroDashboard) =>
+          setFiltro(filtros)
         }
       />
 

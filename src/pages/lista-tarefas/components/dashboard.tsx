@@ -18,6 +18,7 @@ import {
 } from "chart.js";
 import { Loading_anim } from "../../../components/commons/loading";
 import {useState } from "react";
+import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 
 // Registrar módulos obrigatórios
 ChartJS.register(
@@ -36,7 +37,7 @@ ChartJS.register(
 type graficoProps = {
   id_team: string
   prazo: string
-  onFiltroChange?: (filtro: { prioridade?: string; prazo?: string; status?: string }) => void;
+  onFiltroChange: (filtro: FiltroDashboard) => void;
 }
 
 function GraficoBarras({id_team, onFiltroChange}: graficoProps) {
@@ -54,6 +55,11 @@ function GraficoBarras({id_team, onFiltroChange}: graficoProps) {
   /*preciso dos status das tarefas, prioridade ,  e também nome dos responsáveis */
   //integração
   
+    const [Filtros, setFiltros] = useState<FiltroDashboard>({
+    prioridade: "todas",
+    prazo: "todas",
+    status: "todas"
+  })
 const [prioridadeSelecionada, setPrioridadeSelecionada] = useState<string | null>(null)
 const [statusSelecionada, setStattusSelecionada] = useState<string | null>(null)
 const [prazoSelecionado, setPrazoSelecionado] = useState<string | null>(null)
@@ -71,11 +77,9 @@ const [prazoSelecionado, setPrazoSelecionado] = useState<string | null>(null)
   const prioridadeLabel = metrics?.tarPriority?.map(item => item.name) || []
   const prioridadeCount = metrics?.tarPriority?.map(item => item.count) || []
 
-  const usersLabel = metrics?.tarUsers?.map(item => item.name)  || []
-  const usersCount = metrics?.tarUsers?.map(item => item.count) || []
 
-
-
+  
+// Prazo
 const prazo = {
   labels: prazoLabel,
   datasets: [
@@ -92,10 +96,10 @@ const prazo = {
  const termClick = (_event: any, elements: any[]) => {
     if (!elements.length) return
     const index = elements[0].index
-    const prazoClicada = prazoLabel[index]
-    setPrazoSelecionado(prazoClicada)
-    onFiltroChange?.({prazo: prazoClicada})
-    console.log("prazo clicado:", prazoClicada)
+    const prazoclicado = prazoLabel[index]
+    setFiltros({...Filtros, prazo: prazoclicado})
+    onFiltroChange(Filtros)
+    console.log("prazo clicado:", prazoclicado)
   }
 
 const optionsPrazo = {
@@ -129,8 +133,8 @@ const optionsPrazo = {
     if (!elements.length) return
     const index = elements[0].index
     const statusClicada = statusLabel[index]
-    setStattusSelecionada(statusClicada)
-    onFiltroChange?.({status: statusClicada})
+    setFiltros({...Filtros, status: statusClicada})
+    onFiltroChange(Filtros)
     console.log("status clicada:", statusClicada)
   }
 
@@ -144,7 +148,7 @@ const optionsPrazo = {
       y: { beginAtZero: true },
     },
       onClick: statusClick
-  };
+  };  
 
   //prioridade
   const prioridade = {
@@ -162,8 +166,8 @@ const optionsPrazo = {
     if (!elements.length) return;
     const index = elements[0].index;
     const prioridadeClicada = prioridadeLabel[index]
-    setPrioridadeSelecionada(prioridadeClicada);
-     onFiltroChange?.({prioridade: prioridadeClicada});
+    setFiltros({...Filtros, prioridade: prioridadeClicada});
+    onFiltroChange(Filtros);
      console.log("Prioridade clicada:", prioridadeClicada);
   }
   
@@ -261,7 +265,7 @@ const optionsPrazo = {
         setPrioridadeSelecionada(null)
         setPrazoSelecionado(null)
         setStattusSelecionada(null)
-        onFiltroChange?.({prioridade: "todas", prazo: "todas", status: "todas"})
+        onFiltroChange({prioridade: "todas", prazo: "todas", status: "todas"})
       }}
     >
       Limpar filtros

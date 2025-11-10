@@ -14,7 +14,6 @@ type TagCreatedProps = {
 };
 
 function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, onFechar} : TagCreatedProps){
-    const[error, setError] = useState<string>("")
     const [activeTags, setActiveTags] = useState<string[]>([]);
     const {checkIfExist} = useCheckTaskLabel()
     const [isDeleteMode, setIsDeleteMode] = useState(false)
@@ -54,7 +53,7 @@ function TagCreated({tagsteam, onVoltar, idSelected, onDefinir, fetchTagsTeam, o
           const add_tag = await LabelService.Add_New_Label(label)
           setActiveTags((prev) => [...prev, tagId]);
           if(!add_tag){
-            setError("Erro ao adicionar tag")
+            console.log("Erro ao adicionar tag")
           }
         } catch (error) {
           console.log(error)

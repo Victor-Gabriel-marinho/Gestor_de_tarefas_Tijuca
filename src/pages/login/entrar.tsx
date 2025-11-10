@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFont } from "../../components/font";
-import card from "../../assets/card.png";
-import { AuthService } from "../../api/services/authService";
+/* import card from "../../assets/card.png";
+ */import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
 import { UseinviteStore, useAuthStore } from "../../store/Auth";
 
@@ -10,7 +10,6 @@ function Login() {
 
   const setToken = useAuthStore((state) => state.setToken);
   const InviteURL = UseinviteStore((state) => state.token)
-  const clearToken = UseinviteStore((state) => state.clearToken)
 
   const navigate = useNavigate();
 
@@ -83,8 +82,8 @@ function Login() {
         </div>
 
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1">
-          <img src={card} alt="" className="w-[448px] h-[448px]" />
-        </div>
+{/*           <img src={card} alt="" className="w-[448px] h-[448px]" />
+ */}        </div>
       </div>
     </>
   );

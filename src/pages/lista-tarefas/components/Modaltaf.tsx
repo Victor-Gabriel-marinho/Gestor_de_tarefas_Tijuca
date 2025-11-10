@@ -8,7 +8,7 @@ import { FaTrashCan } from "react-icons/fa6";
 import { FaUserPlus } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useFont } from "../../../components/font";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Tag from "./tags";
 import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../../../api/services/TaskService";
@@ -69,9 +69,6 @@ function Modaltaf({
   const { tagsTeam, fetchTagsTeam } = useTagsTeam(id ? id : "");
 
   const [tag, Settag] = useState<string>("");
-  const [tagvalue, Settagvalue] = useState<string>("");
-
-  const [edittask, Setedittask] = useState<string>(task.Name);
 
   const [trocarModal, setTrocarModal] = useState<"first" | "second" | "users" | null>("first");
   const [viewusers, Setviewusers] = useState<boolean>(false);
@@ -101,10 +98,6 @@ function Modaltaf({
   };
   /* Estilo do hover */
   const hoverOptions = /* tw */"absolute top-full mt-1 text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-black p-1 rounded-[5px] text-center"
-
-  useEffect(() => {
-    Setedittask(idSelected);
-  }, [task, idSelected]);
 
   return (
     <>
@@ -275,15 +268,6 @@ function Modaltaf({
                     SetconfirmAction={Delete_task}
                   />
                   )}
-
-
-                {tagvalue && (
-                  <div className="m-1 ">
-                    <span className="text-white bg-blue-500 p-1 rounded-[5px]">
-                      {tagvalue}
-                    </span>
-                  </div>
-                )}
 
                 {/*imprimi o nome do arquivo na tela*/}
                 {filename && (

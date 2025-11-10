@@ -1,4 +1,4 @@
-import { useDraggable, useDroppable } from "@dnd-kit/core";
+import { useDroppable } from "@dnd-kit/core";
 import type { ListProps } from "../ListTar";
 import type React from "react";
 import ListTar from "../ListTar";
