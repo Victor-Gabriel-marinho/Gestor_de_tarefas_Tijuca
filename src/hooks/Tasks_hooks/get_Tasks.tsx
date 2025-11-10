@@ -30,5 +30,5 @@ export function Get_Tasks(idTeam: string) {
         fetchTasks(); 
     }, [fetchTasks])
     
-    return {tasks, refetchTasks: fetchTasks};
+    return {tasks,loading , refetchTasks: fetchTasks};
 }

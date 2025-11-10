@@ -10,7 +10,6 @@ function Login() {
 
   const setToken = useAuthStore((state) => state.setToken);
   const InviteURL = UseinviteStore((state) => state.token)
-  const clearToken = UseinviteStore((state) => state.clearToken)
 
   const navigate = useNavigate();
 

@@ -1,7 +1,6 @@
 import { useState, useEffect} from "react";
 import { AiOutlineTeam } from "react-icons/ai";
 import { inviteService } from "../../api/services/inviteService";
-import type { ReturnaceptDTO } from "../../api/types/inviteTypes/ReturnaceptDTO";
 import { useParams, useNavigate } from "react-router-dom";
 import { decodeJWT } from "../../utils/decodeJWT";
 import { Loading_anim } from "../../components/commons/loading";
@@ -11,7 +10,6 @@ import { UseinviteStore, useAuthStore } from "../../store/Auth";
 
 function InviteTime() {
   const [teamData, setTeamData] = useState<Team | null>(null);
-  const [time, setTime] = useState<ReturnaceptDTO | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { token } = useParams<{ token: string }>();

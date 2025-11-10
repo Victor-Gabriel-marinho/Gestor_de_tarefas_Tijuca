@@ -6,17 +6,11 @@ type PopUpProps = {
   setpopUp: React.Dispatch<React.SetStateAction<string>>;
   ClassName?: string;
   SetRoleName: (role: string) => void;
-  SetRole_id: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function PopUp ({setpopUp, ClassName="", SetRoleName,SetRole_id}: PopUpProps) {
+function PopUp ({setpopUp, ClassName="", SetRoleName}: PopUpProps) {
 
   function alterarRole (role: string){
-    if (role === "Gestor") {
-      SetRole_id("2")
-    } else {
-      SetRole_id("3")
-    }
     SetRoleName(role);
     setpopUp("");
   }

@@ -16,7 +16,6 @@ type ModalProps = {
 
 function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [popUp, setpopUp] = useState<string>("");
-  const [Role_id, SetRole_id] = useState<string>("3");
   const [loading, Setloading] = useState<boolean>(false);
   const [userroles, SetUserroles] = useState<Record<string, string>>({});
   const [Email, setEmail] = useState<string>("");
@@ -200,7 +199,6 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                           popUp={popUp}
                           setpopUp={setpopUp}
                           SetRoleName={(role) => alterarRole(user.id, role)}
-                          SetRole_id={SetRole_id}
                         />
                       )}
                     </div>

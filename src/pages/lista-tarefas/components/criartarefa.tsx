@@ -16,7 +16,7 @@ type CreateProps = {
   Status?: StatusDefault
 };
 
-function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, refetch_Status, Status }: CreateProps) {
+function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, refetch_Status }: CreateProps) {
   const [error, setError] = useState<string>("");
   
 

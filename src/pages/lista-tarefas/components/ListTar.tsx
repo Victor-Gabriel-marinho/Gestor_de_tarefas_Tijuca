@@ -1,4 +1,3 @@
-import { FiMinimize2 } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 
 type MinimizeKey =
