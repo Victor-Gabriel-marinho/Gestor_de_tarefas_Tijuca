@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useAuthStore } from "../store/Auth";
 
+const local= "localhost:3000"
+/* const server = "192.168.0.159:3000" */
 const api = axios.create({
-    baseURL: "http://127.0.0.1:3000"
+    baseURL: `http://${local}`
 })
 
 api.interceptors.response.use((response) => response, (error)=> {
