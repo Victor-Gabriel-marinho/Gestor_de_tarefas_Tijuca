@@ -5,12 +5,15 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    host:"0.0.0.0",
+  build: {
+    chunkSizeWarningLimit: 1000, 
   },
-   resolve: {
+  server: {
+    host: "0.0.0.0",
+  },
+  resolve: {
     alias: {
-      '@': '/src',
+      "@": "/src",
     },
   },
-})
+});

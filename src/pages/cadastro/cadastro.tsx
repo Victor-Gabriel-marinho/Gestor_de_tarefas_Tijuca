@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
-import card from "../../assets/card.png";
-import { useState, type FormEvent } from "react";
+/* import card from "../../assets/card.png";
+ */import { useState, type FormEvent } from "react";
 import { UserService } from "../../api/services/userService";
 import { IoCloseOutline } from "react-icons/io5";
 import { validateEmail } from "../../utils/isEmail";
@@ -126,8 +126,8 @@ function Cadastro() {
         </div>
 
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1 ">
-          <img src={card} alt="" className="max-w-md w-full" />
-        </div>
+{/*           <img src={card} alt="" className="max-w-md w-full" />
+ */}        </div>
       </div>
     </>
   );
