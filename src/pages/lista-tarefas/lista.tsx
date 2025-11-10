@@ -402,7 +402,7 @@ function Lista() {
         prazo={id ? id : ""}  
         onFiltroChange={(filtros: FiltroDashboard) =>
           setFiltro(filtros)
-        }
+          }
       />
 
 

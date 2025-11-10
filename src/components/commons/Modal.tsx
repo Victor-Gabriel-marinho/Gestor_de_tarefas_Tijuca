@@ -3,7 +3,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { BiSolidDownArrow } from "react-icons/bi";
 import PopUp from "../../pages/times/components/PopUp.js";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
 import { inviteService } from "../../api/services/inviteService.js";
@@ -26,8 +26,8 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
     Colaborador: "3",
   };
   const [error, seterror] = useState<string>("");
-  const location = useLocation();
-  const team_id = location.state?.team.id;
+  const {id} = useParams();
+  const team_id = id ?? ""  
 
   function HandlePopUp(event: any) {
     const id = event.currentTarget.id;
@@ -59,7 +59,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
     const CreateInvite = {
       id_team: team_id,
       recipients: recipientsArray,
-    };
+    };    
 
      const response = await inviteService.SendInvite(CreateInvite);
       if (response) {

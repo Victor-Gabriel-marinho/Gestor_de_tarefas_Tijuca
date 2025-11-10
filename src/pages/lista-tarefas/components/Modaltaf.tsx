@@ -2,11 +2,6 @@
   /*ícones usados no modal*/
 }
 import { IoIosClose } from "react-icons/io";
-import { GoPaperclip } from "react-icons/go";
-import { IoMdPricetag } from "react-icons/io";
-import { FaTrashCan } from "react-icons/fa6";
-import { FaUserPlus } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
 import { useFont } from "../../../components/font";
 import { useState, useRef } from "react";
 import Tag from "./tags";
@@ -22,6 +17,8 @@ import { Get_Taskuser } from "../../../hooks/Tasks_hooks/Get_TaskUser";
 import { get_UsersWithNotInTask } from "../../../hooks/User_hooks/get_UsersWithNotInTask";
 import { TaskUser } from "./TaskUser";
 import Confirm_delete from "../../../components/commons/confirmDelete";
+import { Buttons_Bar } from "./ButtonBar";
+import { DescriptionTask } from "./DescriptionTask";
 
 type ModalProps = {
   task: Task;
@@ -59,11 +56,7 @@ function Modaltaf({
   {
     /*abre o seletor de arquivos ao clicar no botão com o clip*/
   }
-  const selectfile = () => {
-    if (inputfile.current) {
-      inputfile.current.click();
-    }
-  };
+
   const { id } = useParams();
   const { tags, fetchTags } = useTags(idSelected);
   const { tagsTeam, fetchTagsTeam } = useTagsTeam(id ? id : "");
@@ -96,8 +89,7 @@ function Modaltaf({
       console.log("erro ao fazer requisição", error);
     }
   };
-  /* Estilo do hover */
-  const hoverOptions = /* tw */"absolute top-full mt-1 text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-black p-1 rounded-[5px] text-center"
+
 
   return (
     <>
@@ -158,82 +150,39 @@ function Modaltaf({
                 {userrole === "3" ? (
                   <div></div>
                 ) : (
-                  <div className="w-full mx-5 flex justify-around gap-3">
-                    <div className="relative group flex flex-col items-center ">
-                      <FaUserPlus
-                        className="hover:scale-110 cursor-pointer"
-                        onClick={() => {
-                          Setviewusers(!viewusers)
-                          if (isMobile) setTrocarModal("users")
-                        }}
-                        size={30}
-                      />
-                      <span
-                        className={hoverOptions}
-                      >Atribuita usuários</span>
-                    </div>
-                    {/*botão responsável por ativar o input type file*/}
-                    <button onClick={selectfile} className="relative group flex flex-col items-center">
-                      <GoPaperclip
-                        className="hover:scale-110 cursor-pointer transition-transform"
-                        size={30}
-                      />
-                      <span
-                        className={hoverOptions}
-                      >
-                        Coloque um arquivo
-                      </span>
-                    </button>
-                    <div className="relative group flex flex-col items-center">
-                      <IoMdPricetag
-                        className="hover:scale-110  cursor-pointer"
-                        size={30}
-                        onClick={() => {
-                          Settag("criar");
-                          if (isMobile) setTrocarModal("second");
-                        }}
-                      />
-                      <span
-                        className={hoverOptions}>Adicone uma Tag</span>
-                    </div>
-                    <div className="relative group flex flex-col items-center">
-                      <MdEdit
-                        className="cursor-pointer hover:scale-110"
-                        size={30}
-                        onClick={setcriar}
-                      />
-                      <span
-                        className={hoverOptions}>Edite sua tarefa</span>
-                    </div>
-                    <div className="relative group flex flex-col items-center">
-                      <FaTrashCan
-                        className="hover:scale-110 cursor-pointer"
-                        color="red"
-                        size={30}
-                        onClick={() => {
-                          setconfimModal(true);
-                        }}
-                      />
-                      <span
-                        className={hoverOptions}>Apague sua Tarefa</span>
-                    </div>
-                  </div>
+                  <Buttons_Bar 
+                  setcriar={setcriar}
+                  Settag={Settag}
+                  isMobile={isMobile}
+                  setTrocarModal={setTrocarModal}
+                  viewusers={viewusers}
+                  Setviewusers={Setviewusers}
+                  inputfile={inputfile}
+                  setconfimModal={setconfimModal}
+                  />
                 )}
 
-                <Tags
-                  tagclassName="rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer"
-                  idSelected={idSelected}
-                  fetchTagsTask={fetchTags}
-                  tags={tags}
-                  onDefinir={() => {
-                    Settag("criar");
-                    fetchTags();
-                  }}
-                />
+                {tags.length>0 &&
+                <div className="text-center flex flex-col gap-2">
+                  <p className="text-lg font-semibold">
+                    Tags associadas:
+                  </p>
+                  <Tags
+                    tagclassName="rounded-[10px] p-1 shadow-xl shadow-black/40 cursor-pointer trasition-all hover:opacity-80 hover:scale-105"
+                    idSelected={idSelected}
+                    fetchTagsTask={fetchTags}
+                    tags={tags}
+                    onDefinir={() => {
+                      Settag("criar");
+                      fetchTags();
+                    }}
+                  />
+                </div>}
+
                 {taskuser.length > 0 &&(
-                  <div>
-                    <p className="text-xl font-semibold">
-                      Usuários responsáveis
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-semibold">
+                      Usuários responsáveis:
                     </p>
                     <TaskUser
                       taskusers={taskuser}
@@ -244,23 +193,10 @@ function Modaltaf({
                       }} />
                   </div>
                 )}
+                
                 {/* Descrição e Data */}
-                <div className="flex items-start justify-center flex-col gap-3 w-full">
-                  <p className="text-sm">
-                    <span className="font-semibold text-xl ">Descrição: </span>
-                    <span className=" max-w-[350px]">{task.Content}</span>
-                  </p>
-                  <p className="flex text-lg gap-2">
-                    <span className="font-semibold text-xl">
-                      Data de entrega:
-                    </span>
-                    {task.EndDate.toString().split("T")[0].replaceAll("-", "/")}
-                  </p>
-                  <p className="flex text-lg gap-2">
-                    <span className="font-semibold text-xl">Prioridade:</span>
-                    {task.Priority}
-                  </p>
-                </div>
+                  <DescriptionTask 
+                  task={task}/>
 
                 {confirmModal &&
                   (<Confirm_delete
