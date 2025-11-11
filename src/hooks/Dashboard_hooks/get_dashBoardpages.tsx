@@ -19,7 +19,6 @@ export function useDashboardPages(id_team: string) {
     try {
       const data = await dashboardService.getStatus(id_team);
       setMetrics(data);
-      console.log(data.tarPriority)
     } catch (err) {
       setErro("Não foi possível encontrar as métricas");
     } finally {
