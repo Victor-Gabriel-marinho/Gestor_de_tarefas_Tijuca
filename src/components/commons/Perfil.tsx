@@ -4,6 +4,10 @@ import { useInforUsers } from "../../hooks/User_hooks/get_inforUsers";
 import { useState } from "react";
 import Confirm_delete from "./confirmDelete";
 
+
+
+
+
 function Perfil() {
   const [confimModal, SetconfirmModal] = useState<boolean>(false)
   const clearToken = useAuthStore((state) => state.clearToken);
@@ -40,7 +44,7 @@ function Perfil() {
           <p>Suas Tarefas:{taskCount}</p>
         </div>
       </div>
-      {confimModal && <Confirm_delete SetconfirmModal={SetconfirmModal} SetconfirmAction={delete_Token}/>}
+      {confimModal && <Confirm_delete texto="Deseja sair do conta?" SetconfirmModal={SetconfirmModal} SetconfirmAction={delete_Token}/>}
     </>
   );
 }

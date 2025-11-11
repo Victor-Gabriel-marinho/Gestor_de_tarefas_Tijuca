@@ -160,7 +160,7 @@ function Times() {
         />
       )}
 
-      {modalconfirm && <Confirm_delete SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
+      {modalconfirm && <Confirm_delete texto="Deseja excluir esse time?" SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
     </div>
   );
 }

@@ -3,7 +3,7 @@
 }
 import { IoIosClose } from "react-icons/io";
 import { useFont } from "../../../components/font";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect} from "react";
 import Tag from "./tags";
 import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 import { TaskService } from "../../../api/services/TaskService";
@@ -28,6 +28,8 @@ type ModalProps = {
   onClose: () => void;
   refetchtask: (() => Promise<void>) | undefined;
   refetchStatus?: (() => Promise<void>) | undefined
+  texto: string
+  isOpen: boolean
 };
 
 function Modaltaf({
@@ -37,7 +39,8 @@ function Modaltaf({
   idSelected,
   refetchtask,
   userrole,
-  refetchStatus
+  refetchStatus,
+  isOpen
 }: ModalProps) {
   useFont(" 'Poppins', 'SansSerif' ");
 
@@ -90,6 +93,19 @@ function Modaltaf({
     }
   };
 
+useEffect(() => {
+  if (isOpen) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.style.overflow = ""
+  }
+
+  return () => {
+    document.body.style.overflow = ""
+  }
+}, [isOpen])
+
+if (!isOpen) return null
 
   return (
     <>
@@ -116,9 +132,9 @@ function Modaltaf({
                 >
                   <IoIosClose size={40} />
                 </button>
-                <p className="max-w-[200px] text-2xl font-bold line-clamp-2">
-                  {task.Name}
-                </p>
+                  <p className="break-words whitespace-normal  max-w-[300px] truncate text-2xl font-bold line-clamp-2 ">
+                    {task.Name}
+                  </p>
               </div>
 
               <div className="w-full h-full flex items-center flex-col gap-6 p-5 justify-start">
@@ -199,7 +215,8 @@ function Modaltaf({
                   task={task}/>
 
                 {confirmModal &&
-                  (<Confirm_delete
+                  (<Confirm_delete 
+                    texto="Deseja excluir essa tarefa?"
                     SetconfirmModal={setconfimModal}
                     SetconfirmAction={Delete_task}
                   />

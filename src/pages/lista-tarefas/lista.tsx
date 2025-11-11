@@ -220,7 +220,7 @@ function Lista() {
 
   return (
     <>
-      <div className="bg-[#1F2937] min-h-screen w-screen overflow-auto">
+      <div className={`bg-[#1F2937] min-h-screen w-screen overflow-auto overflow-x-hidden ${modaltask? 'oveflow-y-hidden' : '' }`}>
         {/* Navbar */}
         <Nav/>
 
@@ -374,6 +374,8 @@ function Lista() {
         {/* Modals e Dashboard */}
         {modaltask && select && (
           <Modaltaf
+            isOpen={modaltask ? true : false}
+            texto=""
             userrole={userRole?.id}
             task={select}
             onClose={() => Setmodaltask(false)}

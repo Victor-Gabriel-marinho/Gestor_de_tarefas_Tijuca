@@ -53,12 +53,12 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
       style={style}
     >
       <div
-        className={`bg-white cursor-grab p-3 w-[150px] flex gap-1.5 justify-center items-center hover:opacity-90 hover:animate-pulse flex-wrap text-center rounded-[5px] sm:w-full ${isDragging ? "cursor-grabbing": ""}`}
+        className={`bg-white cursor-grab p-3 flex gap-1.5 justify-center items-center hover:opacity-90 flex-wrap text-center rounded-[5px] overflow-x-hidden sm:w-[200px]  line-clamp-1 break-words whitespace-normal ${isDragging ? "cursor-grabbing": ""}`}
        onClick={handleclick}
       >
       {/* Revela a div caso houver tags ou a task for atribuida ao usuário */}
        {(tags.length > 0 || taskuser.some((user)=> user.id === payload?.sub))  && ( 
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row justify-between items-center sm:w-[200px]">
             {tags?.length > 0 && (
               <Tags
               containerClassName={"rounded-2xl flex flex-wrap justify-center items-center gap-2 w-full sm:max-w-[200px] sm:w-[190px] font-semibold "}
@@ -79,7 +79,7 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
               )}
 
         </div>)}
-        {taskname}
+        <p className="line-clamp-1 sm:line-clamp-2 sm:break-words sm:whitespace-normal sm:max-w-[200px] overflow-hidden">{taskname}</p>
       </div>
 
     </div>
