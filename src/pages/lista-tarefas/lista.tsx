@@ -65,16 +65,15 @@ function Lista() {
       ?.id,
     Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0]
       ?.id,
-    Atra: GetStatusDefault?.filter((Status) => Status.Name === "Atrasadas")[0]
+    Atra: GetStatusDefault?.filter((Status) => Status.Name === "Atrasada")[0]
       ?.id,
     Canc: GetStatusDefault?.filter((Status) => Status.Name === "Cancelada")[0]
       ?.id,
     Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0]?.id,
   };
 
-
   const { id } = useParams();
-  const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
+  const { tasks, refetchTasks } = id ? Get_Tasks(id) : {}; 
   const { userRole } = Get_userRole(id ?? "");
 
   const { status, refetch_Status } = Get_All_Status(id!)
@@ -82,6 +81,7 @@ function Lista() {
   const [pen, setpen] = useState<Task[]>();
   const [prog, setprog] = useState<Task[]>();
   const [done, setdone] = useState<Task[]>();
+  const [other, setother] = useState<Task[]>();
 
   // Sensores (Permite Scroll Vertical)
   const sensors = useSensors(
@@ -128,25 +128,36 @@ function Lista() {
 
   const activeTask = findTaskById(activeId);
 
-  const [filtro, setFiltro] = useState<{ status?: string; prazo?: string; prioridade?:string}>({});
-  useEffect(() => {
-    if (!tasks || !Status?.Pen || !Status?.Prog || !Status?.Conc) return;
-    if (!tasks) return;
+  const [filtro, setFiltro] = useState<FiltroDashboard>({
+    prioridade: "todas",
+    prazo: "todas",
+    status: "todas",
+  });
 
-    let filteredtask = tasks
 
-    if (filtro.status && filtro.status !== "todas") {
-      let statusId = ""
-      console.log(filtro.status);
-      
+ useEffect(() => {    
+  if (!tasks) return;
 
-      if (filtro.status === "Pendente") statusId = Status.Pen ?? "";
-      else if (filtro.status === "Progresso") statusId = Status.Prog ?? "";
-      else if (filtro.status === "Concluidas") statusId = Status.Conc ?? "";
+  let filteredtask = tasks;
 
-      filteredtask = filteredtask.filter((t) => t.id_status === statusId);
-    }
-    if (filtro.prazo && filtro.prazo !== "todas") {
+  if (filtro.status !== "todas") {
+    const statusMap: Record<string, keyof typeof Status> = {
+      Pendente: "Pen",
+      Progresso: "Prog",
+      Concluido: "Conc",
+      Atrasada: "Atra",
+      Cancelada: "Canc",
+      Revisão: "Rev",
+    };    
+
+    const statusKey = statusMap[filtro.status ?? ""];        
+    const statusId = Status[statusKey] ?? "";    
+
+    filteredtask = filteredtask?.filter((t) => t.id_status === statusId);
+    
+  }
+
+    if (filtro.prazo !== "todas") {
 
       const now = new Date();
 
@@ -160,18 +171,18 @@ function Lista() {
 
         switch (filtro.prazo) {
 
-          case "dia":
+          case "Dia":
             return isSameDay(end, now);
 
-          case "atraso":
+          case "Atrasadas":
             return end < now;
 
-          case "semana":
+          case "Semana":
             const oneWeek = new Date(now);
             oneWeek.setDate(now.getDate() + 7);
             return end >= now && end <= oneWeek;
 
-          case "mes":
+          case "Mês":
             const oneMonth = new Date(now);
             oneMonth.setMonth(now.getMonth() + 1);
             return end >= now && end <= oneMonth;
@@ -181,27 +192,28 @@ function Lista() {
       })
     }
    
-    
-      if (filtro.prioridade && filtro.prioridade != "todas") {
+      if (filtro.prioridade != "todas") {
         filteredtask = filteredtask.filter( 
           (t) => t.Priority === filtro.prioridade
         )
   }
 
-
     const pending: Task[] = [];
     const inProgress: Task[] = [];
     const completed: Task[] = [];
+    const others: Task[] = [];
 
-    filteredtask.forEach((task) => {
+    filteredtask?.forEach((task) => {
       if (task.id_status === Status.Pen) pending.push(task);
       else if (task.id_status === Status.Prog) inProgress.push(task);
       else if (task.id_status === Status.Conc) completed.push(task);
-    });
+      else others.push(task);
+    });    
 
     setpen(pending);
     setprog(inProgress);
     setdone(completed);
+    setother(others)
 
   }, [tasks, filtro]);
   
@@ -219,7 +231,7 @@ function Lista() {
             ) : (
               <div className="flex justify-center sm:justify-start">
                 <button
-                  className="bg-[#251F1F] text-white p-3 rounded-[10px]  text-center hover:bg-[#3d3434] cursor-pointer"
+                  className="bg-[#251F1F] text-white p-3 rounded-[10px]  text-center hover:bg-[#3d3434] hover:scale-105 transition-all cursor-pointer"
                   onClick={() => {
                     Setcriar("Criar");
                   }}
@@ -315,17 +327,7 @@ function Lista() {
 
                 {status?.map((status) => {
                   const key = normalizeKey(status.Name);
-                  const otherTasks =
-                    tasks?.filter(
-                      (task) =>
-                        task.id_status === status.id &&
-                        status.id !== Status.Pen &&
-                        status.id !== Status.Prog &&
-                        status.id !== Status.Conc
-                    ) || [];
-
-                  if (otherTasks.length === 0) return null;
-
+                  
                   return (
                     <DroppableLane
                       key={status.id}
@@ -336,7 +338,8 @@ function Lista() {
                       minimized={minimize[key]}
                       onToggleMinimize={toggleMinimize}
                     >
-                      {otherTasks.map((task) => (
+                      {other?.map((task) => (
+                      task.id_status === status.id) && (
                         <DraggableTask
                           idSelected={task.id}
                           key={task.id}
@@ -400,11 +403,9 @@ function Lista() {
       <Dashboard
         id_team={id ? id : ""}
         prazo={id ? id : ""}  
-        onFiltroChange={(filtros: FiltroDashboard) =>
-          setFiltro(filtros)
-        }
+        setFiltro={setFiltro}
+        Filtro={filtro}
       />
-
 
     </>
   );

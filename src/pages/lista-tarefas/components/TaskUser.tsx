@@ -21,11 +21,13 @@ export const TaskUser = ({taskusers, id_task, refetchs}:TaskUserProps) => {
   };
 
     return (
-      <div className="flex flex-row gap-3 cursor-pointer">
+      <div className="flex flex-row flex-wrap items-center justify-center gap-3 cursor-pointer">
         {taskusers.map((taskuser) => (
           <div
-            className="bg-[#1F2937] p-2 rounded-xl"
-            onClick={() => {Remove_Taskuser(id_task, taskuser.id)}}
+            className=" bg-[#1F2937] p-2 rounded-xl shadow-xl shadow-black/40 text-white hover:opacity-70 hover:scale-105 transition-all"
+            onClick={() => {
+              Remove_Taskuser(id_task, taskuser.id);
+            }}
           >
             {taskuser.Name}
           </div>

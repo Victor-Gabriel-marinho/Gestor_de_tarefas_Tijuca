@@ -47,7 +47,7 @@ function Quadros() {
              
             <div
               onClick={() => Setcriar(!criar)}
-              className="w-30 h-30 sm:w-40 sm:h-40 bg-[#131733] rounded-2xl flex items-center justify-center hover:bg-[#2d304b] hover:scale-100 cursor-pointer"
+              className="w-30 h-30 sm:w-40 sm:h-40 bg-[#131733] rounded-2xl flex items-center justify-center hover:bg-[#2d304b] hover:scale-100 transition-all cursor-pointer"
             >
               <p className="text-white">Criar quadro</p>
             </div>
@@ -58,7 +58,7 @@ function Quadros() {
               Teams.map((team) => (
                 <Link
                   to={`/lista/${team.id}`}
-                  className="w-30 h-30 sm:w-40 sm:h-40 bg-white rounded-2xl hover:scale-110 flex items-end"
+                  className="w-30 h-30 sm:w-40 sm:h-40 bg-white rounded-2xl hover:scale-105 transition-all flex items-end"
                   key={team.id}
                 >
                   <div className="">
