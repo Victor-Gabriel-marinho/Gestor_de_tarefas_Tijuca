@@ -36,13 +36,12 @@ deploy:
         '
       "
 
-    # Pega a versão atual do deploy
-    - export DEPLOY_VERSION=$(ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "cd /var/www/${CI_PROJECT_NAME} && git describe --abbrev=0")
+    # Pegando versão do deploy
+    - export DEPLOY_VERSION=$(ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "cd /var/www/${CI_PROJECT_NAME} && git rev-parse --short HEAD")
 
-    # (Opcional) Envia notificação via WhatsApp
-    - curl -X POST -H "Content-Type:application/json" \
-      -d '{"token":"'${BOT_WPP_TOKEN}'", "type":"deploy", "data":{"projeto":"'${CI_PROJECT_NAME}'","versao":"'$DEPLOY_VERSION'"}}' \
-      ${BOT_WPP_HOST}
+    # Enviando mensagem via WhatsApp
+    - curl -X POST -H "Content-Type:application/json" -d "{\"token\":\"${BOT_WPP_TOKEN}\", \"type\":\"deploy\", \"data\":{\"projeto\":\"${CI_PROJECT_NAME}\",\"versao\":\"${DEPLOY_VERSION}\"}}" ${BOT_WPP_HOST}
+
 
 rollback:
   stage: rollback
