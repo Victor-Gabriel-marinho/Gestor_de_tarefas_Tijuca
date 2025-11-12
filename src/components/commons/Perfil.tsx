@@ -44,7 +44,7 @@ function Perfil() {
           <p>Suas Tarefas:{taskCount}</p>
         </div>
       </div>
-      {confimModal && <Confirm_delete texto="Deseja sair do conta?" SetconfirmModal={SetconfirmModal} SetconfirmAction={delete_Token}/>}
+      {confimModal && <Confirm_delete funcao="Sair" texto="Deseja sair do conta?" SetconfirmModal={SetconfirmModal} SetconfirmAction={delete_Token}/>}
     </>
   );
 }

@@ -3,9 +3,10 @@
    SetconfirmModal: React.Dispatch<React.SetStateAction<boolean>>;
    SetconfirmAction: () => void;
    texto:string
+   funcao: string
  };
  
- function Confirm_delete({SetconfirmModal,SetconfirmAction, texto}: confirmProps) {
+ function Confirm_delete({SetconfirmModal,SetconfirmAction, texto, funcao}: confirmProps) {
           
    function confirm_false() { 
        SetconfirmModal(false)
@@ -30,7 +31,7 @@
                 className="bg-red-700 text-white text-sm sm:text-xl h-10 w-40 rounded-[10px] flex items-center justify-center font-semibold cursor-pointer"
                 onClick={confirm_true}
               >
-                Deletar
+                {funcao}
               </div>
               <div
                 className="bg-[#251F1F] text-white text-sm sm:text-xl h-10 w-40 rounded-[10px] flex justify-center items-center font-semibold cursor-pointer"

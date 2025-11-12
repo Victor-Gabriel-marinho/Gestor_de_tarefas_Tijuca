@@ -28,8 +28,8 @@ function Times() {
   const token = useAuthStore((state) => state.token);
   const payload = decodeJWT(token);
 
-  const { users, loading, refetch } = Get_usersInTeams(id ?? "");
-  const { userRole, loadingRole } = Get_userRole(id ?? "");
+  const { users, loading, refetch } = Get_usersInTeams(id ?? "");  
+  const { userRole, loadingRole } = Get_userRole(id ?? "");  
 
   const { first_team } = Get_teams();
 
@@ -160,7 +160,7 @@ function Times() {
         />
       )}
 
-      {modalconfirm && <Confirm_delete texto="Deseja excluir esse time?" SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
+      {modalconfirm && <Confirm_delete  funcao="Excluir" texto="Deseja excluir esse time?" SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
     </div>
   );
 }

@@ -21,8 +21,8 @@ function Side_bar() {
       <div
         className={`${
           hiddenteams
-            ? "flex items-center justify-center h-full sm:h-20 gap-2 w-1/2 sm:w-full"
-            : "flex items-center gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
+            ? "flex items-start sm:pl-5 h-full sm:h-20 gap-2 w-1/2 sm:w-full"
+            : "flex items-start sm:pl-5 gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
         }`}
       >
         <span
@@ -73,7 +73,7 @@ function Side_bar() {
 
       <Link
         to={"/membros"}
-        className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-center ${
+        className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-start pl-5 ${
           !id ? "bg-[#7E7878] " : ""
         }`}
       >

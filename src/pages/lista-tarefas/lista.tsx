@@ -220,12 +220,13 @@ function Lista() {
 
   return (
     <>
-      <div className={`bg-[#1F2937] min-h-screen w-screen overflow-auto overflow-x-hidden ${modaltask? 'oveflow-y-hidden' : '' }`}>
+      <div className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${modaltask? 'oveflow-y-hidden' : '' }`}>
         {/* Navbar */}
         <Nav/>
 
-        <main className="flex flex-col min-h-1/2 md:flex-row gap-5 sm:gap-0 m-5 sm:mb-10 items-center sm:items-start justify-center overflow-hidden">
-          <div className="flex w-35 sm:w-1/12">
+        <main className="flex flex-col h-full md:flex-row gap-5 sm:gap-0 m-5 items-center sm:items-start justify-center overflow-hidden">
+          <div className="flex flex-col w-full items-center h-full justify-center gap-5">
+          <div className="flex w-35 h-20">
             {userRole?.id === "3" ? (
               <div></div>
             ) : (
@@ -241,14 +242,13 @@ function Lista() {
               </div>
             )}
           </div>
-          <div className="flex flex-col w-full items-center justify-center gap-5">
             <h2 className="text-white font-semibold text-[29.5px] sm:text-3xl">
               Tarefas do time 📒
             </h2>
             <p className="text-white font-semibold text-xl">
               Arraste para mudar o status e clique para expandir
             </p>
-            <div className="flex flex-wrap flex-row gap-5 w-full h-10/12 items-center sm:items-start justify-center overflow-x-auto">
+            <div className="flex flex-wrap flex-row gap-5 w-full items-center sm:items-start justify-center sm:overflow-hidden">
               <DndContext
                 sensors={sensors}
                 onDragStart={handleDragStart}

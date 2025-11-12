@@ -216,6 +216,7 @@ if (!isOpen) return null
 
                 {confirmModal &&
                   (<Confirm_delete 
+                    funcao="Excluir"
                     texto="Deseja excluir essa tarefa?"
                     SetconfirmModal={setconfimModal}
                     SetconfirmAction={Delete_task}

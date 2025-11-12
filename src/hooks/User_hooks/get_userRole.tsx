@@ -21,6 +21,6 @@ export function Get_userRole(id_team: string) {
       }
     };
     fetch_userRole();
-  }, []);
+  }, [id_team]);
   return { userRole, loadingRole };
 }

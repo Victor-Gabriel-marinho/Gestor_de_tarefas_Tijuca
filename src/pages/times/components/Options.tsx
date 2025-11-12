@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { TeamService } from "../../../api/services/teamService";
-import type { MouseEvent } from "react";
+import Confirm_delete from "../../../components/commons/confirmDelete";
+import { useState } from "react";
 
 type OptionsProps = {
   refetch: () => void;
@@ -8,25 +9,22 @@ type OptionsProps = {
   children?: React.ReactNode;
 };
 
-function Options({refetch, id, children }: OptionsProps) {
-
+function Options({ refetch, id, children }: OptionsProps) {
   const location = useLocation();
-  const team_id = location.state?.team.id
+  const [modalconfirm, Setmodalconfirm] = useState<boolean>(false);
+  const team_id = location.state?.team.id;
 
-  async function Delete_User(event: MouseEvent<HTMLInputElement, globalThis.MouseEvent>) {
-    event.preventDefault()
+  async function Delete_User() {
     try {
-      const response = await TeamService.Remove_User_from_team(team_id, id)
+      const response = await TeamService.Remove_User_from_team(team_id, id);
       if (response) {
-        refetch()
-        console.log(response)
+        refetch();
       }
-    } 
-    catch (error){
-      console.log('erro ao fazer requisição', error)
+    } catch (error) {
+      console.log("erro ao fazer requisição", error);
     }
-  } 
-  
+  }
+
   return (
     <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col">
       {children}
@@ -35,7 +33,10 @@ function Options({refetch, id, children }: OptionsProps) {
           type="button"
           value="Remover"
           className=" w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#F21223] cursor-pointer rounded-[10px]"
-          onClick={(event) => Delete_User(event)}
+          onClick={(e) => {
+            e.preventDefault();
+            Setmodalconfirm(true);
+          }}
         />
         <input
           type="button"
@@ -43,9 +44,16 @@ function Options({refetch, id, children }: OptionsProps) {
           className="w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#076F37] cursor-pointer rounded-[10px]"
         />
       </div>
+      {modalconfirm && (
+        <Confirm_delete
+          funcao="Deletar"
+          texto={`Deseja remover esse usuário`}
+          SetconfirmModal={Setmodalconfirm}
+          SetconfirmAction={Delete_User}
+        />
+      )}
     </div>
   );
 }
 
-export default Options
-
+export default Options;
