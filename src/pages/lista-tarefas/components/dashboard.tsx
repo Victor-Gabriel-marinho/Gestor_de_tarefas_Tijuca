@@ -167,6 +167,8 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
     const index = elements[0].index;
     const prioridadeClicada = prioridadeLabel[index];
     setClearfilter(true);
+    console.log(prioridadeClicada);
+    
     setFiltro({ ...Filtro, prioridade: prioridadeClicada });
   };
 

@@ -58,7 +58,7 @@ const DraggableTask = ({ taskname, setModal, id, idSelected }: DraggableTaskProp
       >
       {/* Revela a div caso houver tags ou a task for atribuida ao usuário */}
        {(tags.length > 0 || taskuser.some((user)=> user.id === payload?.sub))  && ( 
-        <div className="flex flex-row justify-between items-center sm:w-[200px]">
+        <div className="flex flex-row justify-between items-center sm:w-[200px] px-2">
             {tags?.length > 0 && (
               <Tags
               containerClassName={"rounded-2xl flex flex-wrap justify-center items-center gap-2 w-full sm:max-w-[200px] sm:w-[190px] font-semibold "}

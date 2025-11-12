@@ -24,6 +24,11 @@ import Get_All_Status from "../../hooks//Status_hooks/Get_All_Status";
 import Dashboard from "./components/dashboard";
 import Get_Status_Default from "../../hooks/Status_hooks/Get_StatusDefaul";
 import type { FiltroDashboard } from "../../api/types/DashboardTypes/filtro";
+import { Create_task_Btn } from "./components/Btns/Create_task_btn";
+import { Title_Lista } from "./components/Title_lista";
+import { Filtro_Modal } from "./components/Filtro_Modal";
+import { FaFilter } from "react-icons/fa";
+
 
 function Lista() {
   useFont(" 'Poppins', 'SansSerif' ");
@@ -73,10 +78,10 @@ function Lista() {
   };
 
   const { id } = useParams();
-  const { tasks, refetchTasks } = id ? Get_Tasks(id) : {}; 
+  const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
   const { userRole } = Get_userRole(id ?? "");
 
-  const { status, refetch_Status } = Get_All_Status(id!)
+  const { status, refetch_Status } = Get_All_Status(id!);
 
   const [pen, setpen] = useState<Task[]>();
   const [prog, setprog] = useState<Task[]>();
@@ -133,32 +138,30 @@ function Lista() {
     prazo: "todas",
     status: "todas",
   });
+  const [FiltroModal, SetFiltroModal] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (!tasks) return;
 
- useEffect(() => {    
-  if (!tasks) return;
+    let filteredtask = tasks;
 
-  let filteredtask = tasks;
+    if (filtro.status !== "todas") {
+      const statusMap: Record<string, keyof typeof Status> = {
+        Pendente: "Pen",
+        Progresso: "Prog",
+        Concluido: "Conc",
+        Atrasada: "Atra",
+        Cancelada: "Canc",
+        Revisão: "Rev",
+      };
 
-  if (filtro.status !== "todas") {
-    const statusMap: Record<string, keyof typeof Status> = {
-      Pendente: "Pen",
-      Progresso: "Prog",
-      Concluido: "Conc",
-      Atrasada: "Atra",
-      Cancelada: "Canc",
-      Revisão: "Rev",
-    };    
+      const statusKey = statusMap[filtro.status ?? ""];
+      const statusId = Status[statusKey] ?? "";
 
-    const statusKey = statusMap[filtro.status ?? ""];        
-    const statusId = Status[statusKey] ?? "";    
-
-    filteredtask = filteredtask?.filter((t) => t.id_status === statusId);
-    
-  }
+      filteredtask = filteredtask?.filter((t) => t.id_status === statusId);
+    }
 
     if (filtro.prazo !== "todas") {
-
       const now = new Date();
 
       const isSameDay = (date1: Date, date2: Date) =>
@@ -167,10 +170,9 @@ function Lista() {
         date1.getDate() === date2.getDate();
 
       filteredtask = filteredtask.filter((t) => {
-        const end = new Date(t.EndDate)
+        const end = new Date(t.EndDate);
 
         switch (filtro.prazo) {
-
           case "Dia":
             return isSameDay(end, now);
 
@@ -189,14 +191,14 @@ function Lista() {
           default:
             return true;
         }
-      })
+      });
     }
-   
-      if (filtro.prioridade != "todas") {
-        filteredtask = filteredtask.filter( 
-          (t) => t.Priority === filtro.prioridade
-        )
-  }
+
+    if (filtro.prioridade != "todas") {
+      filteredtask = filteredtask.filter(
+        (t) => t.Priority === filtro.prioridade
+      );
+    }
 
     const pending: Task[] = [];
     const inProgress: Task[] = [];
@@ -208,166 +210,168 @@ function Lista() {
       else if (task.id_status === Status.Prog) inProgress.push(task);
       else if (task.id_status === Status.Conc) completed.push(task);
       else others.push(task);
-    });    
+    });
 
     setpen(pending);
     setprog(inProgress);
     setdone(completed);
-    setother(others)
-
+    setother(others);
   }, [tasks, filtro]);
-  
 
   return (
     <>
-      <div className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${modaltask? 'oveflow-y-hidden' : '' }`}>
+      <div
+        className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${
+          modaltask ? "oveflow-y-hidden" : ""
+        }`}
+      >
         {/* Navbar */}
-        <Nav/>
+        <Nav />
 
-        <main className="flex flex-col h-full md:flex-row gap-5 sm:gap-0 m-5 items-center sm:items-start justify-center overflow-hidden">
-          <div className="flex flex-col w-full items-center h-full justify-center gap-5">
-          <div className="flex w-35 h-20">
-            {userRole?.id === "3" ? (
-              <div></div>
-            ) : (
-              <div className="flex justify-center sm:justify-start">
-                <button
-                  className="bg-[#251F1F] text-white p-3 rounded-[10px]  text-center hover:bg-[#3d3434] hover:scale-105 transition-all cursor-pointer"
-                  onClick={() => {
-                    Setcriar("Criar");
-                  }}
-                >
-                  + Criar Tarefa
-                </button>
-              </div>
+        <main className="relative flex flex-col sm:min-h-[50vh] md:flex-col gap-5 sm:gap-0 m-5 items-center justify-center overflow-hidden">
+          <Title_Lista />
+          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0">
+            {userRole?.id === "3" ? null : (
+              <Create_task_Btn Setcriar={Setcriar} />
+            )}
+
+            <div
+              onClick={() => SetFiltroModal(!FiltroModal)}
+              className="bg-[#251F1F] flex items-center text-white p-3 rounded-[10px] gap-3 hover:bg-[#3d3434] hover:scale-105 transition-all cursor-pointer"
+            >
+              <FaFilter />
+              Filtros
+            </div>
+
+            {FiltroModal && (
+              <Filtro_Modal Filtro={filtro} setFiltro={setFiltro} />
             )}
           </div>
-            <h2 className="text-white font-semibold text-[29.5px] sm:text-3xl">
-              Tarefas do time 📒
-            </h2>
-            <p className="text-white font-semibold text-xl">
-              Arraste para mudar o status e clique para expandir
-            </p>
-            <div className="flex flex-wrap flex-row gap-5 w-full items-center sm:items-start justify-center sm:overflow-hidden">
-              <DndContext
-                sensors={sensors}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragend}
-                autoScroll={false}
-              >
-                {tasks !== null && (
-                  <DroppableLane
-                    id={Status.Pen ?? "PENDING_ID"}
-                    userrole={userRole?.id}
-                    title="Pendente"
-                    minimizeKey="pendente"
-                    minimized={minimize.pendente}
-                    onToggleMinimize={toggleMinimize}
-                  >
-                    {pen?.map((pentask) => (
-                      <DraggableTask
-                        key={pentask.id}
-                        idSelected={pentask.id}
-                        taskname={pentask.Name}
-                        setModal={() => {
-                          Setmodaltask(true);
-                          Setselect(pentask);
-                        }}
-                        id={pentask.id}
-                      />
-                    ))}
-                  </DroppableLane>
-                )}
-                {tasks && (
-                  <DroppableLane
-                    userrole={userRole?.id}
-                    id={Status.Prog ?? "IN_PROGRESS_ID"}
-                    title="Progresso"
-                    minimizeKey="progresso"
-                    minimized={minimize.progresso}
-                    onToggleMinimize={toggleMinimize}
-                  >
-                    {prog?.map((progtask) => (
-                      <DraggableTask
-                        idSelected={progtask.id}
-                        key={progtask.id}
-                        id={progtask.id}
-                        taskname={progtask.Name}
-                        setModal={() => {
-                          Setmodaltask(true);
-                          Setselect(progtask);
-                        }}
-                      />
-                    ))}
-                  </DroppableLane>
-                )}
-                {tasks && (
-                  <DroppableLane
-                    id={Status.Conc ?? "COMPLETED_ID"}
-                    userrole={userRole?.id}
-                    title="Concluidas"
-                    minimizeKey="concluido"
-                    minimized={minimize.concluido}
-                    onToggleMinimize={toggleMinimize}
-                  >
-                    {done?.map((taskdone) => (
-                      <DraggableTask
-                        idSelected={taskdone.id}
-                        key={taskdone.id}
-                        id={taskdone.id}
-                        taskname={taskdone.Name}
-                        setModal={() => {
-                          Setmodaltask(true);
-                          Setselect(taskdone);
-                        }}
-                      />
-                    ))}
-                  </DroppableLane>
-                )}
-
-                {status?.map((status) => {
-                  const key = normalizeKey(status.Name);
-                  
-                  return (
-                    <DroppableLane
-                      key={status.id}
-                      id={status.id}
-                      userrole={userRole?.id}
-                      title={status.Name}
-                      minimizeKey={key}
-                      minimized={minimize[key]}
-                      onToggleMinimize={toggleMinimize}
-                    >
-                      {other?.map((task) => (
-                      task.id_status === status.id) && (
-                        <DraggableTask
-                          idSelected={task.id}
-                          key={task.id}
-                          id={task.id}
-                          taskname={task.Name}
-                          setModal={() => {
-                            Setmodaltask(true);
-                            Setselect(task);
-                          }}
-                        />
-                      ))}
-                    </DroppableLane>
-                  );
-                })}
-
-                {/* DRAG OVERLAY */}
-                <DragOverlay>
-                  {activeTask ? (
+          <div className="flex flex-col sm:flex-row flex-wrap w-full items-center h-full justify-center gap-5 min-h-[50vh] sm:p-5">
+            <DndContext
+              sensors={sensors}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragend}
+              autoScroll={false}
+            >
+              {tasks !== null && (
+                <DroppableLane
+                  tasks={pen ?? []}
+                  id={Status.Pen ?? "PENDING_ID"}
+                  userrole={userRole?.id}
+                  title="Pendente"
+                  minimizeKey="pendente"
+                  minimized={minimize.pendente}
+                  onToggleMinimize={toggleMinimize}
+                >
+                  {pen?.map((pentask) => (
                     <DraggableTask
-                      idSelected={activeTask.id}
-                      id={activeTask.id}
-                      taskname={activeTask.Name}
-                      setModal={() => {}}
+                      key={pentask.id}
+                      idSelected={pentask.id}
+                      taskname={pentask.Name}
+                      setModal={() => {
+                        Setmodaltask(true);
+                        Setselect(pentask);
+                      }}
+                      id={pentask.id}
                     />
-                  ) : null}
-                </DragOverlay>
-              </DndContext>
-            </div>
+                  ))}
+                </DroppableLane>
+              )}
+              {tasks && (
+                <DroppableLane
+                  tasks={prog ?? []}
+                  userrole={userRole?.id}
+                  id={Status.Prog ?? "IN_PROGRESS_ID"}
+                  title="Progresso"
+                  minimizeKey="progresso"
+                  minimized={minimize.progresso}
+                  onToggleMinimize={toggleMinimize}
+                >
+                  {prog?.map((progtask) => (
+                    <DraggableTask
+                      idSelected={progtask.id}
+                      key={progtask.id}
+                      id={progtask.id}
+                      taskname={progtask.Name}
+                      setModal={() => {
+                        Setmodaltask(true);
+                        Setselect(progtask);
+                      }}
+                    />
+                  ))}
+                </DroppableLane>
+              )}
+              {tasks && (
+                <DroppableLane
+                  tasks={done ?? []}
+                  id={Status.Conc ?? "COMPLETED_ID"}
+                  userrole={userRole?.id}
+                  title="Concluidas"
+                  minimizeKey="concluido"
+                  minimized={minimize.concluido}
+                  onToggleMinimize={toggleMinimize}
+                >
+                  {done?.map((taskdone) => (
+                    <DraggableTask
+                      idSelected={taskdone.id}
+                      key={taskdone.id}
+                      id={taskdone.id}
+                      taskname={taskdone.Name}
+                      setModal={() => {
+                        Setmodaltask(true);
+                        Setselect(taskdone);
+                      }}
+                    />
+                  ))}
+                </DroppableLane>
+              )}
+
+              {status?.map((status) => {
+                const key = normalizeKey(status.Name);
+
+                return (
+                  <DroppableLane
+                    tasks={other ?? []}
+                    key={status.id}
+                    id={status.id}
+                    userrole={userRole?.id}
+                    title={status.Name}
+                    minimizeKey={key}
+                    minimized={minimize[key]}
+                    onToggleMinimize={toggleMinimize}
+                  >
+                    {other?.map(
+                      (task) =>
+                        task.id_status === status.id && (
+                          <DraggableTask
+                            idSelected={task.id}
+                            key={task.id}
+                            id={task.id}
+                            taskname={task.Name}
+                            setModal={() => {
+                              Setmodaltask(true);
+                              Setselect(task);
+                            }}
+                          />
+                        )
+                    )}
+                  </DroppableLane>
+                );
+              })}
+
+              {/* DRAG OVERLAY */}
+              <DragOverlay>
+                {activeTask ? (
+                  <DraggableTask
+                    idSelected={activeTask.id}
+                    id={activeTask.id}
+                    taskname={activeTask.Name}
+                    setModal={() => {}}
+                  />
+                ) : null}
+              </DragOverlay>
+            </DndContext>
           </div>
         </main>
 
@@ -399,16 +403,14 @@ function Lista() {
             Status={Status}
           />
         )}
-
       </div>
 
       <Dashboard
         id_team={id ? id : ""}
-        prazo={id ? id : ""}  
+        prazo={id ? id : ""}
         setFiltro={setFiltro}
         Filtro={filtro}
       />
-
     </>
   );
 }
