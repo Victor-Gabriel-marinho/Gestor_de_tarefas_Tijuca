@@ -80,7 +80,7 @@ function Login() {
         </div>
 
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1">
-          <img src={card} alt="" className="w-[448px] h-[448px]" />
+          <img src="https://s2-g1.glbimg.com/Okf8FFqOU2xsMVvB6Z2lrh2JBQk=/0x0:1066x1600/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2021/R/T/GUAngoTvmAsxB5vDlAlw/ken-jensen-ouch.jpg" alt="" className="w-[448px] h-[448px]" />
         </div>
       </div>
     </>
