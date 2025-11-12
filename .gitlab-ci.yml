@@ -1,0 +1,86 @@
+stages:
+  - deploy
+  - rollback
+
+deploy:
+  stage: deploy
+  image: alpine
+  only:
+    - develop
+  before_script:
+    # Configura SSH
+    - which ssh-agent || apk --update add openssh-client bash
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    # Instala utilitários necessários
+    - apk --no-cache add curl
+
+  script:
+    # Adiciona chave SSH
+    - bash -c 'ssh-add <(echo "${SSH_KEY}")'
+
+    # Conecta no servidor, atualiza código e gera build
+    - ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "
+        bash -i -c '
+          cd /var/www/${CI_PROJECT_NAME} &&
+          git checkout . &&
+          git checkout develop &&
+          git branch --set-upstream-to=origin/develop develop || true &&
+          git pull origin develop &&
+          nvm use 22 &&
+          rm -rf node_modules dist &&
+          npm install &&
+          npm run build &&
+          sudo systemctl restart apache2
+        '
+      "
+
+    # Pega a versão atual do deploy
+    - export DEPLOY_VERSION=$(ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "cd /var/www/${CI_PROJECT_NAME} && git describe --abbrev=0")
+
+    # (Opcional) Envia notificação via WhatsApp
+    - curl -X POST -H "Content-Type:application/json" \
+      -d '{"token":"'${BOT_WPP_TOKEN}'", "type":"deploy", "data":{"projeto":"'${CI_PROJECT_NAME}'","versao":"'$DEPLOY_VERSION'"}}' \
+      ${BOT_WPP_HOST}
+
+rollback:
+  stage: rollback
+  image: alpine
+  when: manual
+  allow_failure: true
+  only:
+    - develop
+  before_script:
+    - which ssh-agent || apk --update add openssh-client bash
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - apk --no-cache add curl
+
+  script:
+    # Adiciona chave SSH
+    - bash -c 'ssh-add <(echo "${SSH_KEY}")'
+
+    # Faz rollback e rebuilda
+    - ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "
+        bash -i -c '
+          cd /var/www/${CI_PROJECT_NAME} &&
+          git checkout . &&
+          git reset HEAD~${RESET_NUMBER:-1} &&
+          git checkout . &&
+          nvm use 22 &&
+          rm -rf node_modules dist &&
+          npm install &&
+          npm run build &&
+          sudo systemctl restart apache2
+        '
+      "
+
+    # Pega versão atual do rollback
+    - export ROLLBACK_VERSION=$(ssh -p ${SSH_PORT} ${SSH_USER}@${SSH_HOST} "cd /var/www/${CI_PROJECT_NAME} && git describe --abbrev=0")
+
+    # (Opcional) Envia mensagem de rollback
+    - curl -X POST -H "Content-Type:application/json" \
+      -d '{"token":"'${BOT_WPP_TOKEN}'", "data":{"projeto":"'${CI_PROJECT_NAME}'","versao":"'$ROLLBACK_VERSION'"}}' \
+      ${BOT_WPP_HOST}

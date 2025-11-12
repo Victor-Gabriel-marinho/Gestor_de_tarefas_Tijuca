@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFont } from "../../components/font";
-/* import card from "../../assets/card.png";
- */import { AuthService } from "../../api/services/authService";
+import card from "../../assets/card.png";
+import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
 import { UseinviteStore, useAuthStore } from "../../store/Auth";
 
@@ -9,7 +9,7 @@ function Login() {
   useFont("'Inter', sans-serif ");
 
   const setToken = useAuthStore((state) => state.setToken);
-  const InviteURL = UseinviteStore((state) => state.token)
+  const InviteURL = UseinviteStore((state) => state.token);
 
   const navigate = useNavigate();
 
@@ -24,15 +24,13 @@ function Login() {
     try {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
-      setToken(new_auth.Token)
+      setToken(new_auth.Token);
 
       if (InviteURL) {
-        navigate(InviteURL)
-
+        navigate(InviteURL);
       } else {
-        navigate("/")
+        navigate("/");
       }
-
     } catch (err) {
       console.log(err);
     }
@@ -82,8 +80,8 @@ function Login() {
         </div>
 
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1">
-{/*           <img src={card} alt="" className="w-[448px] h-[448px]" />
- */}        </div>
+          <img src={card} alt="" className="w-[448px] h-[448px]" />
+        </div>
       </div>
     </>
   );

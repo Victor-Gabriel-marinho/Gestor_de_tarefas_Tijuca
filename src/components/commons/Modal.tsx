@@ -3,7 +3,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import { BiSolidDownArrow } from "react-icons/bi";
 import PopUp from "../../pages/times/components/PopUp.js";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
 import { inviteService } from "../../api/services/inviteService.js";
