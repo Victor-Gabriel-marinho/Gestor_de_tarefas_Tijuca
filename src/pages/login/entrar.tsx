@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFont } from "../../components/font";
-import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
 import { UseinviteStore, useAuthStore } from "../../store/Auth";
