@@ -18,7 +18,7 @@ export function Get_Tasks(idTeam: string) {
             }
         }
         catch(error) {
-            console.log("erro ao fazer requisição", error)
+            console.log("erro ao buscar tasks", error)
         }
         finally{ 
             Setloading(false)

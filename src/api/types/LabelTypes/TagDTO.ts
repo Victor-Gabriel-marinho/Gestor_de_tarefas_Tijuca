@@ -1,0 +1,1 @@
+export interface TagDTO  {Name: string, Color: string, id: string, isActive: boolean}

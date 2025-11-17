@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { dashboardMetricsDTO } from "../../api/types/DashboardTypes/DashboardMetric";
 import type { MetricItem } from "../../api/types/DashboardTypes/MetricItem";
 import { dashboardService } from "../../api/services/dashboardService";
@@ -13,9 +13,8 @@ export function useDashboardPages(id_team: string) {
   const N = 5;
 
   // Busca os dados do dashboard ao montar o hook
-  useEffect(() => {
-  const fetchMetrics = async () => {
-    setLoading(true)
+  const fetchMetrics = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await dashboardService.getStatus(id_team);
       setMetrics(data);
@@ -24,10 +23,11 @@ export function useDashboardPages(id_team: string) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id_team])
+
+  useEffect(() => {
   fetchMetrics()
-  
-}, [id_team]);
+}, [fetchMetrics]);
 
   // Atualiza a página atual dos usuários
   useEffect(() => {
@@ -44,6 +44,7 @@ export function useDashboardPages(id_team: string) {
 
   return {
     metrics,
+    refetchdashboard: fetchMetrics,
     paginasPorUsuario,
     paginaAtual,
     setPaginaAtual,
