@@ -1,6 +1,6 @@
 import Nav from "../../components/layouts/nav";
 import Modaltaf from "./components/Modaltaf";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useFont } from "../../components/font";
 import { Get_Tasks } from "../../hooks//Tasks_hooks/get_Tasks";
 import { useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ import { Create_task_Btn } from "./components/Btns/Create_task_btn";
 import { Title_Lista } from "./components/Title_lista";
 import { Filtro_Modal } from "./components/Filtro_Modal";
 import { FaFilter } from "react-icons/fa";
-
+import { useDashboardPages } from "../../hooks/Dashboard_hooks/get_dashBoardpages";
 
 function Lista() {
   useFont(" 'Poppins', 'SansSerif' ");
@@ -47,41 +47,48 @@ function Lista() {
     revisao: false,
   });
 
-  const toggleMinimize = (key: keyof typeof minimize) => {
+  const toggleMinimize = useCallback((key: keyof typeof minimize) => {
     setMinimize((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  }, []);
 
   type MinimizeKey = keyof typeof minimize;
 
-  const normalizeKey = (name: string): MinimizeKey => {
+  const normalizeKey = useCallback((name: string): MinimizeKey => {
     const lowerCase = name.toLowerCase();
     const normalized = lowerCase
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
     return normalized as MinimizeKey;
-  };
+  }, []);
 
-  const { GetStatusDefault } = Get_Status_Default();
+  const { GetStatusDefault } = Get_Status_Default(); 
 
-  const Status = {
-    Pen: GetStatusDefault?.filter((Status) => Status.Name === "Pendente")[0]
-      ?.id,
-    Prog: GetStatusDefault?.filter((Status) => Status.Name === "Progresso")[0]
-      ?.id,
-    Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0]
-      ?.id,
-    Atra: GetStatusDefault?.filter((Status) => Status.Name === "Atrasada")[0]
-      ?.id,
-    Canc: GetStatusDefault?.filter((Status) => Status.Name === "Cancelada")[0]
-      ?.id,
-    Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0]?.id,
-  };
+  // CORREÇÃO: Memoizar Status
+  const Status = useMemo(
+    () => ({
+      Pen: GetStatusDefault?.filter((Status) => Status.Name === "Pendente")[0]
+        ?.id,
+      Prog: GetStatusDefault?.filter((Status) => Status.Name === "Progresso")[0]
+        ?.id,
+      Conc: GetStatusDefault?.filter((Status) => Status.Name === "Concluido")[0]
+        ?.id,
+      Atra: GetStatusDefault?.filter((Status) => Status.Name === "Atrasada")[0]
+        ?.id,
+      Canc: GetStatusDefault?.filter((Status) => Status.Name === "Cancelada")[0]
+        ?.id,
+      Rev: GetStatusDefault?.filter((Status) => Status.Name === "Revisão")[0]
+        ?.id,
+        Ina: GetStatusDefault?.filter((Status) => Status.Name === "Inativo")[0]?.id
+    }),
+    [GetStatusDefault]
+  );
 
   const { id } = useParams();
   const { tasks, refetchTasks } = id ? Get_Tasks(id) : {};
   const { userRole } = Get_userRole(id ?? "");
 
   const { status, refetch_Status } = Get_All_Status(id!);
+  const { refetchdashboard } = useDashboardPages(id ?? "");
 
   const [pen, setpen] = useState<Task[]>();
   const [prog, setprog] = useState<Task[]>();
@@ -98,40 +105,57 @@ function Lista() {
     })
   );
 
-  const handleDragStart = (event: DragStartEvent) => {
+  const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id.toString());
-  };
+  }, []);
 
-  const handleDragend = async (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
+  const handleDragend = useCallback(
+    async (event: DragEndEvent) => {
+      const { active, over } = event;
+      setActiveId(null);
 
-    if (!over) return;
+      if (!over) return;
 
-    const draggedTaskId = active.id.toString();
-    const newStatus = over.id.toString();
+      const draggedTaskId = active.id.toString();
+      const newStatus = over.id.toString();
 
-    if (active.data.current?.status === newStatus) return;
+      if (active.data.current?.status === newStatus) return;
 
-    try {
-      const response = await TaskService.AlterStatus(draggedTaskId, newStatus);
-      if (response) {
-        if (refetchTasks) {
+      try {
+        const response = await TaskService.AlterStatus(
+          draggedTaskId,
+          newStatus
+        );
+        if (response && refetchTasks) {
           refetchTasks();
+          refetchdashboard();
           refetch_Status();
         }
+      } catch (error) {
+        console.log("erro ao fazer requisição", error);
       }
-    } catch (error) {
-      console.log("erro ao fazer requisição", error);
-    }
-  };
+    },
+    [refetchTasks, refetchdashboard, refetch_Status]
+  );
 
-  const findTaskById = (id: string | null): Task | undefined => {
-    if (!id || !tasks) return undefined;
-    return tasks.find((task) => task.id === id);
-  };
+  const findTaskById = useCallback(
+    (id: string | null): Task | undefined => {
+      if (!id || !tasks) return undefined;
+      return tasks.find((task) => task.id === id);
+    },
+    [tasks]
+  );
 
-  const activeTask = findTaskById(activeId);
+  const activeTask = useMemo(
+    () => findTaskById(activeId),
+    [findTaskById, activeId]
+  );
+
+const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
+  const handleSetModal = useCallback((task: Task) => {
+    Setmodaltask(true);
+    Setselect(task);    
+  }, []);
 
   const [filtro, setFiltro] = useState<FiltroDashboard>({
     prioridade: "todas",
@@ -139,6 +163,10 @@ function Lista() {
     status: "todas",
   });
   const [FiltroModal, SetFiltroModal] = useState<boolean>(false);
+
+  const handleSetFiltro = useCallback((newFiltro: FiltroDashboard) => {
+    setFiltro(newFiltro);
+  }, []);
 
   useEffect(() => {
     if (!tasks) return;
@@ -175,15 +203,12 @@ function Lista() {
         switch (filtro.prazo) {
           case "Dia":
             return isSameDay(end, now);
-
           case "Atrasadas":
             return end < now;
-
           case "Semana":
             const oneWeek = new Date(now);
             oneWeek.setDate(now.getDate() + 7);
             return end >= now && end <= oneWeek;
-
           case "Mês":
             const oneMonth = new Date(now);
             oneMonth.setMonth(now.getMonth() + 1);
@@ -209,23 +234,51 @@ function Lista() {
       if (task.id_status === Status.Pen) pending.push(task);
       else if (task.id_status === Status.Prog) inProgress.push(task);
       else if (task.id_status === Status.Conc) completed.push(task);
-      else others.push(task);
+      else if (task.id_status !== Status.Ina) others.push(task);
     });
 
     setpen(pending);
     setprog(inProgress);
     setdone(completed);
     setother(others);
-  }, [tasks, filtro]);
+  }, [tasks, filtro, Status]);
+
+  const renderDraggableTask = useCallback(
+    (task: Task) => (
+      <DraggableTask
+        key={task.id}
+        idSelected={task.id}
+        taskname={task.Name}
+        task={task}
+        setModal={handleSetModal}
+        id={task.id}
+        refreshtasks={refreshTasksid}
+        setrefreshtask={setRefreshTasksid}
+      />
+    ),
+    [handleSetModal, refreshTasksid]
+  );
+
+  const pendenteTasks = useMemo(
+    () => pen?.map(renderDraggableTask),
+    [pen, renderDraggableTask]
+  );
+  const progressoTasks = useMemo(
+    () => prog?.map(renderDraggableTask),
+    [prog, renderDraggableTask]
+  );
+  const concluidasTasks = useMemo(
+    () => done?.map(renderDraggableTask),
+    [done, renderDraggableTask]
+  );
 
   return (
     <>
       <div
         className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${
-          modaltask ? "oveflow-y-hidden" : ""
+          modaltask ? "overflow-y-hidden" : ""
         }`}
       >
-        {/* Navbar */}
         <Nav />
 
         <main className="relative flex flex-col sm:min-h-[50vh] md:flex-col gap-5 sm:gap-0 m-5 items-center justify-center overflow-hidden">
@@ -243,9 +296,7 @@ function Lista() {
               Filtros
             </div>
 
-            {FiltroModal && (
-              <Filtro_Modal Filtro={filtro} setFiltro={setFiltro} />
-            )}
+            {FiltroModal && <Filtro_Modal setFiltro={handleSetFiltro} />}
           </div>
           <div className="flex flex-col sm:flex-row flex-wrap w-full items-center h-full justify-center gap-5 min-h-[50vh] sm:p-5">
             <DndContext
@@ -264,18 +315,7 @@ function Lista() {
                   minimized={minimize.pendente}
                   onToggleMinimize={toggleMinimize}
                 >
-                  {pen?.map((pentask) => (
-                    <DraggableTask
-                      key={pentask.id}
-                      idSelected={pentask.id}
-                      taskname={pentask.Name}
-                      setModal={() => {
-                        Setmodaltask(true);
-                        Setselect(pentask);
-                      }}
-                      id={pentask.id}
-                    />
-                  ))}
+                  {pendenteTasks}
                 </DroppableLane>
               )}
               {tasks && (
@@ -288,18 +328,7 @@ function Lista() {
                   minimized={minimize.progresso}
                   onToggleMinimize={toggleMinimize}
                 >
-                  {prog?.map((progtask) => (
-                    <DraggableTask
-                      idSelected={progtask.id}
-                      key={progtask.id}
-                      id={progtask.id}
-                      taskname={progtask.Name}
-                      setModal={() => {
-                        Setmodaltask(true);
-                        Setselect(progtask);
-                      }}
-                    />
-                  ))}
+                  {progressoTasks}
                 </DroppableLane>
               )}
               {tasks && (
@@ -312,61 +341,39 @@ function Lista() {
                   minimized={minimize.concluido}
                   onToggleMinimize={toggleMinimize}
                 >
-                  {done?.map((taskdone) => (
-                    <DraggableTask
-                      idSelected={taskdone.id}
-                      key={taskdone.id}
-                      id={taskdone.id}
-                      taskname={taskdone.Name}
-                      setModal={() => {
-                        Setmodaltask(true);
-                        Setselect(taskdone);
-                      }}
-                    />
-                  ))}
+                  {concluidasTasks}
                 </DroppableLane>
               )}
 
-              {status?.map((status) => {
-                const key = normalizeKey(status.Name);
+              {status?.map((statusItem) => {
+                const key = normalizeKey(statusItem.Name);
 
                 return (
                   <DroppableLane
                     tasks={other ?? []}
-                    key={status.id}
-                    id={status.id}
+                    key={statusItem.id}
+                    id={statusItem.id}
                     userrole={userRole?.id}
-                    title={status.Name}
+                    title={statusItem.Name}
                     minimizeKey={key}
                     minimized={minimize[key]}
                     onToggleMinimize={toggleMinimize}
                   >
-                    {other?.map(
-                      (task) =>
-                        task.id_status === status.id && (
-                          <DraggableTask
-                            idSelected={task.id}
-                            key={task.id}
-                            id={task.id}
-                            taskname={task.Name}
-                            setModal={() => {
-                              Setmodaltask(true);
-                              Setselect(task);
-                            }}
-                          />
-                        )
-                    )}
+                    {other
+                      ?.filter((task) => task.id_status === statusItem.id)
+                      .map(renderDraggableTask)}
                   </DroppableLane>
                 );
               })}
 
-              {/* DRAG OVERLAY */}
               <DragOverlay>
                 {activeTask ? (
                   <DraggableTask
                     idSelected={activeTask.id}
                     id={activeTask.id}
                     taskname={activeTask.Name}
+                    task={activeTask}
+                    refreshtasks={refreshTasksid}
                     setModal={() => {}}
                   />
                 ) : null}
@@ -375,14 +382,16 @@ function Lista() {
           </div>
         </main>
 
-        {/* Modals e Dashboard */}
         {modaltask && select && (
           <Modaltaf
-            isOpen={modaltask ? true : false}
+            isOpen={modaltask}
             texto=""
             userrole={userRole?.id}
             task={select}
-            onClose={() => Setmodaltask(false)}
+            onClose={() => {
+              setRefreshTasksid(select.id)
+              Setmodaltask(false);
+            }}
             refetchtask={refetchTasks}
             refetchStatus={refetch_Status}
             idSelected={select.id}
@@ -395,7 +404,7 @@ function Lista() {
           <Criar
             title={criar}
             onClose={() => Setcriar("")}
-            closeModal={() => Setmodaltask(false)}
+            closeModal={() => Setmodaltask(!modaltask)}
             Selected={select}
             refetchTasks={refetchTasks}
             id_team={id}
@@ -408,7 +417,7 @@ function Lista() {
       <Dashboard
         id_team={id ? id : ""}
         prazo={id ? id : ""}
-        setFiltro={setFiltro}
+        setFiltro={handleSetFiltro}
         Filtro={filtro}
       />
     </>

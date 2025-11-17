@@ -10,6 +10,7 @@ function Quadros() {
   useFont(" 'Poppins', 'SansSerif' ");
 
   const [criar, Setcriar] = useState(false);
+  const [Name, SetName] = useState<string>("")
   const { Teams, loading, refetch_teams } = Get_teams();
 
   const create_team = async (
@@ -17,15 +18,12 @@ function Quadros() {
   ) => {
     event.preventDefault();
 
-    const formdata = new FormData(event.currentTarget);
-
-    const Team_Name = formdata.get("Nome_do_time") as string;
-
     try {
-      if (!Team_Name) return;
-      const response = await TeamService.Create_Team(Team_Name);
+      if (!Name) return;
+      const response = await TeamService.Create_Team(Name);
       if (response) {
         refetch_teams();
+        SetName('')
         Setcriar(false)
       }
     } catch (error) {
@@ -93,6 +91,8 @@ function Quadros() {
                   name="Nome_do_time"
                   type="text"
                   className="bg-white outline-none text-black p-1 rounded-md"
+                  onChange={(e) => SetName(e.target.value)}
+                  value={Name}
                   placeholder="Nome do time"
                   required
                 />

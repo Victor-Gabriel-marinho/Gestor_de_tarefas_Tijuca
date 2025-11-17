@@ -1,41 +1,40 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 
 type Filtro_ModalProps = {
-  setFiltro: React.Dispatch<React.SetStateAction<FiltroDashboard>>;
-  Filtro: FiltroDashboard;
+  setFiltro: (newFiltro: FiltroDashboard) => void;
 };
 
-export const Filtro_Modal = ({ setFiltro, Filtro }: Filtro_ModalProps) => {
+export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
   const [values, setvalues] = useState<FiltroDashboard>({
     prazo: "",
     prioridade: "",
     status: "",
   });
 
-  const SetStatus = (Status: string) => {
-    setFiltro({ ...Filtro, status: Status });
-    setvalues({ ...values, status: Status });
-    if (Status === "todas") setvalues({ ...values, status: "" });
-  };
+  const setfilter = (
+    filtro: string,
+    key: "status" | "prazo" | "prioridade"
+  ) => {
+    
+    const newFiltroValue = filtro === "todas" ? "todas" : filtro;
 
-  const SetData = (prazo: string) => {
-    setFiltro({ ...Filtro, prazo: prazo });
-    setvalues({ ...values, prazo: prazo });
-    if (prazo === "todas") setvalues({ ...values, prazo: "" });
-  };
+    
+    setvalues((prevValue) => ({
+      ...prevValue,
+      [key]: newFiltroValue === "todas" ? "" : newFiltroValue,
+    }));
 
-  const SetPrioridade = (Prioridade: string) => {
-    setFiltro({ ...Filtro, prioridade: Prioridade });
-    setvalues({ ...values, prioridade: Prioridade });
-    if (Prioridade === "todas") setvalues({ ...values, prioridade: "" });
+    
+    setFiltro({
+      ...values, 
+      [key]: newFiltroValue, 
+    });
   };
-
-  useEffect(() => {}, [Filtro]);
 
   return (
     <div className="bg-[#251F1F] absolute top-16 h-[20h] flex flex-col items-center text-white p-3 rounded-[10px] cursor-pointer">
-      <p className="font-semibold">Selecione o que você deseja filtrar</p>
+      <p className="font-semibold">Selecione os filtros</p>
       <form
         action=""
         className="w-full flex flex-col items-center justify-center p-1 gap-3"
@@ -44,9 +43,9 @@ export const Filtro_Modal = ({ setFiltro, Filtro }: Filtro_ModalProps) => {
           name="Status"
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
           value={values.status}
-          onChange={(e) => SetStatus(e.target.value)}
+          onChange={(e) => setfilter(e.target.value, "status")}
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Status
           </option>
           <option value="Pendente">Pendente</option>
@@ -59,12 +58,12 @@ export const Filtro_Modal = ({ setFiltro, Filtro }: Filtro_ModalProps) => {
         </select>
 
         <select
-          name="Status"
+          name="Prazo"
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
-          value={values.status}
-          onChange={(e) => SetData(e.target.value)}
+          value={values.prazo}
+          onChange={(e) => setfilter(e.target.value, "prazo")}
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Data
           </option>
           <option value="Mês">Este mês</option>
@@ -79,9 +78,9 @@ export const Filtro_Modal = ({ setFiltro, Filtro }: Filtro_ModalProps) => {
           id=""
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
           value={values.prioridade}
-          onChange={(e) => SetPrioridade(e.target.value)}
+          onChange={(e) => setfilter(e.target.value, "prioridade")}
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Prioridade
           </option>
           <option value="Baixa">Baixa</option>

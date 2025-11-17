@@ -15,7 +15,7 @@ type ModalProps = {
 };
 
 function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
-  const [popUp, setpopUp] = useState<string>("");
+  const [popUp, setpopUp] = useState<string | null>(null);  
   const [loading, Setloading] = useState<boolean>(false);
   const [userroles, SetUserroles] = useState<Record<string, string>>({});
   const [Email, setEmail] = useState<string>("");
@@ -29,7 +29,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const {id} = useParams();
   const team_id = id ?? ""  
 
-  function HandlePopUp(event: any) {
+  function HandlePopUp(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const id = event.currentTarget.id;
     setpopUp((prev) => (prev === id ? null : id));
   }
@@ -40,6 +40,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       [userid]: role,
     }));
   }
+  
 
   function handleModal() {
     setopenmodal(!openModal);
@@ -67,15 +68,14 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
         handleModal();
         refetch();
         search_users();
-        console.log(response); 
        }
        
     } catch (error) {
       Setloading(false);
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
       seterror("este usuário já está no time");
     } 
-  }
+  }  
 
   function selectuser(user: user_for_invite) {
     SetselectUsers_id((prev) => {
@@ -93,7 +93,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
         Setusers_to_invite(response);
       }
     } catch (error) {
-      console.log("erro ao fazer a requisição", error);
+      console.error("erro ao fazer a requisição", error);
     }
   }, []);
 
@@ -106,7 +106,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
 
   useEffect(() => {
     search_users();
-  }, [team_id, search_users]);
+  }, [team_id, search_users]);  
 
   return (
     <div
@@ -159,6 +159,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
             ""
           )}
 
+          <h3 className="font-semibold text-lg">Clique nos usuários para selecionar</h3>
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
           
           {/* Usuário que são possíveis de convidar */}
@@ -177,12 +178,18 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                   {/* Nome e perfil do usuário */}
                   <div className="items-center flex flex-row gap-1 sm:gap2">
                     <FaUserCircle className="text-white text-2xl sm:text-5xl" />
-                    <p className="text-lg sm:text-xl max-w-[100px]">{user.Name}</p>
+                    <p className="text-lg sm:text-xl max-w-[100px]">
+                      {user.Name}
+                    </p>
                   </div>
-                  <div className="flex flex-row gap-2 items-center">
-                    <p
-                      className="text-sm sm:text-lg font-semibold hidden sm:block"
+
+                  {/* Alterar Role */}
+                  <div
+                    className="flex flex-row gap-2 items-center"
+                    onClick={(e) => { HandlePopUp(e); e.stopPropagation()}}
+                    id={user.id}
                     >
+                    <p className="text-sm sm:text-lg font-semibold  ">
                       {userroles[user.id] ?? "Colaborador"}
                     </p>
                     <div className="relative">
@@ -190,14 +197,11 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                         className={`text-sm sm:text-xl ${
                           popUp === user.id ? "rotate-180" : ""
                         } cursor-pointer`}
-                        id={user.id}
-                        onClick={HandlePopUp}
                       />
                       {/* PopUp para selecionar cargo */}
                       {popUp === user.id && (
                         <PopUp
-                          popUp={popUp}
-                          setpopUp={setpopUp}
+                          setpopUp={() => setpopUp('')}
                           SetRoleName={(role) => alterarRole(user.id, role)}
                         />
                       )}

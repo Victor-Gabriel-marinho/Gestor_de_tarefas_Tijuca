@@ -17,10 +17,9 @@ import {
   Legend,
 } from "chart.js";
 import { Loading_anim } from "../../../components/commons/loading";
-import { useEffect, useState } from "react";
 import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 import { ChartGeneric } from "./BarGrafics";
-
+import type { dashboardMetricsDTO } from "../../../api/types/DashboardTypes/DashboardMetric";
 
 // Registrar módulos obrigatórios
 ChartJS.register(
@@ -40,16 +39,10 @@ type graficoProps = {
   id_team: string;
   prazo: string;
   Filtro: FiltroDashboard;
-  setFiltro: (
-    value: React.SetStateAction<{
-      status?: string;
-      prazo?: string;
-      prioridade?: string;
-    }>
-  ) => void;
+  setFiltro: (newfiltro: FiltroDashboard) => void;
 };
 
-function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
+function GraficoBarras({ id_team }: graficoProps) {
   const {
     metrics,
     paginasPorUsuario,
@@ -62,13 +55,6 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
 
   /*preciso dos status das tarefas, prioridade ,  e também nome dos responsáveis */
   //integração
-
-  const [clearfilter, setClearfilter] = useState(false);
-  const DefaultFilter: FiltroDashboard = { prioridade: "todas", prazo: "todas", status: "todas" };
-
-  useEffect(() => {
-    setFiltro(Filtro);
-  }, [Filtro]);
 
   if (loading) return <Loading_anim />;
   if (erro) return <div>{erro}</div>;
@@ -97,21 +83,12 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
     ],
   };
 
-  const termClick = (_event: any, elements: any[]) => {
-    if (!elements.length) return;
-    const index = elements[0].index;
-    const prazoclicado = prazoLabel[index];
-    setFiltro({ ...Filtro, prazo: prazoclicado });
-    setClearfilter(true);
-  };
-
   const optionsPrazo = {
     responsive: true,
     plugins: {
       legend: { position: "bottom" as const },
       title: { display: true, text: "Tarefas por prazo" },
     },
-    onClick: termClick,
   };
 
   //status
@@ -133,21 +110,12 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
     ],
   };
 
-  const statusClick = (_event: any, elements: any[]) => {
-    if (!elements.length) return;
-    const index = elements[0].index;
-    const statusClicada = statusLabel[index];
-    setFiltro({ ...Filtro, status: statusClicada });
-    setClearfilter(true);
-  };
-
   const options = {
     responsive: true,
     plugins: {
       legend: { position: "bottom" as const },
       title: { display: true, text: "Tarefas por Status" },
     },
-    onClick: statusClick,
   };
 
   //prioridade
@@ -162,23 +130,12 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
     ],
   };
 
-  const prioridadeClick = (_event: any, elements: any[]) => {
-    if (!elements.length) return;
-    const index = elements[0].index;
-    const prioridadeClicada = prioridadeLabel[index];
-    setClearfilter(true);
-    console.log(prioridadeClicada);
-    
-    setFiltro({ ...Filtro, prioridade: prioridadeClicada });
-  };
-
   const prioridadeoptions = {
     responsive: true,
     plugins: {
       legend: { display: true, position: "bottom" as const },
       title: { display: true, text: "Tarefas por Prioridade" },
     },
-    onClick: prioridadeClick,
   };
 
   //responsaveis
@@ -213,77 +170,19 @@ function GraficoBarras({ id_team, setFiltro, Filtro }: graficoProps) {
   return (
     <div className="flex flex-col min-h-1/2 w-full items-center gap-6 p-6 bg-gray-900">
       <h2 className="font-bold text-3xl text-white">Dashboards 📊</h2>
-      <p className="text-white text-xl font-semibold">
-        Clique nos gráficos para filtrar as tarefas acima
-      </p>
 
-      <h3 className="text-white font-bold text-2xl">Filtros Ativos:</h3>
-      <p className="text-white font-semibold">
-        Filtro por prazo: {Filtro.prazo}
-      </p>
-      <p className="text-white font-semibold">
-        Filtro por Status: {Filtro.status}
-      </p>
-      <p className="text-white font-semibold">
-        Filtro por Prioridade: {Filtro.prioridade}
-      </p>
-
-      <div className="flex flex-col sm:flex-row justify-start items-start p-2  gap-5">
-        {clearfilter && (
-          <div className="flex justify-center">
-            <button
-              className="bg-red-500 text-white rounded-[10px] hover:bg-green-300 p-2"
-              onClick={() => {
-                setClearfilter(false);
-                setFiltro(DefaultFilter);
-                setFiltro(DefaultFilter);
-              }}
-            >
-              Limpar filtros
-            </button>
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 w-full">
+      <div className="flex flex-col sm:flex-row flex-wrap justify-start items-start p-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
           <ChartGeneric type="pie" data={prazo} options={optionsPrazo} />
 
           <ChartGeneric type="doughnut" data={data} options={options} />
 
-          <div className="flex items-center justify-center bg-white p-4 rounded-2xl shadow-xl shadow-[#797272]">
-            <Doughnut
-              data={prioridade}
-              options={prioridadeoptions}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
+          <ChartGeneric type="doughnut" options={prioridadeoptions} data={prioridade}/>
 
-          <ChartGeneric data={responsaveisdata} options={responsaveisop}>
-            <div className="">
-              <button
-                onClick={() => setPaginaAtual((p) => Math.max(p - 1, 1))} // Volta uma página (mínimo = 1)
-                disabled={paginaAtual === 1} // Desativa se estiver na primeira página
-                className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${
-                  paginaAtual === 1
-                }`}
-              >
-                <FaArrowLeft color="black" />
-              </button>
-              <span className="p-1">
-                Página {paginaAtual} de {totalPaginas}
-              </span>
-
-              <button
-                onClick={() =>
-                  setPaginaAtual((p) => Math.min(p + 1, totalPaginas))
-                } // Avança uma página (máximo = totalPaginas)
-                disabled={paginaAtual === totalPaginas} // Desativa se estiver na última página
-                className={`bg-green-400 hover:bg-green-300 text-white p-1 rounded-full  ${
-                  paginaAtual === totalPaginas
-                }`}
-              >
-                <FaArrowRight color="black" />
-              </button>
-            </div>
-          </ChartGeneric>
+          <ChartGeneric
+            data={responsaveisdata}
+            options={responsaveisop}
+          ></ChartGeneric>
         </div>
       </div>
     </div>

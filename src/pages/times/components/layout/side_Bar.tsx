@@ -19,11 +19,13 @@ function Side_bar() {
   return (
     <div className="h-13 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center fixed sm:static bottom-0 z-10 flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
       <div
-        className={`${
-          hiddenteams
-            ? "flex items-start sm:pl-5 h-full sm:h-20 gap-2 w-1/2 sm:w-full"
-            : "flex items-start sm:pl-5 gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
-        }`}
+        className={`
+          flex items-center justify-center sm:items-start sm:justify-center sm:pl-5 
+          ${
+            hiddenteams
+              ? "h-full sm:h-20 gap-2 w-1/2 sm:w-full"
+              : "gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
+          }`}
       >
         <span
           className={`flex flex-row items-center justify-center gap-2 h-10 sm:h-20`}
@@ -56,14 +58,12 @@ function Side_bar() {
                     }
                   }}
                   key={team.id}
-                  className={`items-center sm:pl-3 p-2 gap-4 h-13 w-full rounded-xl sm:rounded-none justify-start flex flex-row ${
+                  className={`items-center sm:pl-3 p-2 gap-4 h-13 w-full justify-start flex flex-row ${
                     team.id === id ? "bg-[#7E7878]" : ""
                   }`}
                 >
                   <MdSupervisedUserCircle className="text-white w-7 h-7 sm:w-9 sm:h-9" />
-                  <p className="text-white block sm:text-xl ">
-                    {team.Name}
-                  </p>
+                  <p className="text-white block sm:text-xl ">{team.Name}</p>
                 </Link>
               ))
             )}

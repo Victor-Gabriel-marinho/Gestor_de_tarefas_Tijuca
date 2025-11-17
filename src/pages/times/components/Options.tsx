@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { TeamService } from "../../../api/services/teamService";
 import Confirm_delete from "../../../components/commons/confirmDelete";
 import { useState } from "react";
+import { ModalPromove } from "./ModalPromove";
 
 type OptionsProps = {
   refetch: () => void;
@@ -12,6 +13,7 @@ type OptionsProps = {
 function Options({ refetch, id, children }: OptionsProps) {
   const location = useLocation();
   const [modalconfirm, Setmodalconfirm] = useState<boolean>(false);
+  const [Modalpromove, SetModalpromove] = useState<boolean>(false)
   const team_id = location.state?.team.id;
 
   async function Delete_User() {
@@ -42,6 +44,10 @@ function Options({ refetch, id, children }: OptionsProps) {
           type="button"
           value="Promover"
           className="w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#076F37] cursor-pointer rounded-[10px]"
+          onClick={() => {
+            console.log(Modalpromove);
+            SetModalpromove(true)
+          } }
         />
       </div>
       {modalconfirm && (
@@ -50,6 +56,14 @@ function Options({ refetch, id, children }: OptionsProps) {
           texto={`Deseja remover esse usuário`}
           SetconfirmModal={Setmodalconfirm}
           SetconfirmAction={Delete_User}
+        />
+      )}
+      {Modalpromove && (
+        <ModalPromove 
+        refetchusers={refetch}
+        iduser={id}
+        idteam={team_id}
+        closemodal={() => SetModalpromove(false)}
         />
       )}
     </div>

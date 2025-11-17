@@ -63,4 +63,10 @@ export const TeamService = {
 
     return data;
   },
+
+  // Promove usuário em um time
+  async PromoverUser(idteam: string, iduser:string, idRole: string): Promise<{menssage: string}> {
+    const {data} = await api.patch<{menssage: string}>(`time/promove/${idteam}/${iduser}`, {idRole});
+    return data
+  }
 };
