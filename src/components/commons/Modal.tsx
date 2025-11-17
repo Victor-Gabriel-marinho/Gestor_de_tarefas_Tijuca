@@ -21,10 +21,8 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [Email, setEmail] = useState<string>("");
   const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
   const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
-  const RoleMap: Record<string, string> = {
-    Gestor: "2",
-    Colaborador: "3",
-  };
+  const [role, SetRole] = useState<string>("2");
+  
   const [error, seterror] = useState<string>("");
   const {id} = useParams();
   const team_id = id ?? ""  
@@ -57,11 +55,9 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
     if (Email.trim() !== "") {
       recipientsArray.push({
         email: Email.trim(),
-        role: RoleMap["Colaborador"], 
+        role: role
       });
     }
-
-  
     if (recipientsArray.length === 0) {
       seterror("Digite um email ou selecione um usuário.");
       Setloading(false);
@@ -143,7 +139,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
           {/* Buscar usuário por Email */}
 
           <form
-            className="w-full flex flex-row justify-between gap-4 items-center"
+            className="w-full flex flex-col sm:flex-row justify-between gap-4 items-center"
             action=""
             onSubmit={(event) => send_invitation(event)}
           >
@@ -155,11 +151,21 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
               value={Email}
               className="border w-10/12 outline-0 border-[#746E72] p-1 sm:p-2 font-semibold truncate text-xl rounded-[10px]"
             />
-            <input
-              type="submit"
-              value={`${loading ? "Carregando..." : "Convidar"}`}
-              className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-4/12 sm:w-2/12 font-semibold rounded-[10px]"
-            />
+            <div className="flex flex-row gap-1">
+              <input
+                type="submit"
+                value={`${loading ? "Carregando..." : "Convidar"}`}
+                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-[90px] sm:w-8/12 font-semibold rounded-[10px]"
+              />
+              <select
+                value={role}
+                onChange={(e)=> SetRole(e.target.value)}
+                className="bg-[#251F1F] p-2 rounded-[10px] w-[90px] text-sm font-semibold cursor-pointer"
+              >
+                <option value="2">Gestor</option>
+                <option value="3">Colaborador</option>
+              </select>
+            </div>
           </form>
           {error ? (
             <div className="bg-[#F21223] flex flex-row justify-between p-3 w-10/12 rounded-xl">
