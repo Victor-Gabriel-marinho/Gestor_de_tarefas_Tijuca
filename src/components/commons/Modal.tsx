@@ -49,13 +49,25 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   async function send_invitation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-        try {
+    try {
       Setloading(true);
+      let recipientsArray: { email: string; role: string }[] = [];
 
-    const recipientsArray = selectUsers_id.map((user) => ({
-      email: user.Email,
-      role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
-    }));
+
+    if (Email.trim() !== "") {
+      recipientsArray.push({
+        email: Email.trim(),
+        role: RoleMap["Colaborador"], 
+      });
+    }
+
+  
+    if (recipientsArray.length === 0) {
+      seterror("Digite um email ou selecione um usuário.");
+      Setloading(false);
+      return;
+    }
+
 
     const CreateInvite = {
       id_team: team_id,
@@ -85,6 +97,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       return [...prev, user];
     });
   }
+  console.log(selectUsers_id)
 
   const search_users = useCallback(async () => {
     try {
