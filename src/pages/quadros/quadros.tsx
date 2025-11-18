@@ -64,7 +64,7 @@ function Quadros() {
                       className="w-30 h-30 sm:w-40 sm:h-40 bg-cover bg-center rounded-2xl flex items-end"
                     >
                       <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex-wrap sm:p-3">
-                        <p className="text-white font-semibold">{team.Name}</p>
+                        <p className="text-white font-semibold line-clamp-2 b">{team.Name}</p>
                       </div>
                     </div>
                   </div>
