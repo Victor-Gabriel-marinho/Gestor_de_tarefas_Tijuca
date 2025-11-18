@@ -7,7 +7,7 @@ export function BlockRouter() {
   const hasPendingInvite = UseinviteStore((state) => state.token);   
   
   if (isAuthenticated) {
-      if (hasPendingInvite && location.pathname === '/Entrar') {
+      if ((hasPendingInvite && location.pathname === '/Entrar') || (hasPendingInvite && location.pathname === "/cadastro")) {
           return <Navigate to= {hasPendingInvite} replace />;
       }
       

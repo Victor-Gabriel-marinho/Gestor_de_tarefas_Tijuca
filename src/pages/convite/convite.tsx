@@ -54,7 +54,7 @@ function InviteTime() {
 
       }
   }
-
+  
   useEffect( () => {
     const fetch = async () => {
       try {
@@ -97,7 +97,7 @@ function InviteTime() {
       try {
         const response = await inviteService.Aceptinvite(token);
         console.log(response);
-       clearToken()
+        clearToken()
         navigate(`/times/${info?.teamid}`);
 
       } catch (err) {

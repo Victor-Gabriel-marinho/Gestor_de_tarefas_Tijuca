@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
 import { inviteService } from "../../api/services/inviteService.js";
-
+  
 type ModalProps = {
   refetch: () => void;
   openModal: boolean;
@@ -21,6 +21,9 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [Email, setEmail] = useState<string>("");
   const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
   const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
+  const [role, SetRole] = useState<string>("");
+  
+
   const RoleMap: Record<string, string> = {
     Gestor: "2",
     Colaborador: "3",
@@ -49,13 +52,34 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   async function send_invitation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-        try {
+    try {
       Setloading(true);
+      let recipientsArray: { email: string; role: string }[] = [];
 
-    const recipientsArray = selectUsers_id.map((user) => ({
-      email: user.Email,
-      role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
-    }));
+
+      if (Email.trim() !== "") {
+        recipientsArray.push({
+          email: Email.trim(),
+          role: role, 
+        });
+      } 
+    
+      if (selectUsers_id.length > 0) {
+        const selected = selectUsers_id.map((user) => ({
+          email: user.Email,
+          role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
+        }));
+        recipientsArray = recipientsArray.concat(selected);
+      }
+
+      if (recipientsArray.length === 0) {
+      seterror("Digite um email ou selecione um usuário.");
+      Setloading(false);
+      return;
+      }
+    
+  
+
 
     const CreateInvite = {
       id_team: team_id,
@@ -85,6 +109,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       return [...prev, user];
     });
   }
+  console.log(selectUsers_id)
 
   const search_users = useCallback(async () => {
     try {
@@ -142,11 +167,22 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
               value={Email}
               className="border w-10/12 outline-0 border-[#746E72] p-1 sm:p-2 font-semibold truncate text-xl rounded-[10px]"
             />
-            <input
-              type="submit"
-              value={`${loading ? "Carregando..." : "Convidar"}`}
-              className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-4/12 sm:w-2/12 font-semibold rounded-[10px]"
-            />
+            <div className="flex flex-row gap-1">
+              <input
+                type="submit"
+                value={`${loading ? "Carregando..." : "Convidar"}`}
+                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-[90px] sm:w-8/12 font-semibold rounded-[10px]"
+              />
+              <select
+                value={role}
+                onChange={(e)=> SetRole(e.target.value)}
+                className="bg-[#251F1F] p-2 rounded-[10px] w-[90px] text-sm font-semibold cursor-pointer"
+              >
+                <option value="2">Gestor</option>
+                <option value="3">Colaborador</option>
+              </select>
+            </div>
+
           </form>
           {error ? (
             <div className="bg-[#F21223] flex flex-row justify-between p-3 w-10/12 rounded-xl">

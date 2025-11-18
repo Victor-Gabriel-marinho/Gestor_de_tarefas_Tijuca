@@ -10,7 +10,6 @@ function Login() {
 
   const setToken = useAuthStore((state) => state.setToken);
   const InviteURL = UseinviteStore((state) => state.token);
-
   const navigate = useNavigate();
 
   async function CreatAuth(event: FormEvent<HTMLFormElement>) {
@@ -25,7 +24,8 @@ function Login() {
       const new_auth = await AuthService.SingIn({ Email, Password });
 
       setToken(new_auth.Token);
-
+      console.log("token: ",new_auth.Token)
+    
       if (InviteURL) {
         navigate(InviteURL);
       } else {
