@@ -1,6 +1,3 @@
-import { Doughnut } from "react-chartjs-2";
-import { FaArrowRight } from "react-icons/fa";
-import { FaArrowLeft } from "react-icons/fa";
 import { useDashboardPages } from "../../../hooks/Dashboard_hooks/get_dashBoardpages";
 
 import {
@@ -19,7 +16,6 @@ import {
 import { Loading_anim } from "../../../components/commons/loading";
 import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 import { ChartGeneric } from "./BarGrafics";
-import type { dashboardMetricsDTO } from "../../../api/types/DashboardTypes/DashboardMetric";
 
 // Registrar módulos obrigatórios
 ChartJS.register(
@@ -47,8 +43,6 @@ function GraficoBarras({ id_team }: graficoProps) {
     metrics,
     paginasPorUsuario,
     paginaAtual,
-    setPaginaAtual,
-    totalPaginas,
     loading,
     erro,
   } = useDashboardPages(id_team);
