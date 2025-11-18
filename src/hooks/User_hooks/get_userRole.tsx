@@ -10,20 +10,14 @@ export function Get_userRole(id_team: string) {
     const fetch_userRole = async () => {
       SetloadingRole(true);
       try {
-        console.log(1);
         const response = await UserService.get_userRole(id_team);
-        console.log(2);
         SetloadingRole(false);
-        console.log(3);
         if (response) {
-        console.log(4);
           setuserRole(response);
-        console.log(5);
-
         }
       } catch (err: any) {
         SetloadingRole(false);
-        console.log(id_team)
+        console.log('id do time: ', id_team)
         console.error("erro ao fazer requisição", err?.response ?? err);
       }
     };

@@ -10,6 +10,7 @@ export const UserService = {
     return data;
   },
   async get_userRole(id_team: string): Promise<Role> {
+    console.log(id_team);
     const { data } = await api.get<Role>(`/user/get_role/${id_team}`);
     return data;
   },

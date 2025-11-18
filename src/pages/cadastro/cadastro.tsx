@@ -5,7 +5,7 @@ import { useState, type FormEvent } from "react";
 import { UserService } from "../../api/services/userService";
 import { IoCloseOutline } from "react-icons/io5";
 import { validateEmail } from "../../utils/isEmail";
-import { useAuthStore } from "../../store/Auth";
+import { useAuthStore, UseinviteStore } from "../../store/Auth";
 import { useFont } from "../../components/font"
 
 function Cadastro() {
@@ -16,6 +16,8 @@ function Cadastro() {
   const setToken = useAuthStore((state) => state.setToken);
 
   const navigate = useNavigate();
+  const InviteURL = UseinviteStore((state) => state.token);
+  console.log(InviteURL);
 
   async function CreateUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,7 +28,7 @@ function Cadastro() {
     const Name = formdata.get("Name") as string;
     const Password = formdata.get("Password") as string;
     const Confirm_Password = formdata.get("Confirm_Password");
-
+    
     if (Password != Confirm_Password) {
       seterro(true);
       setmenssage("Senhas diferentes");
@@ -40,11 +42,14 @@ function Cadastro() {
 
     try {
       const new_user = await UserService.CreateUser({ Name, Email, Password });
-      
-      if (new_user) {
-        setToken(new_user.token.Token);
+
+      setToken(new_user.token.Token);     
+
+      if (InviteURL) {
+        navigate(InviteURL);
+      } else {        
         navigate("/");
-    }
+      }
     } catch (err) {
       seterro(true);
       setmenssage("Ja existe um usuário com este Email");

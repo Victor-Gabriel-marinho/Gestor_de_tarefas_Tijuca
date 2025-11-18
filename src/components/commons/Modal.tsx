@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
 import { inviteService } from "../../api/services/inviteService.js";
-
+  
 type ModalProps = {
   refetch: () => void;
   openModal: boolean;
@@ -21,8 +21,13 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [Email, setEmail] = useState<string>("");
   const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
   const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
-  const [role, SetRole] = useState<string>("2");
+  const [role, SetRole] = useState<string>("");
   
+
+  const RoleMap: Record<string, string> = {
+    Gestor: "2",
+    Colaborador: "3",
+  };
   const [error, seterror] = useState<string>("");
   const {id} = useParams();
   const team_id = id ?? ""  
@@ -52,17 +57,28 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
       let recipientsArray: { email: string; role: string }[] = [];
 
 
-    if (Email.trim() !== "") {
-      recipientsArray.push({
-        email: Email.trim(),
-        role: role
-      });
-    }
-    if (recipientsArray.length === 0) {
+      if (Email.trim() !== "") {
+        recipientsArray.push({
+          email: Email.trim(),
+          role: role, 
+        });
+      } 
+    
+      if (selectUsers_id.length > 0) {
+        const selected = selectUsers_id.map((user) => ({
+          email: user.Email,
+          role: RoleMap[userroles[user.id]] ?? RoleMap["Colaborador"],
+        }));
+        recipientsArray = recipientsArray.concat(selected);
+      }
+
+      if (recipientsArray.length === 0) {
       seterror("Digite um email ou selecione um usuário.");
       Setloading(false);
       return;
-    }
+      }
+    
+  
 
 
     const CreateInvite = {
@@ -139,7 +155,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
           {/* Buscar usuário por Email */}
 
           <form
-            className="w-full flex flex-col sm:flex-row justify-between gap-4 items-center"
+            className="w-full flex flex-row justify-between gap-4 items-center"
             action=""
             onSubmit={(event) => send_invitation(event)}
           >
@@ -166,6 +182,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                 <option value="3">Colaborador</option>
               </select>
             </div>
+
           </form>
           {error ? (
             <div className="bg-[#F21223] flex flex-row justify-between p-3 w-10/12 rounded-xl">
