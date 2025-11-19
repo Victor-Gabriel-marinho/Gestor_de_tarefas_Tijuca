@@ -161,12 +161,11 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
     prioridade: "todas",
     prazo: "todas",
     status: "todas",
-  });
+  });  
+  console.log(filtro);
+  
+    
   const [FiltroModal, SetFiltroModal] = useState<boolean>(false);
-
-  const handleSetFiltro = useCallback((newFiltro: FiltroDashboard) => {
-    setFiltro(newFiltro);
-  }, []);
 
   useEffect(() => {
     if (!tasks) return;
@@ -296,7 +295,7 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
               Filtros
             </div>
 
-            {FiltroModal && <Filtro_Modal setFiltro={handleSetFiltro} />}
+            {FiltroModal && <Filtro_Modal setFiltro={setFiltro} />}
           </div>
           <div className="flex flex-col sm:flex-row flex-wrap w-full items-center h-full justify-center gap-5 min-h-[50vh] sm:p-5">
             <DndContext
@@ -417,7 +416,6 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
       <Dashboard
         id_team={id ? id : ""}
         prazo={id ? id : ""}
-        setFiltro={handleSetFiltro}
         Filtro={filtro}
       />
     </>

@@ -35,7 +35,6 @@ type graficoProps = {
   id_team: string;
   prazo: string;
   Filtro: FiltroDashboard;
-  setFiltro: (newfiltro: FiltroDashboard) => void;
 };
 
 function GraficoBarras({ id_team }: graficoProps) {

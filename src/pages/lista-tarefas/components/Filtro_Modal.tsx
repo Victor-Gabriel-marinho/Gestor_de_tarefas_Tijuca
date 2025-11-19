@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 
 type Filtro_ModalProps = {
@@ -6,31 +6,42 @@ type Filtro_ModalProps = {
 };
 
 export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
+
   const [values, setvalues] = useState<FiltroDashboard>({
-    prazo: "",
-    prioridade: "",
-    status: "",
+    prioridade: "todas",
+    prazo: "todas",
+    status: "todas",
   });
+  const [changefilter, Setchangefilter] = useState<boolean>(false)
 
   const setfilter = (
     filtro: string,
-    key: "status" | "prazo" | "prioridade"
+    key: "prazo" | "prioridade" | "status"
   ) => {
-    
-    const newFiltroValue = filtro === "todas" ? "todas" : filtro;
-
     
     setvalues((prevValue) => ({
       ...prevValue,
-      [key]: newFiltroValue === "todas" ? "" : newFiltroValue,
-    }));
-
+      [key]: filtro === "" ? "todas" : filtro,
+    }))
     
     setFiltro({
       ...values, 
-      [key]: newFiltroValue, 
-    });
+      [key]: filtro === "" ? 'todas' : filtro 
+    })
+    
+    Setchangefilter(true)
   };
+
+  const clearfilters = () => {
+    const clearedfilter: FiltroDashboard = {
+      prazo: "todas",
+      prioridade: "todas",
+      status: "todas"
+    }
+    setvalues(clearedfilter)
+    setFiltro(clearedfilter)
+    Setchangefilter(false)
+  }
 
   return (
     <div className="bg-[#251F1F] absolute top-16 h-[20h] flex flex-col items-center text-white p-3 rounded-[10px] cursor-pointer">
@@ -42,7 +53,7 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
         <select
           name="Status"
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
-          value={values.status}
+          value={values.status === "todas" ? "" : values.status}
           onChange={(e) => setfilter(e.target.value, "status")}
         >
           <option value="" disabled>
@@ -54,13 +65,13 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Cancelada">Cancelada</option>
           <option value="Atrasada">Atrasada</option>
           <option value="Revisão">Revisão</option>
-          <option value="todas">Todos</option>
+          <option value="todas">limpar</option>
         </select>
 
         <select
           name="Prazo"
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
-          value={values.prazo}
+          value={values.prazo === "todas" ? '' : values.prazo}
           onChange={(e) => setfilter(e.target.value, "prazo")}
         >
           <option value="" disabled>
@@ -70,14 +81,14 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Semana">Esta semana</option>
           <option value="Dia">Hoje</option>
           <option value="Atrasadas">Atrasadas</option>
-          <option value="todas">Todos</option>
+          <option value="todas">limpar</option>
         </select>
 
         <select
           name="Prioridade"
           id=""
           className="w-3/4 p-1 rounded-[10px] text-black cursor-pointer bg-white hover:scale-105 transition-all"
-          value={values.prioridade}
+          value={values.prioridade === "todas" ? "" : values.prioridade}
           onChange={(e) => setfilter(e.target.value, "prioridade")}
         >
           <option value="" disabled>
@@ -86,9 +97,16 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Baixa">Baixa</option>
           <option value="Média">Média</option>
           <option value="alta">Alta</option>
-          <option value="todas">Todos</option>
+          <option value="todas">limpar</option>
         </select>
       </form>
+      { changefilter &&
+      <div className="bg-red-500 p-1 rounded-[5px] mt-2"
+      onClick={clearfilters}
+      >
+      Limpar filtros
+      </div>
+      }
     </div>
   );
 };
