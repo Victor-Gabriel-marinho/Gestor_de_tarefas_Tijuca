@@ -39,9 +39,9 @@ function Quadros() {
          <h2 className="text-2xl text-white">Quadros dos Times 🗃</h2> 
          <p className="text-white">Selecione o time que deseja entrar</p>
        </div>
-        <main className="flex flex-1 justify-center">
+        <main className="flex flex-1 justify-center h-full">
              
-          <div className="w-full max-h-110 lg:h-50 overflow-y-auto relative grid items grid-cols-2 sm:flex m-5 sm:flex-row sm:gap-6 gap-6">
+          <div className="w-full h-auto  overflow-visible flex flex-wrap justify-center items-center relative gap-5 gap-y-1'">
              
             <div
               onClick={() => Setcriar(!criar)}
@@ -61,10 +61,10 @@ function Quadros() {
                 >
                   <div className="">
                     <div
-                      className="w-30 h-30 sm:w-40 sm:h-40 bg-cover bg-center rounded-2xl flex items-end"
+                      className="w-30 h-30 sm:w-40 sm:h-40 bg-cover rounded-2xl flex items-end"
                     >
-                      <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex-wrap sm:p-3">
-                        <p className="text-white font-semibold line-clamp-2 break-words whitespace-normal max-w-[126px]">{team.Name}</p>
+                      <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex flex-wrap sm:p-3">
+                        <p className="text-white font-semibold line-clamp-2 break-words whitespace-normal max-w-[120px]">{team.Name}</p>
                       </div>
                     </div>
                   </div>

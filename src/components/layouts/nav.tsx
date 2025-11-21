@@ -25,7 +25,7 @@ function Nav() {
           to="/"
           className="relative group flex flex-col items-center justify-center"
         >
-          <div className="relative flex flex-col items-center justify-center">
+          <div className="relative flex flex-row ">
             <BsFillHouseFill className="cursor-pointer text-white text-xl sm:text-3xl " />
 
             <span
