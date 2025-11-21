@@ -41,7 +41,7 @@ function Quadros() {
        </div>
         <main className="flex flex-1 justify-center">
              
-          <div className="w-full max-h-110 lg:h-50 overflow-y-auto relative grid items grid-cols-2 sm:flex m-5 sm:flex-row sm:gap-6">
+          <div className="w-full max-h-110 lg:h-50 overflow-y-auto relative grid items grid-cols-2 sm:flex m-5 sm:flex-row sm:gap-6 gap-6">
              
             <div
               onClick={() => Setcriar(!criar)}
@@ -64,7 +64,7 @@ function Quadros() {
                       className="w-30 h-30 sm:w-40 sm:h-40 bg-cover bg-center rounded-2xl flex items-end"
                     >
                       <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex-wrap sm:p-3">
-                        <p className="text-white font-semibold">{team.Name}</p>
+                        <p className="text-white font-semibold line-clamp-2 break-words whitespace-normal max-w-[126px]">{team.Name}</p>
                       </div>
                     </div>
                   </div>

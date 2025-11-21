@@ -9,7 +9,7 @@ function Layout() {
   return (
     <div className="w-screen h-screen flex flex-col overflow-hidden">
       <Nav />
-      <div className="flex-1 flex flex-col-reverse sm:flex-row">
+      <div className="flex-1 flex flex-col-reverse sm:flex-row ">
         <Side_bar />
         <main className="relative flex-1">
           <Outlet />

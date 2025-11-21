@@ -17,13 +17,13 @@ function Side_bar() {
   }
 
   return (
-    <div className="h-13 sm:h-full w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center fixed sm:static bottom-0 z-10 flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
+    <div className="h-13 sm:h-full  w-full sm:w-60 bg-[#251F1F] justify-center sm:justify-start items-center fixed sm:static bottom-0 z-10 flex flex-row sm:flex-col gap-10 sm:gap-3 sm:pt-10">
       <div
         className={`
-          flex items-center justify-center sm:items-start sm:justify-center sm:pl-5 
+          flex items-center justify-center sm:items-start sm:justify-center  sm:pl-5 
           ${
             hiddenteams
-              ? "h-full sm:h-20 gap-2 w-1/2 sm:w-full"
+              ? "h-full sm:h-20  gap-2 w-1/2 sm:w-full"
               : "gap-2 relative z-10 sm:z-0 flex-col-reverse sm:flex-col w-1/2 sm:w-full"
           }`}
       >
@@ -41,39 +41,43 @@ function Side_bar() {
             }`}
             onClick={handlehiddenteams}
           />
-        </span>
+        </span> 
 
         {!hiddenteams && (
-          <div className="flex max-h-80 sm:h-10/12 overflow-y-auto w-55 sm:w-full absolute sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl sm:rounded-none left-5 bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
-            {loading ? (
-              <Loading_anim />
-            ) : (
-              Teams.map((team: Team) => (
-                <Link
-                  to={`/times/${team.id}`}
-                  state={{ team }}
-                  onClick={() => {
-                    if (window.innerWidth < 640) {
-                      handlehiddenteams();
-                    }
-                  }}
-                  key={team.id}
-                  className={`items-center sm:pl-3 p-2 gap-4 h-13 w-full justify-start flex flex-row ${
-                    team.id === id ? "bg-[#7E7878]" : ""
-                  }`}
-                >
-                  <MdSupervisedUserCircle className="text-white w-7 h-7 sm:w-9 sm:h-9" />
-                  <p className="text-white block sm:text-xl ">{team.Name}</p>
-                </Link>
-              ))
-            )}
+          <div className="flex max-h-80 sm:h-10/12 overflow-y-auto w-55 sm:w-full absolute  sm:static bg-zinc-900 sm:bg-[#251F1F] rounded-xl sm:rounded-none  bottom-full sm:bottom-0 z-50 sm:z-0 flex-col gap-4 sm:gap-7 ">
+          
+
+            <div className="pl-10">
+              {loading ? (
+                <Loading_anim />
+              ) : (
+                Teams.map((team: Team) => (
+                  <Link
+                    to={`/times/${team.id}`}
+                    state={{ team }}
+                    onClick={() => {
+                      if (window.innerWidth < 640) {
+                        handlehiddenteams();
+                      }
+                    }}
+                    key={team.id}
+                    className={`items-center sm:pl-3 p-2 gap-4 h-13 w-full justify-start flex flex-row ${
+                      team.id === id ? "bg-[#7E7878]" : ""
+                    }`}
+                  >
+                    <MdSupervisedUserCircle size={40} className="text-white" />
+                    <p className="text-white block sm:text-xl line-clamp-2 break-words whitespace-normal sm:line-clamp-2 sm:break-words sm:whitespace-normal sm:max-w-[200px] overflow-hidden ">{team.Name}</p>
+                  </Link>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
 
       <Link
         to={"/membros"}
-        className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-start pl-5 ${
+        className={`w-1/2 sm:w-full h-full sm:h-15 flex items-center  justify-start pl-5  ${
           !id ? "bg-[#7E7878] " : ""
         }`}
       >

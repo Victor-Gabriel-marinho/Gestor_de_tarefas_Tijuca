@@ -4,6 +4,8 @@ import { Loading_anim } from "../../../components/commons/loading";
 import { useParams } from "react-router-dom";
 import { TaskService } from "../../../api/services/TaskService";
 import { get_UsersWithNotInTask } from "../../../hooks/User_hooks/get_UsersWithNotInTask";
+import { IoIosClose } from "react-icons/io";
+
 
 type Modal_taskUserProps = {
     id_task: string;
@@ -45,15 +47,29 @@ export function Modal_taskUser({id_task, refetch_taskuser, closeModal}:Modal_tas
     }
 
     const {usersWithNotInTask, loading, refetchUsersWithNotInTask} = get_UsersWithNotInTask(id_task, id ?? "")
-    
+    const isMobile = window.innerWidth <= 768;
+
 
     return (
       <div className="w-[280px] h-[240px] flex flex-col text-center items-center justify-center bg-[#251F1F] mr-5 rounded-[10px] shadow-2xl shadow-[#3b3232]">
+           
+         
+           { isMobile && (
+           <div className="flex w-full items-center justify-end ">
+            <button className="cursor-pointer absolute mt-10"
+            onClick={closeModal}
+            >
+              <IoIosClose size={40} color="white" className=""/>
+            </button>
+          </div>)}
+
+
         {loading ?
         < Loading_anim/>
         : ( 
         <div className="h-full w-full p-5 flex items-center justify-center flex-col gap-3">
-            <h2 className="text-white font-semibold text-lg">Atribuir tarefa</h2>
+      
+           <h2 className="text-white font-semibold text-lg">Atribuir tarefa</h2>
             <div className="w-full h-full flex flex-col gap-2 max-h-[241px]">
              {usersWithNotInTask.map((user) => { 
                 const isSelected = selectedUser.some((u) => u.id === user.id)

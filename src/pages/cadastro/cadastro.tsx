@@ -7,6 +7,8 @@ import { IoCloseOutline } from "react-icons/io5";
 import { validateEmail } from "../../utils/isEmail";
 import { useAuthStore, UseinviteStore } from "../../store/Auth";
 import { useFont } from "../../components/font"
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 function Cadastro() {
   useFont("'Poppins', sans-serif ");
@@ -18,6 +20,13 @@ function Cadastro() {
   const navigate = useNavigate();
   const InviteURL = UseinviteStore((state) => state.token);
   console.log(InviteURL);
+
+  const [mostrarSenha, setMostrarSenha] = useState<boolean>(false)
+
+const ToggleMostrarSenha = () => {
+  setMostrarSenha(!mostrarSenha)
+}
+
 
   async function CreateUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,21 +94,33 @@ function Cadastro() {
                 className="border p-2 border-gray-300 rounded-md  placeholder-gray-500  bg-gray-50 w-full max-w-sm  focus:outline-none"
               />
 
-              <input
-                type="password"
-                name="Password"
-                placeholder="Senha"
-                required
-                className="border p-2 border-gray-300 rounded-md   placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
-              />
+              <div className="relative w-full max-w-sm">
+                <input
+                  id="Senha"
+                  type={mostrarSenha ? "text" : "password"}
+                  name="Password"
+                  placeholder="Senha"
+                  required
+                  className="border p-2 border-gray-300 rounded-md   placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
 
-              <input
-                type="password"
-                name="Confirm_Password"
-                placeholder="Confirme a senha"
-                required
-                className=" border p-2 border-gray-300  rounded-md  placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
-              />
+                />
+
+                <button className="absolute inset-y-0 right-0 flex items-center p-3 cursor-pointer" onClick={ToggleMostrarSenha}>
+                  {mostrarSenha ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+
+              </div>
+              <div className="relative w-full max-w-sm">
+
+                <input
+                  type="password"
+                  name="Confirm_Password"
+                  placeholder="Confirme a senha"
+                  required
+                  className=" border p-2 border-gray-300  rounded-md  placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
+                />
+
+              </div>
 
               <input
                 type="submit"
@@ -131,8 +152,8 @@ function Cadastro() {
         </div>
 
         <div className="bg-[#1F2937] w-1/2 mr-auto z-10 hidden md:flex justify-center items-center flex-1 ">
-           <img src={card} alt="" className="max-w-md w-full" />
-      </div>
+          <img src={card} alt="" className="max-w-md w-full" />
+        </div>
       </div>
     </>
   );

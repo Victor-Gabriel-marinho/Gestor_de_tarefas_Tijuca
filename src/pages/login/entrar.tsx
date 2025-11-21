@@ -1,9 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useFont } from "../../components/font";
 import card from "../../assets/card.png";
 import { AuthService } from "../../api/services/authService";
 import { type FormEvent } from "react";
 import { UseinviteStore, useAuthStore } from "../../store/Auth";
+import { useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   useFont("'Inter', sans-serif ");
@@ -36,6 +39,12 @@ function Login() {
     }
   }
 
+
+  const [mostrarSenha, setMostrarSenha] = useState<boolean>(false)
+    
+    const ToggleMostrarSenha = () => {
+      setMostrarSenha(!mostrarSenha)
+    }
   return (
     <>
       <div className="flex h-screen overflow-hidden">
@@ -54,14 +63,21 @@ function Login() {
                 required
                 className="border p-2 border-gray-300 rounded-md   placeholder-gray-500 bg-gray-50 w-full max-w-sm focus:outline-none"
               />
-              <input
-                type="password"
-                name="Password"
-                id=""
-                placeholder="Senha"
-                required
-                className="border p-2 border-gray-300 rounded-md placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
-              />
+              <div className="relative w-full max-w-sm">
+                <input
+                  type={mostrarSenha ? "text" : "password"}
+                  name="Password"
+                  id=""
+                  placeholder="Senha"
+                  required
+                  className="border p-2 border-gray-300 rounded-md placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
+                />
+
+                <button type="button" className="absolute inset-y-0 right-0 flex items-center p-3 cursor-pointer" onClick={ToggleMostrarSenha}>
+                   {mostrarSenha ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
+
               <input
                 type="submit"
                 value="Entrar"

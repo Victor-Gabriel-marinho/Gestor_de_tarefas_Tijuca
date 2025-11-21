@@ -66,8 +66,8 @@ function Times() {
       ) : (
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
-            <h1 className="text-white text-2xl sm:text-6xl font-semibold">
-              Membros do time{" "}
+            <h1 className="text-white text-2xl sm:text-3xl font-semibold p-2 line-clamp-2 break-all whitespace-normal md:line-clamp-2 md:break-all md:whitespace-normal md:max-w-[750px]">
+              Membros do time <br />
               {first_team?.id === id ? first_team?.Name : team?.Name}
             </h1>
 
