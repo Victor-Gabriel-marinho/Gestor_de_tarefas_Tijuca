@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { FiltroDashboard } from "../../../api/types/DashboardTypes/filtro";
 
 type Filtro_ModalProps = {
