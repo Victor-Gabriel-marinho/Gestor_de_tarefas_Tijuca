@@ -31,12 +31,11 @@ export function Buttons_Bar({isMobile,setconfimModal,setcriar,Settag,Setviewuser
     <div className="w-full mx-5 flex justify-around gap-3">
       <div className="relative group flex flex-col items-center ">
         <FaUserPlus
-          className="hover:scale-110 cursor-pointer"
+          className="hover:scale-110 cursor-pointer size-8"
           onClick={() => {
             Setviewusers(!viewusers);
             if (isMobile) setTrocarModal("users");
           }}
-          size={30}
         />
         <span className={hoverOptions}>Atribuita usuários</span>
       </div>
@@ -46,15 +45,15 @@ export function Buttons_Bar({isMobile,setconfimModal,setcriar,Settag,Setviewuser
         className="relative group flex flex-col items-center"
       >
         <GoPaperclip
-          className="hover:scale-110 cursor-pointer transition-transform"
-          size={30}
+          className="hover:scale-110 cursor-pointer transition-transform size-8"
+          
         />
         <span className={hoverOptions}>Coloque um arquivo</span>
       </button>
       <div className="relative group flex flex-col items-center">
         <IoMdPricetag
-          className="hover:scale-110  cursor-pointer"
-          size={30}
+          className="hover:scale-110  cursor-pointer transition-transform size-8"
+          size={25}
           onClick={() => {
             Settag("criar");
             if (isMobile) setTrocarModal("second");
@@ -64,17 +63,17 @@ export function Buttons_Bar({isMobile,setconfimModal,setcriar,Settag,Setviewuser
       </div>
       <div className="relative group flex flex-col items-center">
         <MdEdit
-          className="cursor-pointer hover:scale-110"
-          size={30}
+          className="cursor-pointer hover:scale-110 transition-transform size-8"
+          size={25}
           onClick={setcriar}
         />
         <span className={hoverOptions}>Edite sua tarefa</span>
       </div>
       <div className="relative group flex flex-col items-center">
         <FaTrashCan
-          className="hover:scale-110 cursor-pointer"
+          className="hover:scale-110 cursor-pointer transition-transform size-8"
           color="red"
-          size={30}
+          size={25}
           onClick={() => {
             setconfimModal(true);
           }}

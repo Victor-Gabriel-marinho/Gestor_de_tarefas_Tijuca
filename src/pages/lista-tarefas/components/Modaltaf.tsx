@@ -162,7 +162,7 @@ if (!isOpen) return null
                   }}
                 />
 
-                {/* bara de botões*/}
+                {/* barra de botões*/}
                 {userrole === "3" ? (
                   <div></div>
                 ) : (

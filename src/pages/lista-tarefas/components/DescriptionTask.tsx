@@ -1,5 +1,7 @@
 import type { Task } from "../../../api/types/TaskTypes/TaskDTO";
 
+
+
 type DescriptionTaskProps = {
     task: Task
 }
@@ -13,7 +15,7 @@ export function DescriptionTask({task}:DescriptionTaskProps) {
         </p>
         <p className="flex text-lg gap-2">
           <span className="font-semibold text-xl">Data de entrega:</span>
-          {task.EndDate.toString().split("T")[0].replaceAll("-", "/")}
+          {task.EndDate.toString().split("T")[0].split("-").reverse().join("/")}
         </p>
         <p className="flex text-lg gap-2">
           <span className="font-semibold text-xl">Prioridade:</span>
