@@ -7,14 +7,16 @@ import { useParams } from "react-router-dom";
 import type { user_for_invite } from "../../api/types/UserTypes/User";
 import { UserService } from "../../api/services/userService";
 import { inviteService } from "../../api/services/inviteService.js";
+
   
 type ModalProps = {
   refetch: () => void;
   openModal: boolean;
   setopenmodal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSucess: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
+function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
   const [popUp, setpopUp] = useState<string | null>(null);  
   const [loading, Setloading] = useState<boolean>(false);
   const [userroles, SetUserroles] = useState<Record<string, string>>({});
@@ -22,7 +24,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
   const [selectUsers_id, SetselectUsers_id] = useState<user_for_invite[]>([]);
   const [users_to_invite, Setusers_to_invite] = useState<user_for_invite[]>([]);
   const [role, SetRole] = useState<string>("");
-  
+ 
 
   const RoleMap: Record<string, string> = {
     Gestor: "2",
@@ -89,18 +91,17 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
      const response = await inviteService.SendInvite(CreateInvite);
       if (response) {
         Setloading(false);
+        setSucess(true)
         handleModal();
         refetch();
         search_users();
        }
-       
     } catch (error) {
       Setloading(false);
       console.error("erro ao fazer requisição", error);
       seterror("este usuário já está no time");
     } 
   }  
-
   function selectuser(user: user_for_invite) {
     SetselectUsers_id((prev) => {
       if (prev.some((u) => u.id === user.id)) {
@@ -160,7 +161,11 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
           <form
             className="w-full flex flex-row justify-between gap-4 items-center"
             action=""
-            onSubmit={(event) => send_invitation(event)}
+            onSubmit={(event) =>{
+              send_invitation(event)
+            } 
+              
+            }
           >
             <input
               type="text"

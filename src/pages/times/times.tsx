@@ -13,11 +13,14 @@ import Get_teams from "../../hooks/Team_hooks/get_teams.js";
 import Confirm_delete from "../../components/commons/confirmDelete.js";
 import { Loading_anim } from "../../components/commons/loading.js";
 import { TeamService } from "../../api/services/teamService.js";
+import SucessInvite from "./components/SucessInviteModal.js";
+
 
 function Times() {
   const [openModal, SetopenModal] = useState<boolean>(false);
   const [options, Setoptions] = useState<string | null>(null);
   const [modalconfirm, Setmodalconfirm] = useState<boolean>(false);
+  const [sucess, setSucess] = useState<boolean>(false)
 
   const Navigate = useNavigate();
 
@@ -71,7 +74,6 @@ function Times() {
                 {first_team?.id === id ? first_team?.Name : team?.Name}
               </span>
             </h1>
-
             {userRole?.id === "1" && (
               <div className="flex flex-row gap-2 sm:gap-3 items-center">
                 <div
@@ -157,15 +159,20 @@ function Times() {
           </div>
         </main>
       )}
-
+  
+      {sucess &&(
+        <SucessInvite
+        
+        />
+      )}
       {openModal && (
         <Modal
           setopenmodal={SetopenModal}
           openModal={openModal}
           refetch={refetch}
+          setSucess={setSucess}
         />
       )}
-
       {modalconfirm && (
         <Confirm_delete
           funcao="Excluir"
