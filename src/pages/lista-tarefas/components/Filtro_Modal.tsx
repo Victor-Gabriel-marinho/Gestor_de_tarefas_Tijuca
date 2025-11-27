@@ -65,7 +65,6 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Cancelada">Cancelada</option>
           <option value="Atrasada">Atrasada</option>
           <option value="Revisão">Revisão</option>
-          <option value="todas">limpar</option>
         </select>
 
         <select
@@ -81,7 +80,6 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Semana">Esta semana</option>
           <option value="Dia">Hoje</option>
           <option value="Atrasadas">Atrasadas</option>
-          <option value="todas">limpar</option>
         </select>
 
         <select
@@ -97,7 +95,6 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
           <option value="Baixa">Baixa</option>
           <option value="Média">Média</option>
           <option value="alta">Alta</option>
-          <option value="todas">limpar</option>
         </select>
       </form>
       { changefilter &&

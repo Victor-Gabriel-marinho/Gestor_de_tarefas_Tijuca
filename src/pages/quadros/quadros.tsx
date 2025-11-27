@@ -35,14 +35,12 @@ function Quadros() {
     <>
       <div className="bg-[#1F2937] w-screen h-screen flex flex-col overflow-x-hidden">
         <Nav />
-       <div className="flex flex-col justify-center items-center p-1 font-semibold">
-         <h2 className="text-2xl text-white">Quadros dos Times 🗃</h2> 
-         <p className="text-white">Selecione o time que deseja entrar</p>
-       </div>
+        <div className="flex flex-col justify-center items-center mt-5 p-1 font-semibold">
+          <h2 className="text-2xl text-white">Quadros dos Times 📋</h2>
+          <p className="text-white">Selecione o time que deseja entrar</p>
+        </div>
         <main className="flex flex-1 justify-center h-full">
-             
-          <div className="w-full h-auto  overflow-visible flex flex-wrap justify-center items-center relative gap-5 gap-y-1'">
-             
+          <div className="w-full overflow-visible flex flex-wrap justify-center items-center sm:justify-start sm:items-start sm:m-10 relative gap-5 gap-y-1'">
             <div
               onClick={() => Setcriar(!criar)}
               className="w-30 h-30 sm:w-40 sm:h-40 bg-[#131733] rounded-2xl flex items-center justify-center hover:bg-[#2d304b] hover:scale-100 transition-all cursor-pointer"
@@ -60,11 +58,11 @@ function Quadros() {
                   key={team.id}
                 >
                   <div className="">
-                    <div
-                      className="w-30 h-30 sm:w-40 sm:h-40 bg-cover rounded-2xl flex items-end"
-                    >
+                    <div className="w-30 h-30 sm:w-40 sm:h-40 bg-cover rounded-2xl flex items-end">
                       <div className="bg-[#251F1F] w-50 rounded-[5px] p-1 flex flex-wrap sm:p-3">
-                        <p className="text-white font-semibold line-clamp-2 break-words whitespace-normal max-w-[120px]">{team.Name}</p>
+                        <p className="text-white font-semibold line-clamp-2 break-words whitespace-normal max-w-[120px]">
+                          {team.Name}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -79,7 +77,6 @@ function Quadros() {
               criar ? "block" : "hidden"
             }`}
           >
-
             <div className="bg-[#111827] text-white flex flex-col justify-evenly w-60 h-70 p-4 rounded-2xl ">
               <p className="text-xl font-bold">Criar Quadro</p>
               <form
@@ -114,10 +111,7 @@ function Quadros() {
             </div>
           </div>
         </main>
-
-      
       </div>
-      
     </>
   );
 }

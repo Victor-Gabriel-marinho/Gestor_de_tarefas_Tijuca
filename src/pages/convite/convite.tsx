@@ -23,7 +23,7 @@ function InviteTime() {
   const Inviteurl = window.location.pathname
   const clearToken = UseinviteStore((state) => state.clearToken)
 
-  const login_ROUTE = '/Entrar'
+  const login_ROUTE = '/entrar'
   let info = null; 
 
   // checa se o usuário não está logado 
@@ -103,7 +103,7 @@ function InviteTime() {
       } catch (err) {
         console.error(err);
         setError("Convite não encontrado ou já foi aceito/expirado, você voltara para a página inicial do Workpoint");
-        setTimeout(() => navigate('/Entrar/'), 3000)
+        setTimeout(() => navigate('/entrar/'), 3000)
       } finally {
         setLoading(false);
     };

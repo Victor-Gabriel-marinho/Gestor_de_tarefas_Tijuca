@@ -19,7 +19,6 @@ function Cadastro() {
 
   const navigate = useNavigate();
   const InviteURL = UseinviteStore((state) => state.token);
-  console.log(InviteURL);
 
   const [mostrarSenha, setMostrarSenha] = useState<boolean>(false)
 
@@ -27,20 +26,26 @@ const ToggleMostrarSenha = () => {
   setMostrarSenha(!mostrarSenha)
 }
 
-
   async function CreateUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formdata = new FormData(event.currentTarget);
 
-    const Email = formdata.get("Email") as string;
-    const Name = formdata.get("Name") as string;
-    const Password = formdata.get("Password") as string;
-    const Confirm_Password = formdata.get("Confirm_Password");
+    const Email = (formdata.get("Email") as string) ?? "";
+    const Name = (formdata.get("Name") as string) ?? "";
+    const Password = (formdata.get("Password") as string) ?? "";
+    const Confirm_Password = (formdata.get("Confirm_Password") as string) ?? "";
+
+    if ([Email, Name, Password, Confirm_Password].some((v) => !v.trim())) {
+      seterro(true)
+      setmenssage("Algum campo está vazio ou só tem espaços");
+      return
+    }
     
     if (Password != Confirm_Password) {
       seterro(true);
       setmenssage("Senhas diferentes");
+      return
     }
 
     if (!validateEmail(Email)) {
@@ -56,9 +61,8 @@ const ToggleMostrarSenha = () => {
 
       if (InviteURL) {
         navigate(InviteURL);
-      } else {        
-        navigate("/");
       }
+      
     } catch (err) {
       seterro(true);
       setmenssage("Ja existe um usuário com este Email");
@@ -83,14 +87,12 @@ const ToggleMostrarSenha = () => {
                 type="Name"
                 name="Name"
                 placeholder="Nome"
-                required
                 className="border p-2 border-gray-300 rounded-md   placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
               />
 
               <input
                 name="Email"
                 placeholder="Email"
-                required
                 className="border p-2 border-gray-300 rounded-md  placeholder-gray-500  bg-gray-50 w-full max-w-sm  focus:outline-none"
               />
 
@@ -100,12 +102,11 @@ const ToggleMostrarSenha = () => {
                   type={mostrarSenha ? "text" : "password"}
                   name="Password"
                   placeholder="Senha"
-                  required
                   className="border p-2 border-gray-300 rounded-md   placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
 
                 />
 
-                <button className="absolute inset-y-0 right-0 flex items-center p-3 cursor-pointer" onClick={ToggleMostrarSenha}>
+                <button type="button" className="absolute inset-y-0 right-0 flex items-center p-3 cursor-pointer" onClick={ToggleMostrarSenha}>
                   {mostrarSenha ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                 </button>
 
@@ -116,7 +117,6 @@ const ToggleMostrarSenha = () => {
                   type="password"
                   name="Confirm_Password"
                   placeholder="Confirme a senha"
-                  required
                   className=" border p-2 border-gray-300  rounded-md  placeholder-gray-500 bg-gray-50 w-full max-w-sm  focus:outline-none"
                 />
 

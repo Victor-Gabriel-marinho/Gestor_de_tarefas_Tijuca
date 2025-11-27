@@ -2,7 +2,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Modal from "../../components/commons/Modal.js";
 import Options from "./components/Options.js";
-import { useState, type MouseEvent } from "react";
+import { useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Get_usersInTeams } from "../../hooks/User_hooks/get_usersInTeams.js";
 import { decodeJWT } from "../../utils/decodeJWT.js";
@@ -41,8 +41,7 @@ function Times() {
     Setmodalconfirm(!modalconfirm);
   }
 
-  function handleOptions(event: MouseEvent<SVGElement, globalThis.MouseEvent>) {
-    const id = event.currentTarget.id;
+  function handleOptions(id: string) {
     Setoptions((prev) => (prev === id ? null : id));
   }
 
@@ -66,9 +65,11 @@ function Times() {
       ) : (
         <main className="bg-[#20282F] h-full w-full flex flex-col p-4 sm:p-10 gap-5">
           <div className="flex flex-row items-center justify-between">
-            <h1 className="text-white text-2xl sm:text-3xl font-semibold p-2 line-clamp-2 break-all whitespace-normal md:line-clamp-2 md:break-all md:whitespace-normal md:max-w-[750px]">
-              Membros do time <br />
-              {first_team?.id === id ? first_team?.Name : team?.Name}
+            <h1 className="text-white text-xl sm:text-3xl font-semibold p-2 wrap-break-word max-h-[170px] max-w-[200px] overflow-auto sm:max-w-[800px]">
+              Membros do time:{" "}
+              <span className="font-bold text-2xl sm:text-4xl">
+                {first_team?.id === id ? first_team?.Name : team?.Name}
+              </span>
             </h1>
 
             {userRole?.id === "1" && (
@@ -88,14 +89,19 @@ function Times() {
             )}
           </div>
 
-          <div className="w-full sm:max-h-90 lg:max-h-160 max-h-120 min-h-55 overflow-y-auto">
+          <div className="w-full sm:max-h-90 lg:max-h-160 max-h-90 min-h-55 overflow-y-auto">
             <div className="flex flex-col gap-4 sm:gap-8">
               {loading ? (
                 <Loading_anim />
               ) : (
                 users.map((user) =>
                   options === user.id ? (
-                    <Options id={user.id} refetch={refetch} key={user.id}>
+                    <Options
+                      id={user.id}
+                      refetch={refetch}
+                      closeOptions={handleOptions}
+                      key={user.id}
+                    >
                       <div className="flex flex-row gap-2 m-2 justify-between items-center">
                         <div className="flex gap-4">
                           <FaUserCircle className="text-white text-3xl sm:text-5xl" />
@@ -109,9 +115,9 @@ function Times() {
                           </div>
                         </div>
                         <BsThreeDotsVertical
-                          className="text-white text-xl sm:text-3xl cursor-pointer rotate-90"
+                          className="text-white text-xl sm:text-3xl cursor-pointer rotate-90 hover:scale-105 transition-all"
                           id={user.id}
-                          onClick={handleOptions}
+                          onClick={() => handleOptions}
                         />
                       </div>
                     </Options>
@@ -120,8 +126,9 @@ function Times() {
                       className={`flex flex-row gap-2 justify-between items-center hover:bg-[#303d47] rounded-2xl p-2 ${
                         payload?.sub === user.id
                           ? "bg-zinc-900 h-20 pl-2 rounded-xl"
-                          : ""
+                          : "cursor-pointer"
                       }`}
+                      onClick={ payload?.sub !== user.id ? () => handleOptions(user.id) : () => {}}
                       key={user.id}
                     >
                       <div className="flex gap-4 items-center">
@@ -138,9 +145,8 @@ function Times() {
 
                       {payload?.sub !== user.id && userRole?.id === "1" && (
                         <BsThreeDotsVertical
-                          className="text-white text-xl sm:text-3xl cursor-pointer hover:opacity-70"
-                          id={user.id}
-                          onClick={handleOptions}
+                          className="text-white text-xl sm:text-3xl cursor-pointer hover:opacity-70 hover:scale-105 transition-all"
+                          onClick={() => handleOptions}
                         />
                       )}
                     </div>
@@ -160,7 +166,14 @@ function Times() {
         />
       )}
 
-      {modalconfirm && <Confirm_delete  funcao="Excluir" texto="Deseja excluir esse time?" SetconfirmModal={Setmodalconfirm} SetconfirmAction={confirm_delete} />}
+      {modalconfirm && (
+        <Confirm_delete
+          funcao="Excluir"
+          texto="Deseja excluir esse time?"
+          SetconfirmModal={Setmodalconfirm}
+          SetconfirmAction={confirm_delete}
+        />
+      )}
     </div>
   );
 }

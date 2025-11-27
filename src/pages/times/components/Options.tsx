@@ -6,11 +6,12 @@ import { ModalPromove } from "./ModalPromove";
 
 type OptionsProps = {
   refetch: () => void;
+  closeOptions: (id:string) => void;
   id: string;
   children?: React.ReactNode;
 };
 
-function Options({ refetch, id, children }: OptionsProps) {
+function Options({ refetch, id, children, closeOptions}: OptionsProps) {
   const location = useLocation();
   const [modalconfirm, Setmodalconfirm] = useState<boolean>(false);
   const [Modalpromove, SetModalpromove] = useState<boolean>(false)
@@ -28,13 +29,13 @@ function Options({ refetch, id, children }: OptionsProps) {
   }
 
   return (
-    <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col">
+    <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col cursor-pointer" onClick={() => closeOptions(id)}>
       {children}
       <div className="w-full h-[94px] flex items-center justify-around">
         <input
           type="button"
           value="Remover"
-          className=" w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#F21223] cursor-pointer rounded-[10px]"
+          className=" w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#F21223] cursor-pointer rounded-[10px] hover:scale-110 transition-all"
           onClick={(e) => {
             e.preventDefault();
             Setmodalconfirm(true);
@@ -43,13 +44,14 @@ function Options({ refetch, id, children }: OptionsProps) {
         <input
           type="button"
           value="Promover"
-          className="w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#076F37] cursor-pointer rounded-[10px]"
+          className="w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#076F37] cursor-pointer rounded-[10px] hover:scale-110 transition-all"
           onClick={() => {
             console.log(Modalpromove);
-            SetModalpromove(true)
-          } }
+            SetModalpromove(true);
+          }}
         />
       </div>
+
       {modalconfirm && (
         <Confirm_delete
           funcao="Deletar"
@@ -59,11 +61,11 @@ function Options({ refetch, id, children }: OptionsProps) {
         />
       )}
       {Modalpromove && (
-        <ModalPromove 
-        refetchusers={refetch}
-        iduser={id}
-        idteam={team_id}
-        closemodal={() => SetModalpromove(false)}
+        <ModalPromove
+          refetchusers={refetch}
+          iduser={id}
+          idteam={team_id}
+          closemodal={() => SetModalpromove(false)}
         />
       )}
     </div>

@@ -9,7 +9,7 @@ function People() {
   return (
     <main className="bg-[#20282F] w-full h-full min-w-[50px] flex flex-col gap-8 p-5 sm:pt-10 sm:px-15 sm:gap-15">
       <div className="flex flex-row items-center justify-start">
-        <h1 className="text-white text-3xl sm:text-6xl font-semibold ">
+        <h1 className="text-white text-3xl sm:text-4xl font-bold ">
           {" "}
           Pessoas que estão nos seus times{" "}
         </h1>

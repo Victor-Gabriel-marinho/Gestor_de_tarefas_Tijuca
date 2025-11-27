@@ -129,6 +129,9 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
     );
   };
 
+  const filteredUsers = filter_users(Email, users_to_invite);
+  const lastUserIndex = filteredUsers.length - 1;
+
   useEffect(() => {
     search_users();
   }, [team_id, search_users]);  
@@ -171,12 +174,12 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
               <input
                 type="submit"
                 value={`${loading ? "Carregando..." : "Convidar"}`}
-                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center w-[90px] sm:w-8/12 font-semibold rounded-[10px]"
+                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center sm:w-8/12 font-semibold rounded-[10px]"
               />
               <select
                 value={role}
                 onChange={(e)=> SetRole(e.target.value)}
-                className="bg-[#251F1F] p-2 rounded-[10px] w-[90px] text-sm font-semibold cursor-pointer"
+                className="bg-[#251F1F] p-2 rounded-[10px] text-sm font-semibold cursor-pointer"
               >
                 <option value="2">Gestor</option>
                 <option value="3">Colaborador</option>
@@ -196,12 +199,15 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
           )}
 
           <h3 className="font-semibold text-lg">Clique nos usuários para selecionar</h3>
+
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
           
           {/* Usuário que são possíveis de convidar */}
-          <div className="w-full flex flex-col gap-7 h-full sm:px-5 overflow-y-auto overflow-x-hidden">
-            {filter_users(Email, users_to_invite).map((user) => {
+          <div className="w-full flex flex-col gap-7 sm:px-5 sm:max-h-[420px] sm:overflow-y-auto">
+            {filter_users(Email, users_to_invite).map((user, index) => {
+
               const isSelected = selectUsers_id.some((u) => u.id === user.id);
+              const isLastUser = index === lastUserIndex ? true : false         
 
               return (
                 <div
@@ -214,7 +220,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                   {/* Nome e perfil do usuário */}
                   <div className="items-center flex flex-row gap-1 sm:gap2">
                     <FaUserCircle className="text-white text-2xl sm:text-5xl" />
-                    <p className="text-lg sm:text-xl max-w-[100px]">
+                    <p className="text-lg sm:text-xl max-w-[100px] sm:max-w-[200px]">
                       {user.Name}
                     </p>
                   </div>
@@ -239,6 +245,7 @@ function Modal({ refetch, openModal, setopenmodal }: ModalProps) {
                         <PopUp
                           setpopUp={() => setpopUp('')}
                           SetRoleName={(role) => alterarRole(user.id, role)}
+                          isLast={isLastUser}
                         />
                       )}
                     </div>

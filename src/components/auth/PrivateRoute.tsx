@@ -4,7 +4,9 @@ import { useAuthStore } from "../../store/Auth";
 export function PrivateRoute() {
   const token = useAuthStore((state) => state.token);
   
-  const isAuthenticated = !!token
+  const isAuthenticated = !!token  
+  console.log(isAuthenticated);
+  
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/Entrar" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/entrar" replace />;
 }

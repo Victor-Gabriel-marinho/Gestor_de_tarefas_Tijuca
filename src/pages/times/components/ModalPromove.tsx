@@ -35,7 +35,7 @@ export const ModalPromove = ({
   return (
     <div className="h-screen w-screen flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm fixed inset-0">
       <div className="bg-[#524D50] w-[250px] h-[175px] sm:w-[400px] sm:h-[175px] rounded-2xl p-5 shadow-2xl shadow-[#524D50] flex items-center justify-center flex-col ">
-        <div className="flex flex-row gap-5 items-center justify-between">
+        <div className="flex flex-row w-full gap-5 items-center justify-between">
           <h2 className="text-white font-semibold text-sm sm:text-xl">
             Selecione um cargo
           </h2>
