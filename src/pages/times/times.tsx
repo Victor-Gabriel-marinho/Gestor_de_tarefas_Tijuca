@@ -162,7 +162,9 @@ function Times() {
   
       {sucess &&(
         <SucessInvite
-        
+        onClose={()=>{
+          setSucess(false)
+        }}
         />
       )}
       {openModal && (
