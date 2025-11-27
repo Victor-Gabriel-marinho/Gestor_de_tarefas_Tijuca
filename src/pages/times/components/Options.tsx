@@ -31,7 +31,7 @@ function Options({ refetch, id, children, closeOptions}: OptionsProps) {
   return (
     <div className="bg-[#251F1F] w-full h-[150px] sm:h-[173px] rounded-b-[20px] rounded-t-[10px] flex flex-col cursor-pointer" onClick={() => closeOptions(id)}>
       {children}
-      <div className="w-full h-[94px] flex items-center justify-around">
+      <div className="w-full h-[94px] flex items-center justify-around" onClick={(e) => e.stopPropagation()}>
         <input
           type="button"
           value="Remover"
