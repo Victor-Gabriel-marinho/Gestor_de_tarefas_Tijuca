@@ -276,7 +276,8 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
       <div
         className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${
           modaltask ? "overflow-y-hidden" : ""
-        }`}
+        }
+        `}
       >
         <Nav />
 

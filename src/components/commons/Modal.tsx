@@ -159,7 +159,7 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
           {/* Buscar usuário por Email */}
 
           <form
-            className="w-full flex flex-row justify-between gap-4 items-center"
+            className="w-full flex flex-wrap gap-4 items-center"
             action=""
             onSubmit={(event) =>{
               send_invitation(event)
@@ -173,7 +173,7 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               value={Email}
-              className="border w-10/12 outline-0 border-[#746E72] p-1 sm:p-2 font-semibold truncate text-xl rounded-[10px]"
+              className="border w-6/12 outline-0 border-[#746E72] p-1 sm:p-2 font-semibold truncate text-xl rounded-[10px]"
             />
             <div className="flex flex-row gap-1">
               <input
@@ -208,7 +208,7 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
           
           {/* Usuário que são possíveis de convidar */}
-          <div className="w-full flex flex-col gap-7 sm:px-5 sm:max-h-[420px] sm:overflow-y-auto">
+          <div className="w-full flex flex-col gap-7 sm:px-5 max-h-[100px] sm:max-h-[420px] overflow-auto sm:overflow-y-auto">
             {filter_users(Email, users_to_invite).map((user, index) => {
 
               const isSelected = selectUsers_id.some((u) => u.id === user.id);

@@ -127,9 +127,7 @@ function Criar({ onClose, id_team,title, refetchTasks, Selected, closeModal, ref
     } else {
       setFormData(estadoInicial);
     }
-  }, [title, Selected, arraystatus]);
-
-  
+  }, [title, Selected, arraystatus]);  
     
   const handlechange = (e: { target: { name: string; value: string; }; }) => {
     const { name, value } = e.target;
