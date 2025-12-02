@@ -3,16 +3,17 @@ type PopUpProps = {
   ClassName?: string;
   SetRoleName: (role: string) => void;
   isLast?: boolean;
+  lenusers: number
 };
 
-function PopUp({ setpopUp, SetRoleName, isLast }: PopUpProps) {
+function PopUp({ setpopUp, SetRoleName, isLast, lenusers }: PopUpProps) {
   function alterarRole(role: string) {
     setpopUp;
     SetRoleName(role);
   }
 
   return (
-    <div className={`absolute right-0 z-50 rounded-[10px] bg-black ${isLast ? 'bottom-0' : 'top-0'}`}>
+    <div className={`absolute right-0 z-50 rounded-[10px] bg-black ${lenusers > 1 && isLast ? 'bottom-0' : 'top-0'}`}>
       <div
         className={`w-[110px] h-[110px] sm:w-[150px] sm:h-[133px] flex items-center justify-center rounded-[15px]`}
       >

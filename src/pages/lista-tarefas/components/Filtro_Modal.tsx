@@ -44,7 +44,7 @@ export const Filtro_Modal = ({ setFiltro }: Filtro_ModalProps) => {
   }
 
   return (
-    <div className="bg-[#251F1F] absolute top-16 h-[20h] flex flex-col items-center text-white p-3 rounded-[10px] cursor-pointer">
+    <div className="bg-[#251F1F] absolute top-16 right-0 flex flex-col items-center text-white p-3 rounded-[10px] cursor-pointer">
       <p className="font-semibold">Selecione os filtros</p>
       <form
         action=""

@@ -270,7 +270,6 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
     [done, renderDraggableTask]
   );
 
-  const [modal, setModal] = useState<boolean>(false)
 
   useEffect(() => {
   if (modaltask || criar) {

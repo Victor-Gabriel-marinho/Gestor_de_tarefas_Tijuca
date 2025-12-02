@@ -99,7 +99,7 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
     } catch (error) {
       Setloading(false);
       console.error("erro ao fazer requisição", error);
-      seterror("este usuário já está no time");
+      seterror("este usuário já está no time ou não existe");
     } 
   }  
   function selectuser(user: user_for_invite) {
@@ -160,11 +160,9 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
           <form
             className="w-full flex flex-wrap gap-4 items-center"
             action=""
-            onSubmit={(event) =>{
-              send_invitation(event)
-            } 
-              
-            }
+            onSubmit={(event) => {
+              send_invitation(event);
+            }}
           >
             <input
               type="text"
@@ -178,18 +176,20 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
               <input
                 type="submit"
                 value={`${loading ? "Carregando..." : "Convidar"}`}
-                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center sm:w-8/12 font-semibold rounded-[10px]"
+                className="bg-[#251F1F] cursor-pointer text-sm p-2 sm:p-3.5 text-center font-semibold rounded-[10px] hover:bg-[#312a2a] hover:scale-105"
               />
-              <select
-                value={role}
-                onChange={(e)=> SetRole(e.target.value)}
-                className="bg-[#251F1F] p-2 rounded-[10px] text-sm font-semibold cursor-pointer"
-              >
-                <option value="2">Gestor</option>
-                <option value="3">Colaborador</option>
-              </select>
-            </div>
 
+              {Email ? (
+                <select
+                  value={role}
+                  onChange={(e) => SetRole(e.target.value)}
+                  className="bg-[#251F1F] p-2 rounded-[10px] text-sm font-semibold cursor-pointer hover:bg-[#312a2a] hover:scale-105"
+                >
+                  <option value="2">Gestor</option>
+                  <option value="3">Colaborador</option>
+                </select>
+              ) : null}
+            </div>
           </form>
           {error ? (
             <div className="bg-[#F21223] flex flex-row justify-between p-3 w-10/12 rounded-xl">
@@ -202,20 +202,17 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
             ""
           )}
 
-          <h3 className="font-semibold text-lg">Clique nos usuários para selecionar</h3>
-
           <div className="h-0.5 w-full bg-[#A7A0A5]"></div>
-          
-          {/* Usuário que são possíveis de convidar */}
-          <div className="w-full flex flex-col gap-7 sm:px-5 max-h-[100px] sm:max-h-[420px] overflow-auto sm:overflow-y-auto">
-            {filter_users(Email, users_to_invite).map((user, index) => {
 
+          {/* Usuário que são possíveis de convidar */}
+          <div className="w-full flex flex-col gap-7 sm:px-5 min-h-[150px] sm:min-h-[400px] max-h-[100px] sm:max-h-[420px] overflow-auto sm:overflow-y-auto">
+            {filter_users(Email, users_to_invite).map((user, index) => {
               const isSelected = selectUsers_id.some((u) => u.id === user.id);
-              const isLastUser = index === lastUserIndex ? true : false         
+              const isLastUser = index === lastUserIndex ? true : false;
 
               return (
                 <div
-                  className={`flex items-center justify-between w-full cursor-pointer p-2 rounded-xl ${
+                  className={`flex items-center justify-between w-full cursor-pointer p-2 rounded-xl hover:bg-zinc-700 hover:scale-102 transition-all ${
                     isSelected ? "bg-zinc-800" : ""
                   } `}
                   key={user.id}
@@ -232,9 +229,12 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
                   {/* Alterar Role */}
                   <div
                     className="flex flex-row gap-2 items-center"
-                    onClick={(e) => { HandlePopUp(e); e.stopPropagation()}}
+                    onClick={(e) => {
+                      HandlePopUp(e);
+                      e.stopPropagation();
+                    }}
                     id={user.id}
-                    >
+                  >
                     <p className="text-sm sm:text-lg font-semibold  ">
                       {userroles[user.id] ?? "Colaborador"}
                     </p>
@@ -247,8 +247,9 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
                       {/* PopUp para selecionar cargo */}
                       {popUp === user.id && (
                         <PopUp
-                          setpopUp={() => setpopUp('')}
+                          setpopUp={() => setpopUp("")}
                           SetRoleName={(role) => alterarRole(user.id, role)}
+                          lenusers={users_to_invite.length}
                           isLast={isLastUser}
                         />
                       )}

@@ -141,46 +141,46 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
     <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
       <div className="bg-[#251F1F] h-[690px] w-[450px] max-w-[90vw] max-h-[100vh] text-white  p-8 gap-5 gap-y-0 flex flex-col rounded-[10px]">
         <div className="flex items-center justify-between w-full">
-          <h2 className="text-sm sm:text-xl font-bold">{title} tarefa</h2>
+          <h2 className="text-xl font-bold">{title} tarefa</h2>
           <button className="cursor-pointer" onClick={onClose}>
-            <IoIosClose size={40} />
+            <IoIosClose className="text-3xl" />
           </button>
         </div>
         <form
           action=""
           onSubmit={(e) => Criar(e)}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-2 sm:gap-4 text-sm sm:text-xl"
         >
           <div className="flex flex-col">
-            <p className="text-lg font-semibold">Nome da tarefa</p>
+            <p className="font-semibold">Nome da tarefa</p>
             <input
               type="text"
               name="Name"
               placeholder="Nome"
-              className="bg-white text-black rounded-[5px] outline-none p-2"
+              className="bg-white text-black rounded-[5px] outline-none p-1"
               value={formData.Name}
               onChange={handlechange}
             />
           </div>
 
           <div className="flex flex-col">
-            <p className="text-lg font-semibold">Descrição da tarefa</p>
+            <p className=" font-semibold">Descrição da tarefa</p>
             <textarea
               name="Content"
               value={formData.Content}
               placeholder="Descrição (opcional)"
-              className="bg-white text-black resize-none rounded-[5px] outline-none p-2"
+              className="bg-white text-black resize-none rounded-[5px] outline-none p-1 h-10 "
               onChange={handlechange}
             ></textarea>
           </div>
 
           <div className="flex flex-col gap-2">
-            <p className="test-lg font-semibold">Status da tarefa</p>
+            <p className="font-semibold">Status da tarefa</p>
             <select
               name="Status"
               value={formData.Status}
               onChange={handlechange}
-              className="bg-white text-black rounded-[5px] p-2 w-full"
+              className="bg-white text-black rounded-[5px] p-1 w-full"
             >
               <option value="" disabled>
                 Status
@@ -195,11 +195,11 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
           </div>
 
           <div className="flex flex-col">
-            <p className="text-lg font-semibold">Prioridade</p>
+            <p className="font-semibold">Prioridade</p>
             <select
               name="Priority"
               value={formData.Priority}
-              className="bg-white text-black rounded-[5px] p-2"
+              className="bg-white text-black rounded-[5px] p-1"
               onChange={handlechange}
             >
               <option value="" disabled>
@@ -212,34 +212,32 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
           </div>
 
           <div className="flex flex-col">
-            <p className="text-lg font-semibold">Data de Entrega</p>
+            <p className="font-semibold">Data de Entrega</p>
             <input
               type="date"
               name="endDate"
               value={formData.endDate}
-              className="bg-white text-black rounded-[5px] p-2 outline-none"
+              className="bg-white text-black rounded-[5px] p-1 outline-none"
               onChange={handlechange}
             />
-
-
           </div>
 
           <button
             type="submit"
-            className="bg-green-500 p-2 rounded-[5px] cursor-pointer"
+            className="bg-green-500 p-1 rounded-[5px] cursor-pointer"
           >
             {title} tarefa
           </button>
         </form>
         {error && (
           <div className="w-full h-15 bg-red-500 gap-5 flex flex-row items-center justify-center p-1 mt-1 rounded-[5px]">
-            <p className="text-white text-lg">{error}</p>
+            <p className="text-white text-sm sm:text-lg">{error}</p>
             <div>
               <p
                 className="font-semibold text-white text-lg cursor-pointer"
                 onClick={() => setError("")}
               >
-                <IoIosClose size={30} />
+                <IoIosClose className="text-3xl" />
               </p>
             </div>
           </div>
