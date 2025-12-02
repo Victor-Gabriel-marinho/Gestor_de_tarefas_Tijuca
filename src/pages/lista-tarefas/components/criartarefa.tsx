@@ -113,20 +113,6 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
     if (title !== "Criar" && Selected) {
       if (arraystatus && arraystatus.length > 0) {
         const StatusName = arraystatus[0].Name || ""
-<<<<<<< HEAD
-        console.log(StatusName);
-
-        setFormData({
-          Name: Selected.Name || "",
-          Status: StatusName,
-          Content: Selected.Content || "",
-          Priority: Selected.Priority || "",
-          endDate: Selected.EndDate
-            ? new Date(Selected.EndDate).toISOString().slice(0, 10)
-            : "",
-        });
-      }
-=======
         
       setFormData({
        Name: Selected.Name || "",
@@ -138,7 +124,6 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
          : "",
       });
     }
->>>>>>> b470e4b (ajustando responsividade)
     } else {
       setFormData(estadoInicial);
     }
