@@ -17,7 +17,6 @@ export function Get_userRole(id_team: string) {
         }
       } catch (err: any) {
         SetloadingRole(false);
-        console.log('id do time: ', id_team)
         console.error("erro ao fazer requisição", err?.response ?? err);
       }
     };

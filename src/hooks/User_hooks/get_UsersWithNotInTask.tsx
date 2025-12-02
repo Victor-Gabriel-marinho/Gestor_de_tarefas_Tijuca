@@ -17,7 +17,7 @@ export function get_UsersWithNotInTask(idTask: string, idTeam: string) {
                 SetUsersWithNotInTask(response)
             }
         }catch(error){
-            console.log("erro ao fazer requisição", error)
+            console.error("erro ao fazer requisição", error)
         } finally{
             Setloading(false)
         }

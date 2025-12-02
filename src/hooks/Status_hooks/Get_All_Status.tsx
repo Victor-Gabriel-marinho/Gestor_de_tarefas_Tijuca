@@ -22,7 +22,7 @@ export default function Get_All_Status(id_team: string) {
             }
         }
         catch(error){
-            console.log("erro ao buscar Status", error)
+            console.error("erro ao buscar Status", error)
         }
         finally {
             setloading(false)

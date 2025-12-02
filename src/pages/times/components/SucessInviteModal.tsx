@@ -4,8 +4,6 @@ type SucessInviteProps = {
     onClose : ()=> void
 }
 function SucessInvite({onClose}:SucessInviteProps) {
-    console.log('Modal abriu')
-
     
     return (
         <div className="h-screen w-screen flex flex-col items-center justify-center z-50 bg-black/50 fixed inset-0">

@@ -18,7 +18,7 @@ export function Get_status(id_status: string) {
         }
     }   
     catch (error){
-        console.log("erro ao buscar Status", error)
+        console.error("erro ao buscar Status", error)
     }
     finally{
         Setloading(false)

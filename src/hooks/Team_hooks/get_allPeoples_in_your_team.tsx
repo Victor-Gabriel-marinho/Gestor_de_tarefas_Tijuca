@@ -16,7 +16,7 @@ export default function Get_allPeoples_in_your_teams() {
           setusers(response);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       finally{
         Setloading(false)

@@ -24,7 +24,7 @@ function Options({ refetch, id, children, closeOptions}: OptionsProps) {
         refetch();
       }
     } catch (error) {
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
     }
   }
 
@@ -46,7 +46,6 @@ function Options({ refetch, id, children, closeOptions}: OptionsProps) {
           value="Promover"
           className="w-[80px] sm:w-[250px] h-[38px] text-sm sm:text-xl text-white bg-[#076F37] cursor-pointer rounded-[10px] hover:scale-110 transition-all"
           onClick={() => {
-            console.log(Modalpromove);
             SetModalpromove(true);
           }}
         />

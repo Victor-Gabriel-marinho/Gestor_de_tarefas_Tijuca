@@ -96,10 +96,10 @@ function InviteTime() {
       setError(null)
       try {
         const response = await inviteService.Aceptinvite(token);
-        console.log(response);
+        if (response){
         clearToken()
         navigate(`/times/${info?.teamid}`);
-
+}
       } catch (err) {
         console.error(err);
         setError("Convite não encontrado ou já foi aceito/expirado, você voltara para a página inicial do Workpoint");

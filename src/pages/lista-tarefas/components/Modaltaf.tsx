@@ -89,7 +89,7 @@ function Modaltaf({
         onClose();
       }
     } catch (error) {
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
     }
   };
 

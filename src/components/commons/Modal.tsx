@@ -110,7 +110,6 @@ function Modal({ refetch, openModal, setopenmodal, setSucess }: ModalProps) {
       return [...prev, user];
     });
   }
-  console.log(selectUsers_id)
 
   const search_users = useCallback(async () => {
     try {

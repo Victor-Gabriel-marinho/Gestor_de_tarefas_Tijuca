@@ -42,7 +42,7 @@ export function Modal_taskUser({id_task, refetch_taskuser, closeModal}:Modal_tas
 
             SetselectedUser([])
         }catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 

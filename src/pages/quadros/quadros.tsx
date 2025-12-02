@@ -12,14 +12,19 @@ function Quadros() {
   const [criar, Setcriar] = useState(false);
   const [Name, SetName] = useState<string>("")
   const { Teams, loading, refetch_teams } = Get_teams();
+  const [error, seterror] = useState<string>('')
 
   const create_team = async (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
 
-    try {
-      if (!Name) return;
+    try {      
+      if (!Name || Name.trim() === "") {
+        seterror('Digite um nome para o time.')
+        return
+      };
+      
       const response = await TeamService.Create_Team(Name);
       if (response) {
         refetch_teams();
@@ -27,7 +32,7 @@ function Quadros() {
         Setcriar(false)
       }
     } catch (error) {
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
     }
   };
 
@@ -73,7 +78,7 @@ function Quadros() {
 
           <div
             id="criar"
-            className={`absolute top-13 right-4 sm:left-50  ${
+            className={`absolute top-20 right-4 sm:left-10  ${
               criar ? "block" : "hidden"
             }`}
           >
@@ -108,6 +113,7 @@ function Quadros() {
                   Cancelar
                 </button>
               </form>
+              {error && <div className="p-2 bg-red-500 text-white rounded-[10px] cursor-pointer" onClick={() => seterror('')}>{error}</div>}
             </div>
           </div>
         </main>
