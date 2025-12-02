@@ -271,10 +271,25 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
     [done, renderDraggableTask]
   );
 
+  const [modal, setModal] = useState<boolean>(false)
+
+  useEffect(() => {
+  if (modaltask || criar) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  return () => {
+    document.body.style.overflow = "auto";
+  };
+}, [modaltask, criar]);
+
+
   return (
     <>
       <div
-        className={`bg-[#1F2937] min-h-1/2 w-screen overflow-auto sm:overflow-hidden overflow-x-hidden ${
+        className={`bg-[#1F2937] min-h-1/2 w-screen sm:overflow-hidden overflow-x-hidden ${
           modaltask ? "overflow-y-hidden" : ""
         }
         `}
@@ -283,9 +298,9 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
 
         <main className="relative flex flex-col sm:min-h-[50vh] md:flex-col gap-5 sm:gap-0 m-5 items-center justify-center overflow-hidden">
           <Title_Lista />
-          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0">
+          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0" onClick={() => setModal(!modal)}>
             {userRole?.id === "3" ? null : (
-              <Create_task_Btn Setcriar={Setcriar} />
+              <Create_task_Btn Setcriar={Setcriar}/>
             )}
 
             <div
@@ -410,6 +425,7 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
             id_team={id}
             refetch_Status={refetch_Status}
             Status={Status}
+            
           />
         )}
       </div>
