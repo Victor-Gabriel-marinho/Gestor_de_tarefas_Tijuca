@@ -69,10 +69,10 @@ function TagCreated({
         const add_tag = await LabelService.Add_New_Label(label);
         setActiveTags((prev) => [...prev, tagId]);
         if (!add_tag) {
-          console.log("Erro ao adicionar tag");
+          console.error("Erro ao adicionar tag");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     } else if (exists) {
       await LabelService.Remove_LabelTask(label);
@@ -97,7 +97,7 @@ function TagCreated({
       onDefinir();
       fetchTags();
     } catch (error) {
-      console.log("Erro ao deletar tag:", error);
+      console.error("Erro ao deletar tag:", error);
     }
   }
   return (

@@ -16,7 +16,7 @@ export const TaskUser = ({taskusers, id_task, refetchs}:TaskUserProps) => {
         refetchs()
       }
     } catch (error) {
-      console.log("Erro ao deletar um taskUser", error);
+      console.error("Erro ao deletar um taskUser", error);
     }
   };
 

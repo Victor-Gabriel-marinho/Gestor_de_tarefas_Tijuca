@@ -40,7 +40,7 @@ function Tag({onDefinir,idSelected, onVerCriadas, onFechar} : tagProps) {
             setError("Não foi possível criar a tag")
           }
         }catch(err){
-          console.log(err)
+          console.error(err)
         }
     }
 

@@ -15,7 +15,7 @@ export function Get_Taskuser(id_task: string) {
         Settaskuser(response);
       }
     } catch (error) {
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
     } finally {
       Setloading(false);
     }

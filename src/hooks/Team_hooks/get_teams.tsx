@@ -17,7 +17,7 @@ export default function Get_teams() {
 
       return first_team;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     finally{
       Setloading(false)

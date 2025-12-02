@@ -17,7 +17,7 @@ export function useTags(idSelected: string){
             const response = await LabelService.Get_All_Label_Tasks(idSelected)
             setTags([...response])
         } catch (err) {
-            console.log("erro ao buscar as tags")        
+            console.error("erro ao buscar as tags")        
         }
     }, [idSelected])
     useEffect(()=>{

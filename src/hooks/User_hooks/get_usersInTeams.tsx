@@ -17,7 +17,7 @@ export function Get_usersInTeams(id: string) {
         Setusers(response);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       Setloading(false);
     }

@@ -37,6 +37,7 @@ function Lista() {
   const [select, Setselect] = useState<Task>();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [criar, Setcriar] = useState<string>("");
+  const [viewDashboard, SetViewDashboard] = useState<boolean>(false)
 
   const [minimize, setMinimize] = useState({
     pendente: false,
@@ -132,7 +133,7 @@ function Lista() {
           refetch_Status();
         }
       } catch (error) {
-        console.log("erro ao fazer requisição", error);
+        console.error("erro ao fazer requisição", error);
       }
     },
     [refetchTasks, refetchdashboard, refetch_Status]
@@ -161,9 +162,7 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
     prioridade: "todas",
     prazo: "todas",
     status: "todas",
-  });  
-  console.log(filtro);
-  
+  });    
     
   const [FiltroModal, SetFiltroModal] = useState<boolean>(false);
 
@@ -289,23 +288,30 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
   return (
     <>
       <div
-        className={`bg-[#1F2937] min-h-1/2 w-screen sm:overflow-hidden overflow-x-hidden ${
-          modaltask ? "overflow-y-hidden" : ""
-        }
+        className={`bg-[#1F2937]  w-screen overflow-auto sm:overflow-hidden overflow-x-hidden 
+          ${viewDashboard ? "min-h-1/2" : "h-screen"}
+          ${modaltask ? "overflow-y-hidden" : ""}
         `}
       >
         <Nav />
 
         <main className="relative flex flex-col sm:min-h-[50vh] md:flex-col gap-5 sm:gap-0 m-5 items-center justify-center overflow-hidden">
           <Title_Lista />
-          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0" onClick={() => setModal(!modal)}>
+          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0">
+            <div
+              className="bg-[#251F1F] flex items-center text-white p-3 rounded-[10px] gap-3 hover:bg-[#3d3434] text-xs sm:text-sm hover:scale-105 transition-all cursor-pointer"
+              onClick={() => SetViewDashboard(!viewDashboard)}
+            >
+              Ver Dashboard
+            </div>
+
             {userRole?.id === "3" ? null : (
               <Create_task_Btn Setcriar={Setcriar}/>
             )}
 
             <div
               onClick={() => SetFiltroModal(!FiltroModal)}
-              className="bg-[#251F1F] flex items-center text-white p-3 rounded-[10px] gap-3 hover:bg-[#3d3434] hover:scale-105 transition-all cursor-pointer"
+              className="bg-[#251F1F] flex items-center text-white p-3 rounded-[10px] gap-3 hover:bg-[#3d3434] text-xs sm:text-sm hover:scale-105 transition-all cursor-pointer"
             >
               <FaFilter />
               Filtros
@@ -404,7 +410,7 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
             userrole={userRole?.id}
             task={select}
             onClose={() => {
-              setRefreshTasksid(select.id)
+              setRefreshTasksid(select.id);
               Setmodaltask(false);
             }}
             refetchtask={refetchTasks}
@@ -430,11 +436,13 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
         )}
       </div>
 
-      <Dashboard
-        id_team={id ? id : ""}
-        prazo={id ? id : ""}
-        Filtro={filtro}
-      />
+      {viewDashboard && (
+        <Dashboard
+          id_team={id ? id : ""}
+          prazo={id ? id : ""}
+          Filtro={filtro}
+        />
+      )}
     </>
   );
 }

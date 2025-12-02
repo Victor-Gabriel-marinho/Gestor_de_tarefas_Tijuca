@@ -16,7 +16,7 @@ export default function Get_Status_Default() {
            }
         }
         catch(error){
-            console.log("erro ao buscar Status", error)
+            console.error("erro ao buscar Status", error)
         }
         finally {
             setloading(false)

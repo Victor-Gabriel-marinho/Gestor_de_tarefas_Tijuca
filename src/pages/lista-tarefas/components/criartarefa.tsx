@@ -27,14 +27,13 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
 
       const response = await TaskService.CreateTask(task);
       if (response) {
-        console.log(response);
-
+        
         await refetchTasks?.();
         refetch_Status?.()
         onClose();
       }
     } catch (error) {
-      console.log("erro ao fazer requisição", error);
+      console.error("erro ao fazer requisição", error);
     }
   }
 
@@ -49,7 +48,7 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
         onClose();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -114,18 +113,17 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
     if (title !== "Criar" && Selected) {
       if (arraystatus && arraystatus.length > 0) {
         const StatusName = arraystatus[0].Name || ""
-        console.log(StatusName);
-
-        setFormData({
-          Name: Selected.Name || "",
-          Status: StatusName,
-          Content: Selected.Content || "",
-          Priority: Selected.Priority || "",
-          endDate: Selected.EndDate
-            ? new Date(Selected.EndDate).toISOString().slice(0, 10)
-            : "",
-        });
-      }
+        
+      setFormData({
+       Name: Selected.Name || "",
+       Status: StatusName,
+       Content: Selected.Content || "",
+       Priority: Selected.Priority || "",
+       endDate: Selected.EndDate
+         ? new Date(Selected.EndDate).toISOString().slice(0,10)
+         : "",
+      });
+    }
     } else {
       setFormData(estadoInicial);
     }
