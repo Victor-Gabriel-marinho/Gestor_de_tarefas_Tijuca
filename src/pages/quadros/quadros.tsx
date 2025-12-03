@@ -48,7 +48,7 @@ function Quadros() {
               onClick={() => Setcriar(!criar)}
               className="w-30 h-30 sm:w-40 sm:h-40 bg-[#131733] rounded-2xl flex items-center justify-center hover:bg-[#2d304b] hover:scale-100 transition-all cursor-pointer"
             >
-              <p className="text-white">Criar quadro</p>
+              <p className="text-white">Criar time</p>
             </div>
 
             {loading ? (
