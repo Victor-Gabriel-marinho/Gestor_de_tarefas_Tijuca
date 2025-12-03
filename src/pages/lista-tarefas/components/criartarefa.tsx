@@ -139,7 +139,7 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
 
   return (
     <div className="w-screen h-screen bg-black/50 flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-center fixed inset-0 backdrop-blur-[20px]">
-      <div className="bg-[#251F1F] h-[690px] w-[450px] max-w-[90vw] max-h-[100vh] text-white  p-8 gap-5 gap-y-0 flex flex-col rounded-[10px]">
+      <div className="bg-[#251F1F] w-[450px] max-w-[90vw] max-h-[95vh] text-white  p-8 gap-5 gap-y-0 flex flex-col rounded-[10px] relative">
         <div className="flex items-center justify-between w-full">
           <h2 className="text-xl font-bold">{title} tarefa</h2>
           <button className="cursor-pointer" onClick={onClose}>
@@ -157,7 +157,7 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
               type="text"
               name="Name"
               placeholder="Nome"
-              className="bg-white text-black rounded-[5px] outline-none p-1"
+              className="bg-white text-black rounded-[5px] outline-none p-1 sm:p-2 "
               value={formData.Name}
               onChange={handlechange}
             />
@@ -169,7 +169,7 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
               name="Content"
               value={formData.Content}
               placeholder="Descrição (opcional)"
-              className="bg-white text-black resize-none rounded-[5px] outline-none p-1 h-10 "
+              className="bg-white text-black resize-none rounded-[5px] outline-none p-1 sm:p-2  h-10 sm:h-20"
               onChange={handlechange}
             ></textarea>
           </div>
@@ -180,7 +180,7 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
               name="Status"
               value={formData.Status}
               onChange={handlechange}
-              className="bg-white text-black rounded-[5px] p-1 w-full"
+              className="bg-white text-black rounded-[5px] p-1 sm:p-2  w-full"
             >
               <option value="" disabled>
                 Status
@@ -217,24 +217,24 @@ function Criar({ onClose, id_team, title, refetchTasks, Selected, closeModal, re
               type="date"
               name="endDate"
               value={formData.endDate}
-              className="bg-white text-black rounded-[5px] p-1 outline-none"
+              className="bg-white text-black rounded-[5px] p-1 sm:p-2 outline-none"
               onChange={handlechange}
             />
           </div>
 
           <button
             type="submit"
-            className="bg-green-500 p-1 rounded-[5px] cursor-pointer"
+            className="bg-green-500 p-1 sm:p-3 rounded-[5px] cursor-pointer hover:scale-105 hover:bg-green-400 transition-all"
           >
             {title} tarefa
           </button>
         </form>
         {error && (
-          <div className="w-full h-15 bg-red-500 gap-5 flex flex-row items-center justify-center p-1 mt-1 rounded-[5px]">
+          <div className="w-full h-15 bg-red-500 flex flex-row items-center justify-center p-1 mt-1 sm:mt-5 rounded-[5px] absolute bottom-0 right-0">
             <p className="text-white text-sm sm:text-lg">{error}</p>
             <div>
               <p
-                className="font-semibold text-white text-lg cursor-pointer"
+                className="font-semibold text-white text-sm cursor-pointer"
                 onClick={() => setError("")}
               >
                 <IoIosClose className="text-3xl" />

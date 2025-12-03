@@ -296,7 +296,7 @@ const [refreshTasksid, setRefreshTasksid] = useState<string | null>(null);
 
         <main className="relative flex flex-col sm:min-h-[50vh] md:flex-col gap-5 sm:gap-0 m-5 items-center justify-center overflow-hidden">
           <Title_Lista />
-          <div className="flex flex-row absolute h-15 gap-2 top-0 right-0">
+          <div className="flex flex-row absolute gap-2 top-0 right-0">
             <div
               className="bg-[#251F1F] flex items-center text-white p-3 rounded-[10px] gap-3 hover:bg-[#3d3434] text-xs sm:text-sm hover:scale-105 transition-all cursor-pointer"
               onClick={() => SetViewDashboard(!viewDashboard)}
