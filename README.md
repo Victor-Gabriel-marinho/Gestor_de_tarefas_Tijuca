@@ -1,69 +1,79 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Gestor de tarefas-Tijuca
 
-Currently, two official plugins are available:
+Um gerenciador de atividades estilo to-do list para organização de tarefas do dia a dia, projeto proposto como desafio de estágio escolar pela empresa Tijuca Alimentos. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funcionalidades
 
-## Expanding the ESLint configuration
+* O usuário é capaz de criar um time na aplicação e convidar outros usuários da plataforma para compor esse time.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* O convite é enviado atraves de um E-mail para o convidado
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* Usuários com cargo de adimin possuem todas as Funcionalidades do Gestor porém, também são capazes de adicionar, promover e remover um usuário do time.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+* Usuários com o cargo de gestor são capazes de criar, editar e deletar uma tarefa.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* Usuários com cargo colaborador são capazes apenas de vizualizar a tarefa e seu time.
+
+## Tecnologias ultilizadas
+
+#### Front-End
+* React + TS 
+* Tailwind CSS
+
+#### Back-End
+* Nest
+* PrismaORM
+* MySql
+
+
+## Rodando localmente
+
+Clone o projeto
+
+```bash
+  git clone https://github.com/Victor-Gabriel-marinho/Gestor_de_tarefas_Tijuca
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Entre no diretório do projeto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+  cd Gestor_de_tarefas_Tijuca/Gestor_de_tarefas_tijuca_app
 ```
+
+Instale as dependências
+
+```bash
+  npm i
+```
+
+Inicie o servidor
+
+```bash
+  npm run dev
+```
+
+
+## Telas
+
+![Criar time](https://github.com/user-attachments/assets/71f7a7d5-0f39-45a9-97e2-2d2c6792e2c8)
+
+### Times
+
+![Seu time](https://github.com/user-attachments/assets/51d407ae-4cf3-4593-b374-f2a5f91f23cd)
+
+
+### Tarefas
+
+![Tarefas](https://github.com/user-attachments/assets/2bcca155-fa26-4605-b8e2-0fd3341ccf75)
+
+### Dashboards
+
+![Dashboard](https://github.com/user-attachments/assets/cc1e3f2d-a419-4ecc-8a89-793dcfbd68b5)
+
+
+## Autores
+
+- [Victor-Gabriel](https://github.com/Victor-Gabriel-marinho)
+- [JoseIlcle](https://github.com/JoseIlcle14)
+- [Wladson14](https://github.com/Wladson14)
